@@ -15,7 +15,7 @@ maven
 
 <dependency>
   <groupId>open.commons</groupId>
-  <artifactId>open-commons-spring5</artifactId>
-  <version>0.0.1</version>
+  <artifactId>open-commons-spring-jdbc</artifactId>
+  <version>${open-commons-spring-jdbc.version}</version>
 </dependency>
 ```
