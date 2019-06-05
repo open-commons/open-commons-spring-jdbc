@@ -47,6 +47,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentSkipListMap;
+import java.util.function.BiFunction;
 
 import javax.sql.DataSource;
 
@@ -136,6 +137,10 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     private final ConcurrentSkipListMap<String, SQLBiFunction<ResultSet, Integer, ?>> CREATORS = new ConcurrentSkipListMap<>();
 
+    final BiFunction<Connection, JdbcTemplate, Connection> CONN_CREATOR = (c, t) -> {
+        return (Connection) Proxy.newProxyInstance(ConnectionProxy.class.getClassLoader(), new Class<?>[] { ConnectionProxy.class }, new CloseSuppressingInvocationHandler(c, t));
+    };
+
     /**
      * <br>
      * 
@@ -188,6 +193,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 6. 5.		박준홍			작업용 Connection 객체 생성 로직 수직
      * </pre>
      *
      * @param act
@@ -204,17 +210,13 @@ public abstract class AbstractGenericDao implements IGenericDao {
         Connection conToWork = null;
 
         JdbcTemplate jdbcTemplate = getJdbcTemplate();
-        NativeJdbcExtractor nativeJdbcExtractor = jdbcTemplate.getNativeJdbcExtractor();
 
         try {
             con.setAutoCommit(false);
-
-            if (nativeJdbcExtractor != null) {
-                conToWork = nativeJdbcExtractor.getNativeConnection(con);
-            } else {
-                conToWork = (Connection) Proxy.newProxyInstance(ConnectionProxy.class.getClassLoader(), new Class<?>[] { ConnectionProxy.class },
-                        new CloseSuppressingInvocationHandler(con, jdbcTemplate));
-            }
+            // (start) [BUG-FIX]: spring 5.x 부터 4.x에 존재하던 public NativeJdbcExtractor getNativeJdbcExtractor()
+            // 를 제공함에 따라 호환성 지원 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 5. 오후 5:14:17
+            conToWork = getConnection(con, jdbcTemplate);
+            // (end): 2019. 6. 5. 오후 5:14:17
 
             conToWork.setAutoCommit(false);
             T r = act.apply(conToWork);
@@ -533,6 +535,47 @@ public abstract class AbstractGenericDao implements IGenericDao {
         }
 
         return creator;
+    }
+
+    /**
+     * 작업용 Connection 객체를 제공한다.<br>
+     * Springframework 5.x 부터 4.x에 존재하던 아래 메소드를 제거함에 따라 호환성 제공을 목적으로 한다.
+     * 
+     * <pre>
+     * public NativeJdbcExtractor getNativeJdbcExtractor() {
+     *     return this.nativeJdbcExtractor;
+     * }
+     * </pre>
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2019. 6. 5.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param con
+     * @param jdbcTemplate
+     * @return
+     * @throws SQLException
+     *
+     * @since 2019. 6. 5.
+     * @version _._._
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    private Connection getConnection(Connection con, JdbcTemplate jdbcTemplate) throws SQLException {
+        try {
+            NativeJdbcExtractor nativeJdbcExtractor = jdbcTemplate.getNativeJdbcExtractor();
+            if (nativeJdbcExtractor != null) {
+                return nativeJdbcExtractor.getNativeConnection(con);
+            } else {
+                return CONN_CREATOR.apply(con, jdbcTemplate);
+            }
+        } catch (NoSuchMethodError e) {
+            return CONN_CREATOR.apply(con, jdbcTemplate);
+        }
     }
 
     /**
