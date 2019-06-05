@@ -1,7 +1,7 @@
 # open-commons-spring-jdbc
 Open Commons for Spring JDBC
 
-### Repository
+## Repository
 maven
 ``` xml
 <repositories>
