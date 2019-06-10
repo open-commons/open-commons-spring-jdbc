@@ -1,25 +1,17 @@
-/* 
- * MIT License
+/*
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
  * 
- * Copyright (c) 2019 Park Jun-Hong (parkjunhong77@gmail.com)
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  * 
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ *     http://www.apache.org/licenses/LICENSE-2.0
  * 
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * 
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 /*
@@ -83,13 +75,13 @@ import open.commons.utils.SQLUtils;
  * {@link SQLConsumer}를 이용한 파라미터 설정 객체 생성 예제 <br>
  * 
  * <pre>
- * static final Function<QueryParamObj, SQLConsumer<PreparedStatement>> PROVIDER = param -> pstmt -> {
+ * static final Function&lt;QueryParamObj, SQLConsumer&lt;PreparedStatement>> PROVIDER = param -> pstmt -> {
  *     pstmt.setString(1, param.getName());
  *     pstmt.setString(1, param.getCost());
  *     pstmt.setString(1, param.getDate());
  * };
  * 
- * static SQLConsumer<PreparedStatement> create(QueryParamObj param) {
+ * static SQLConsumer&lt;PreparedStatement> create(QueryParamObj param) {
  *     return pstmt -> {
  *         pstmt.setString(1, param.getName());
  *         pstmt.setString(1, param.getCost());
@@ -110,17 +102,16 @@ import open.commons.utils.SQLUtils;
  * 
  *     // insert/update/delete
  *     String query = "INSERT ...";
- *     Result<Integer> executeUpdate = dao.executeUpdate(query, setter);
+ *     Result&lt;Integer> executeUpdate = dao.executeUpdate(query, setter);
  * 
  *     // select
  *     query = "SELECT ...";
- *     Result<List<QueryObj>> getList = dao.getList(query, setter, QueryObj.class);
+ *     Result&lt;List&lt;QueryObj>> getList = dao.getList(query, setter, QueryObj.class);
  * 
  *     // select
  *     query = "SELECT ...";
- *     Result<QueryObj> getObject = dao.getObject(query, setter, QueryObj.class);
+ *     Result&lt;QueryObj> getObject = dao.getObject(query, setter, QueryObj.class);
  * }
- * </pre>
  * </pre>
  * 
  * @since 2019. 3. 28.
@@ -771,8 +762,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *            조회 요청쿼리
      * @param entity
      *            결과 데이타 타입
-     * @param required
-     *            필수 여부
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
      *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.

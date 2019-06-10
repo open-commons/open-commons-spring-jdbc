@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(fafanmama_at_naver_com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
