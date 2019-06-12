@@ -4,7 +4,7 @@ Open Commons for Spring JDBC
 # History
 See [history.md](./history.md).
 
-## Repository
+# Repository
 maven
 ``` xml
 <repositories>
