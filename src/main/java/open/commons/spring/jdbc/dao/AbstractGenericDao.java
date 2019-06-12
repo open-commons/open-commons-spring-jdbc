@@ -895,7 +895,10 @@ public abstract class AbstractGenericDao implements IGenericDao {
                     result.andTrue();
                     break;
                 case 1:
-                    result.setData(list.get(0));
+                    // (start) [BUG-FIX]: Result#result 설정 누락 수정 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 12.
+                    // 오후 4:15:28
+                    result.andTrue().setData(list.get(0));
+                    // (end): 2019. 6. 12. 오후 4:15:28
                     break;
                 default:
                     throw new IncorrectResultSizeDataAccessException(1, list.size());

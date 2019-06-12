@@ -1,4 +1,9 @@
 [2019/06/12]
+- Release: 0.0.3.1
+- BugFix
+  + open.commons.spring.jdbc.dao.AbstractGenericDao.getObject(String, SQLConsumer<PreparedStatement>, Class<T>, boolean, String...) 반환상태 설정누락 버그 수정
+
+[2019/06/12]
 - Release: 0.0.3
 - Update
   + open.commons.spring.jdbc.dao.AbstractGenericDao
