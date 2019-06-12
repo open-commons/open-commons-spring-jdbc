@@ -149,6 +149,79 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
+     * 기존 쿼리에 IN Clause(<code>"IN ( ?, ?, ...)")를 추가한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2019. 6. 12.     박준홍         최초 작성
+     * </pre>
+     *
+     * @param sqlBuffer
+     *            쿼리 버퍼
+     * @param inParamCount
+     *            IN ( ... )에 사용될 파라미터 개수
+     *
+     * @since 2019. 6. 12.
+     * @version
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    protected void addQueryForInClause(StringBuffer sqlBuffer, int inParamCount) {
+
+        if (inParamCount < 1) {
+            throw new IllegalArgumentException("Parameter count MUST BE LARGER than 0.");
+        }
+
+        sqlBuffer.append(" ( ?");
+
+        for (int i = 1; i < inParamCount; i++) {
+            sqlBuffer.append(", ?");
+        }
+
+        sqlBuffer.append(" )");
+    }
+
+    /**
+     * 기존 쿼리 WHERE Clause에 IN Clause (<code>"IN ( ?, ?, ...)")를 추가한다.. <br>
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2019. 6. 12.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param sqlBuffer
+     *            쿼리 버퍼
+     * @param concatenator
+     *            WHERE 조건 병합 연산자 [ AND | OR ]
+     * @param columnName
+     *            비교 컬럼명
+     * @param inParamCount
+     *            IN ( ... )에 사용될 파라미터 개수
+     *
+     * @since 2019. 6. 12.
+     * @version _._._
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    protected void addQueryForInClause(StringBuffer sqlBuffer, String concatenator, String columnName, int inParamCount) {
+
+        if (inParamCount < 1) {
+            throw new IllegalArgumentException("Parameter count MUST BE LARGER than 0.");
+        }
+
+        sqlBuffer.append(" ");
+        sqlBuffer.append(concatenator);
+        sqlBuffer.append(" ");
+        sqlBuffer.append(columnName);
+        sqlBuffer.append(" IN");
+
+        addQueryForInClause(sqlBuffer, inParamCount);
+    }
+
+    /**
      * @see org.springframework.beans.factory.InitializingBean#afterPropertiesSet()
      */
     @Override

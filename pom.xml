@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>open.commons</groupId>
 	<artifactId>open-commons-spring-jdbc</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 	<name>Open Commons for Spring JDBC</name>
 
 	<properties>
@@ -24,7 +24,7 @@
 		<!-- <<< end: dependencies -->
 
 		<!-- >>> begin: plugin dependencies -->
-		<build.finalName>open-commons-spring4</build.finalName>
+		<build.finalName>open-commons-spring-jdbc</build.finalName>
 		
 		<maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>		
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
