@@ -40,6 +40,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import javax.sql.DataSource;
 
@@ -119,6 +120,16 @@ import open.commons.utils.SQLUtils;
  * @author Park_Jun_Hong_(fafanmama_at_naver_com)
  */
 public abstract class AbstractGenericDao implements IGenericDao {
+
+    /**
+     * @params 파라미터 배열. NotNull
+     */
+    protected static final Function<Object[], SQLConsumer<PreparedStatement>> PSSetter = params -> stmt -> {
+        for (int i = 0; i < params.length; i++) {
+            AssertUtils.assertNull("SQL 파라미터는 null 이 올 수가 없습니다.", params[i], IllegalArgumentException.class);
+            stmt.setObject(i + 1, params[i]);
+        }
+    };
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
