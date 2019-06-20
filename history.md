@@ -1,7 +1,7 @@
 [2019/06/20]
 - Release: 0.0.4
 - Add
-  + open.commons.spring.jdbc.dao.AbstractGenericDao 클래스
+  + [open.commons.spring.jdbc.dao.AbstractGenericDao](https://github.com/parkjunhong/open-commons-spring-jdbc/blob/master/src/main/java/open/commons/spring/jdbc/dao/AbstractGenericDao.java) 클래스
     - Function<Object[], SQLConsumer<PreparedStatement>> PSSetter 추가
 
 [2019/06/12]
