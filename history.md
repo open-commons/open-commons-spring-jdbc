@@ -1,3 +1,7 @@
+[2019/7/4]
+- Dependency
+	+ open.commons.core: 1.6.10
+	
 [2019/06/20]
 - Release: 0.0.4
 - Add

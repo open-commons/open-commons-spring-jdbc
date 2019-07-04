@@ -6,10 +6,18 @@
 	<version>0.0.4</version>
 	<name>Open Commons for Spring JDBC</name>
 
+	<licenses>
+		<license>
+			<name>Apache License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
 	<properties>
 		<encoding>UTF-8</encoding>
 		<java-version>1.8</java-version>
-		
+
 		<compile.encoding-version>UTF-8</compile.encoding-version>
 		<compile.source-version>1.8</compile.source-version>
 		<compile.target-version>1.8</compile.target-version>
@@ -20,13 +28,13 @@
 		<jackson-databind.version>2.9.9</jackson-databind.version>
 		<commons-io.version>2.5</commons-io.version>
 
-		<open-commons-core.version>1.6.6</open-commons-core.version>
+		<open-commons-core.version>1.6.10</open-commons-core.version>
 		<!-- <<< end: dependencies -->
 
 		<!-- >>> begin: plugin dependencies -->
 		<build.finalName>open-commons-spring-jdbc</build.finalName>
-		
-		<maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>		
+
+		<maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
 		<maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
@@ -93,7 +101,7 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 		<!-- <<< end: Spring -->
-		
+
 		<!-- ********************** -->
 		<!-- begin: slf4j -->
 		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
