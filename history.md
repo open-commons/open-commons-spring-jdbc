@@ -1,3 +1,8 @@
+[2019/10/17]
+- Release: 0.0.5
+- Tag: 0.0.5-SNAPSHOT
+
+
 [2019/7/4]
 - Dependency
 	+ open.commons.core: 1.6.10

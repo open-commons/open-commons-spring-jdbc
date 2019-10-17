@@ -126,7 +126,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     protected static final Function<Object[], SQLConsumer<PreparedStatement>> PSSetter = params -> stmt -> {
         for (int i = 0; i < params.length; i++) {
-            AssertUtils.assertNull("SQL 파라미터는 null 이 올 수가 없습니다.", params[i], IllegalArgumentException.class);
+//            AssertUtils.assertNull("SQL 파라미터는 null 이 올 수가 없습니다.", params[i], IllegalArgumentException.class);
             stmt.setObject(i + 1, params[i]);
         }
     };
