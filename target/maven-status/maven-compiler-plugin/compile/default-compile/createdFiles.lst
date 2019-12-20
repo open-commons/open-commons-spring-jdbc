@@ -1,6 +1,0 @@
-open\commons\spring\jdbc\dao\DefaultPreparedStatementCallback.class
-open\commons\spring\jdbc\dao\DefaultConnectionCallback.class
-open\commons\spring\jdbc\dao\DefaultConnectionCallback2.class
-open\commons\spring\jdbc\dao\AbstractGenericDao.class
-open\commons\spring\jdbc\dao\IGenericDao.class
-open\commons\spring\jdbc\dao\AbstractGenericDao$CloseSuppressingInvocationHandler.class
