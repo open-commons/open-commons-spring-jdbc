@@ -23,7 +23,8 @@
 hs_err_pid*
 
 # build files
-target/
+target
+target/**
 /deploy
 /target
 /.sts4-cache/
