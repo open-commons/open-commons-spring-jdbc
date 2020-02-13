@@ -1,4 +1,7 @@
 [2020/02/13]
+- Tag: 0.0.7-SNAPSHOT
+
+[2020/02/13]
 - Release: 0.0.6
 - Add
   + open.commons.spring.jdbc.dao.IAsyncSupportable 
