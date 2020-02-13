@@ -29,6 +29,8 @@ package open.commons.spring.jdbc.dao;
 
 import java.util.Locale;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -82,7 +84,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @see #getQuerySourece()
      * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[], Locale)
      */
-    String getQuery(String name);
+    String getQuery(@NotNull String name);
 
     /**
      * 파라미터 정보에 해당하는 쿼리를 제공한다. <br>
@@ -108,7 +110,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * 
      * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[], String, Locale)
      */
-    String getQuery(String name, Object[] args, Locale locale);
+    String getQuery(@NotNull String name, Object[] args, Locale locale);
 
     /**
      * 파라미터 정보에 해당하는 쿼리를 제공한다. 없는 경우 기본값을 제공한다.<br>
@@ -134,7 +136,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      * @version 0.1.0
      */
-    String getQuery(String name, Object[] args, String defaultMessage, Locale locale);
+    String getQuery(@NotNull String name, Object[] args, String defaultMessage, Locale locale);
 
     /**
      * JDBC용 쿼리문을 제공하는 객체를 반환한다. <br>

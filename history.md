@@ -1,4 +1,16 @@
 [2019/10/17]
+- Release: 0.0.6
+- Add
+  + open.commons.spring.jdbc.dao.IAsyncSupportable 
+  + open.commons.spring.jdbc.dao.dto.CountDTO
+  + open.commons.spring.jdbc.dao.oracle.AbstractAsyncOracleGenericDao
+  + open.commons.spring.jdbc.dao.oracle.AbstraceOracleGenericDao
+- Update
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+  + open.commons.spring.jdbc.dao.DefaultConnectionCallback2
+  + open.commons.spring.jdbc.dao.IGenericDao  
+
+[2019/10/17]
 - Release: 0.0.5
 - Tag: 0.0.6-SNAPSHOT
 

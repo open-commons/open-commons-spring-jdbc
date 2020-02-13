@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>open.commons</groupId>
 	<artifactId>open-commons-spring-jdbc</artifactId>
-	<version>0.0.6-SNAPSHOT</version>
+	<version>0.0.6</version>
 	<name>Open Commons for Spring JDBC</name>
 
 	<licenses>
@@ -28,7 +28,7 @@
 		<jackson-databind.version>[2.9.10.1,)</jackson-databind.version>
 		<commons-io.version>2.5</commons-io.version>
 
-		<open-commons-core.version>1.6.10</open-commons-core.version>
+		<open-commons-core.version>1.6.17-SNAPSHOT</open-commons-core.version>
 		<!-- <<< end: dependencies -->
 
 		<!-- >>> begin: plugin dependencies -->
@@ -101,6 +101,14 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 		<!-- <<< end: Spring -->
+
+		<!-- begin: Validation -->
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<version>2.0.1.Final</version>
+		</dependency>
+		<!-- end : Validation -->
 
 		<!-- ********************** -->
 		<!-- begin: slf4j -->
