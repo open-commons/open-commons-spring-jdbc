@@ -1,4 +1,4 @@
-[2019/10/17]
+[2020/02/13]
 - Release: 0.0.6
 - Add
   + open.commons.spring.jdbc.dao.IAsyncSupportable 
