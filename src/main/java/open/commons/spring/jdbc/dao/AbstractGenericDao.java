@@ -56,7 +56,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.ConnectionProxy;
 import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.jdbc.support.nativejdbc.NativeJdbcExtractor;
 import org.springframework.validation.annotation.Validated;
 
 import open.commons.Result;
@@ -301,7 +300,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
         try {
             con.setAutoCommit(false);
             // (start) [BUG-FIX]: spring 5.x 부터 4.x에 존재하던 public NativeJdbcExtractor getNativeJdbcExtractor()
-            // 를 제공함에 따라 호환성 지원 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 5. 오후 5:14:17
+            // 를 제거함에 따라 호환성 지원 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 5. 오후 5:14:17
             conToWork = getConnection(con, jdbcTemplate);
             // (end): 2019. 6. 5. 오후 5:14:17
 
@@ -815,6 +814,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2019. 6. 5.		박준홍			최초 작성
+     * 2020. 2. 13.		박준홍			springframework 5.1.13 >= 대응
      * </pre>
      *
      * @param con
@@ -828,12 +828,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     private Connection getConnection(@NotNull Connection con, @NotNull JdbcTemplate jdbcTemplate) throws SQLException {
         try {
-            NativeJdbcExtractor nativeJdbcExtractor = jdbcTemplate.getNativeJdbcExtractor();
-            if (nativeJdbcExtractor != null) {
-                return nativeJdbcExtractor.getNativeConnection(con);
+            Connection targetCon = DataSourceUtils.getTargetConnection(con);
+
+            if (targetCon != null) {
+                return targetCon;
             } else {
                 return CONN_CREATOR.apply(con, jdbcTemplate);
             }
+
         } catch (NoSuchMethodError e) {
             return CONN_CREATOR.apply(con, jdbcTemplate);
         }

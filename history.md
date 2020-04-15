@@ -1,3 +1,17 @@
+[2020/04/15]
+- Update
+  + open.commons.spring.jdbc.dao.AbstractGenericDao.getConnection(Connection, JdbcTemplate)
+    -  springframework 5.1.13 >= 대응
+- Dependencies
+  + org.springframework
+    + spring-context: 5.1.13.RELEASE
+    + spring-webmvc: 5.1.13.RELEASE
+    + spring-jdbc: 5.1.13.RELEASE
+  + com.fasterxml.jackson.core
+    + jackson-databind: 2.9.10.2
+  + open.commons
+    + open-commons-core: 1.6.17
+    
 [2020/02/13]
 - Tag: 0.0.7-SNAPSHOT
 
