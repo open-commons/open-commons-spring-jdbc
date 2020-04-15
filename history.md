@@ -1,4 +1,14 @@
 [2020/04/15]
+- Vulnerability
+  + Bump jackson-databind from 2.9.10.2 to 2.9.10.3 dependencies\
+    __CVE-2020-8840__\
+    high severity\
+    Vulnerable versions: >= 2.9.0, <= 2.9.10.2\
+    Patched version: 2.9.10.3\
+    FasterXML jackson-databind 2.0.0 through 2.9.10.2 lacks certain xbean-reflect/JNDI blocking,\
+    as demonstrated by org.apache.xbean.propertyeditor.JndiConverter.
+
+[2020/04/15]
 - Update
   + open.commons.spring.jdbc.dao.AbstractGenericDao.getConnection(Connection, JdbcTemplate)
     -  springframework 5.1.13 >= 대응
