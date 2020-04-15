@@ -1,4 +1,7 @@
 [2020/04/15]
+- Release: 0.1.0
+
+[2020/04/15]
 - Vulnerability
   + Bump jackson-databind from 2.9.10.2 to 2.9.10.3 dependencies\
     __CVE-2020-8840__\
