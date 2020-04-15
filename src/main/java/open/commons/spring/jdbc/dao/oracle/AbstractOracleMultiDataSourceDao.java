@@ -1,24 +1,8 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *     http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-/*
  *
  * This file is generated under this project, "open-commons-spring-jdbc".
  *
- * Date  : 2020. 1. 17. 오전 12:59:31
+ * Date  : 2020. 4. 15. 오후 3:25:48
  *
  * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
  * 
@@ -32,21 +16,18 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.validation.annotation.Validated;
-
 import open.commons.Result;
 import open.commons.function.SQLTripleFunction;
-import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
+import open.commons.spring.jdbc.dao.AbstractMultiDataSourceDao;
 
 /**
- * Oracle DBMS 연동 기능이 추가된 클래스.
+ * 여러 개의 DBMS 연동을 지원.
  * 
- * @since 2020. 1. 17.
+ * @since 2020. 4. 15.
+ * @version
  * @author Park_Jun_Hong_(fafanmama_at_naver_com)
- * @version 0.0.6
  */
-@Validated
-public abstract class AbstractOracleGenericDao extends AbstractSingleDataSourceDao {
+public abstract class AbstractOracleMultiDataSourceDao extends AbstractMultiDataSourceDao {
 
     /**
      * <br>
@@ -55,18 +36,16 @@ public abstract class AbstractOracleGenericDao extends AbstractSingleDataSourceD
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 17.		박준홍			최초 작성
+     * 2020. 4. 15.		박준홍			최초 작성
      * </pre>
      *
-     * @since 2020. 1. 17.
-     * @version 0.0.6
+     * @since 2020. 4. 15.
+     * @version
      */
-    public AbstractOracleGenericDao() {
+    public AbstractOracleMultiDataSourceDao() {
     }
 
     /**
-     *
-     * @see SQLTripleFunction#setParameters(String...)
      * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
      *      open.commons.function.SQLTripleFunction, int, java.lang.String)
      */

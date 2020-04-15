@@ -34,12 +34,18 @@
 
 package dao.example;
 
+import java.sql.PreparedStatement;
+import java.util.List;
+
 import javax.sql.DataSource;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 import open.commons.Result;
-import open.commons.spring.jdbc.dao.AbstractGenericDao;
+import open.commons.function.SQLTripleFunction;
+import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
 
 /**
  * 
@@ -47,7 +53,7 @@ import open.commons.spring.jdbc.dao.AbstractGenericDao;
  * @author Park_Jun_Hong_(fafanmama_at_naver_com)
  * @version _._._
  */
-public class TestDao extends AbstractGenericDao {
+public class TestDao extends AbstractSingleDataSourceDao {
     /**
      * <br>
      * 
@@ -100,5 +106,14 @@ public class TestDao extends AbstractGenericDao {
     @Override
     public void setQuerySource(ReloadableResourceBundleMessageSource querySource) {
         this.querySource = querySource;
+    }
+
+    /**
+     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List, open.commons.function.SQLTripleFunction, int, java.lang.String)
+     */
+    @Override
+    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            @NotNull String valueQuery) {
+        return null;
     }
 }

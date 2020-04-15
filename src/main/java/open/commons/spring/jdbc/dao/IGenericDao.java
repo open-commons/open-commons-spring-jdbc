@@ -34,7 +34,6 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.jdbc.core.JdbcTemplate;
 
 /**
  * DAO 클래스 공통 기능 정의 클래스.
@@ -61,7 +60,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      * @version 0.1.0
      */
-    JdbcTemplate getJdbcTemplate();
+//    JdbcTemplate getJdbcTemplate();
 
     /**
      * 이름에 해당하는 쿼리를 제공한다. <br>
@@ -81,7 +80,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      * @version 0.1.0
      * 
-     * @see #getQuerySourece()
+     * @see #getQuerySource()
      * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[], Locale)
      */
     String getQuery(@NotNull String name);
@@ -154,6 +153,6 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      * @version 0.1.0
      */
-    ReloadableResourceBundleMessageSource getQuerySourece();
+    ReloadableResourceBundleMessageSource getQuerySource();
 
 }
