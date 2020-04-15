@@ -1,5 +1,6 @@
 [2020/04/15]
 - Release: 0.1.0
+- Tag: 0.2.0-SNAPSHOT
 
 [2020/04/15]
 - Vulnerability
