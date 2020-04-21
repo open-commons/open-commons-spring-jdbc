@@ -313,56 +313,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
     protected abstract <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException;
-    // protected <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException {
-    //
-    // Connection con = DataSourceUtils.getConnection(getDataSource());
-    // Connection conToWork = null;
-    //
-    // JdbcTemplate jdbcTemplate = getJdbcTemplate();
-    //
-    // try {
-    // con.setAutoCommit(false);
-    // // (start) [BUG-FIX]: spring 5.x 부터 4.x에 존재하던 public NativeJdbcExtractor getNativeJdbcExtractor()
-    // // 를 제거함에 따라 호환성 지원 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 5. 오후 5:14:17
-    // conToWork = getConnection(con, jdbcTemplate);
-    // // (end): 2019. 6. 5. 오후 5:14:17
-    //
-    // conToWork.setAutoCommit(false);
-    // R r = act.apply(conToWork);
-    //
-    // return r;
-    //
-    // } catch (SQLException e) {
-    // logger.warn("Fail to execute query.", e);
-    //
-    // try {
-    // con.rollback();
-    // } catch (SQLException ignored) {
-    // }
-    //
-    // StringBuffer msg = new StringBuffer();
-    // msg.append("con=");
-    // msg.append(con.toString());
-    // msg.append("con-to-work=");
-    // msg.append(conToWork != null ? conToWork.toString() : null);
-    //
-    // DataAccessException dae = jdbcTemplate.getExceptionTranslator().translate("ConnectionCallback", msg.toString(),
-    // e);
-    // throw new SQLException(dae.getMessage(), dae);
-    // } finally {
-    // try {
-    // if (con != null) {
-    // con.commit();
-    // }
-    // } catch (SQLException ignored) {
-    // }
-    //
-    // DataSourceUtils.releaseConnection(con, dataSource);
-    //
-    // con = null;
-    // conToWork = null;
-    // }
-    // }
 
     /**
      * 요청쿼리를 실행하고 결과를 제공한다. <br>
@@ -898,38 +848,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
             return new Result<Integer>(result.getData().getCount(), true);
         }
     }
-
-    // /**
-    // * {@link DataSource}를 제공한다. <br>
-    // *
-    // * <pre>
-    // * [개정이력]
-    // * 날짜 | 작성자 | 내용
-    // * ------------------------------------------
-    // * 2019. 3. 28. 박준홍 최초 작성
-    // * </pre>
-    // *
-    // * @return
-    // *
-    // * @since 2019. 3. 28.
-    // * @version 0.1.0
-    // * @author Park_Jun_Hong_(fafanmama_at_naver_com)
-    // */
-    // public DataSource getDataSource() {
-    // return this.dataSource;
-    // }
-
-    // /**
-    // * @see open.commons.spring.jdbc.dao.IGenericDao#getJdbcTemplate()
-    // */
-    // @Override
-    // public JdbcTemplate getJdbcTemplate() {
-    // if (this.jdbcTemplate == null) {
-    // this.jdbcTemplate = new JdbcTemplate(this.dataSource);
-    // }
-    //
-    // return this.jdbcTemplate;
-    // }
 
     /**
      * 데이터 조회 요청쿼리를 처리한다. <br>
