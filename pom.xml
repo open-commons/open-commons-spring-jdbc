@@ -241,6 +241,14 @@
 					<docencoding>${encoding}</docencoding>
 					<encoding>${encoding}</encoding>
 				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<!-- <<< end: javadoc -->
 		</plugins>
