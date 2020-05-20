@@ -1,3 +1,15 @@
+[2020//5/20]
+- POM
+  + Apply Javadoc
+- Vulnerability
+  + Upgrade com.fasterxml.jackson.core:jackson-databind to version 2.9.10.4 or later.\
+    __CVE-2020-9548__\
+    moderate severity\
+    Vulnerable versions: >= 2.0.0, <= 2.9.10.3\
+    Patched version: 2.9.10.4\
+    FasterXML jackson-databind 2.x before 2.9.10.4 mishandles the interaction between serialization gadgets and typing,\
+    related to br.com.anteros.dbcp.AnterosDBCPConfig (aka anteros-core).
+
 [2020/04/15]
 - Release: 0.1.0
 - Tag: 0.2.0-SNAPSHOT
