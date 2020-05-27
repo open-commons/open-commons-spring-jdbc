@@ -1,4 +1,8 @@
-[2020//5/20]
+[2020/05/27]
+- Dependencies
+  + open.commons:open-commons-core: 1.6.18
+
+[2020/05/20]
 - POM
   + Apply Javadoc
 - Vulnerability
