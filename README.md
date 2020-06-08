@@ -5,7 +5,7 @@ Open Commons for Spring JDBC
 See [history.md](./history.md).
 
 # Repository
-maven
+maven (**[Go to LATEST](http://nexus3.ymtech.co.kr/#browse/browse:maven-public:open%2Fcommons%2Fopen-commons-spring-jdbc)**)
 ``` xml
 <repositories>
   <repository>
