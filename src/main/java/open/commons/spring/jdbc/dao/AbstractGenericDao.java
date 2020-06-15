@@ -553,6 +553,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      * @deprecated Use {@link #executeUpdate(List, Function, int, String, String, String, String)
      */
+    @SuppressWarnings("unused")
     private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
             @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) {
         return executeUpdate(data, psSetterProvider, partitionSize, headerQuery, valueQuery, "", tailQuery);
