@@ -1,3 +1,13 @@
+[2020/06/15]
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    + executeUpdate(List<E>, Function<List<E>, SQLConsumer<PreparedStatement>>, int, String, String, String, String)
+    + executeUpdate(List<E>, SQLTripleFunction<PreparedStatement, Integer, E, Integer>, int, String, String, String, String)
+    + getListAsMap(String, Class<T>, String...)
+- Modify
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    + findCreator(Class<R>, String...):  DAO Entity 타입으로 Map.class 지원 및 Entity Generator 식별값 생성규칙 변경
+
 [2020/05/27]
 - Dependencies
   + open.commons:open-commons-core: 1.6.18

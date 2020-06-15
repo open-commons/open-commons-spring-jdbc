@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -534,19 +535,62 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @param <E>
      * @param data
+     *            저장할 데이터
      * @param psSetterProvider
+     *            PreparedStatement 데이터 설정
      * @param partitionSize
+     *            분할 크기
      * @param headerQuery
+     *            다중 데이터 추가를 위한 쿼리 헤더
      * @param valueQuery
+     *            데이터 바인딩 쿼리
      * @param tailQuery
+     *            추가 쿼리
      * @return
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @deprecated Use {@link #executeUpdate(List, Function, int, String, String, String, String)
      */
     private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
             @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) {
+        return executeUpdate(data, psSetterProvider, partitionSize, headerQuery, valueQuery, "", tailQuery);
+    }
+
+    /**
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 6. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            저장할 데이터
+     * @param psSetterProvider
+     *            PreparedStatement 데이터 설정
+     * @param partitionSize
+     *            분할 크기
+     * @param headerQuery
+     *            다중 데이터 추가를 위한 쿼리 헤더
+     * @param valueQuery
+     *            데이터 바인딩 쿼리
+     * @param concatForVQ
+     *            데이터 바인딩 쿼리 연결자
+     * @param tailQuery
+     *            추가 쿼리
+     * @return
+     *
+     * @since 2020. 6. 15.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
+            @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
 
         if (data == null || data.size() < 1) {
             return new Result<>(0, true);
@@ -581,11 +625,16 @@ public abstract class AbstractGenericDao implements IGenericDao {
             // #2-1. 쿼리 생성
             query.append(headerQuery);
             query.append(" ");
-            for (int i = 0; i < part.size(); i++) {
-                query.append(valueQuery);
+            query.append(valueQuery);
+            query.append(" ");
+            for (int i = 1; i < part.size(); i++) {
+                query.append(concatForVQ);
                 query.append(" ");
+                query.append(valueQuery);
             }
-            query.append(tailQuery);
+            if (tailQuery != null) {
+                query.append(tailQuery);
+            }
 
             // #2-2. 데이터 Setter 생성 및 PreparedStatement 브로커 생성.
             brokers.add(new DefaultConCallbackBroker2(query.toString(), psSetterProvider.apply(part)));
@@ -668,6 +717,48 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) {
+        return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
+    }
+
+    /**
+     * 여러 개의 데이터를 나누어서 추가한다. <br>
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 6. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     *            데이터 타입.
+     * @param data
+     *            추가하려는 데이타.
+     * @param dataSetter
+     *            객체 데이터를 {@link PreparedStatement}에 추가하는 주체.<br>
+     *            참조: {@link SQLTripleFunction#setParameters(String...)}
+     * @param partitionSize
+     *            데이터 분할 크기
+     * @param headerQuery
+     *            여러개 데이터 추가용 쿼리 헤더, INSERT ... 이 포함된 구문이 설정됨.
+     * @param valueQuery
+     *            여러개 데이터 바인딩용 쿼리. (?, ?, ...) 이 포함된 구문이 설정됨.
+     * @param concatForVQ
+     *            바인딩용 쿼리 연결자
+     * @param tailQuery
+     *            쿼리 마지막
+     * @return
+     *
+     * @since 2020. 6. 15.
+     * @version 0.2.0
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * 
+     * @see SQLTripleFunction#setParameters(String...)
+     */
+    public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
 
         Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider = params -> {
             SQLConsumer<PreparedStatement> con = stmt -> {
@@ -680,7 +771,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
             return con;
         };
 
-        return executeUpdate(data, psSetterProvider, partitionSize, headerQuery, valueQuery, tailQuery);
+        return executeUpdate(data, psSetterProvider, partitionSize, headerQuery, valueQuery, concatForVQ, tailQuery);
     }
 
     /**
@@ -740,6 +831,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2019. 3. 28.		박준홍			최초 작성
+     * 2020. 6. 12.     박준홍         조회 결과를 java.util.Map 형태로 받는 경우 지원
      * </pre>
      *
      * @param entity
@@ -756,16 +848,34 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @version 0.0.6
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    @SuppressWarnings("unchecked")
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private <R> SQLBiFunction<ResultSet, Integer, R> findCreator(@NotNull Class<R> entity, String... columns) {
-
-        SQLBiFunction<ResultSet, Integer, R> creator = (SQLBiFunction<ResultSet, Integer, R>) CREATORS.get(entity.getName());
+        Arrays.sort(columns);
+        String key = String.join("-", entity.getName(), String.valueOf(Arrays.toString(columns).hashCode()));
+        SQLBiFunction<ResultSet, Integer, R> creator = (SQLBiFunction<ResultSet, Integer, R>) CREATORS.get(key);
 
         if (creator == null) {
-            creator = (rs, rowNum) -> {
-                return SQLUtils.newInstance(entity, rs, columns);
-            };
-            CREATORS.put(entity.getName(), creator);
+            // begin - PATCH [2020. 6. 12.]: 조회 결과를 java.util.Map 형태로 받는 경우 지원.| Park_Jun_Hong_(fafanmama_at_naver_com)
+            if (Map.class.isAssignableFrom(entity)) {
+                // DAO Entity가 Map.class 인 경우는 Map.class 가 여러 가지의 데이터 타입을 대신하는 것이기 때문에,
+                // Entity 생성 함수를 별도로 저장하지 않는다.
+                creator = (rs, rowNum) -> {
+                    try {
+                        Map data = (Map) entity.newInstance();
+                        for (String clmn : columns) {
+                            data.put(clmn, rs.getObject(clmn));
+                        }
+
+                        return (R) data;
+                    } catch (InstantiationException | IllegalAccessException e) {
+                        throw new SQLException(String.format("%s 객체 생성시 에러가 발생하였습니다. 원인=%s", entity, e.getMessage()), e);
+                    }
+                };
+                // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 6. 12.
+            } else {
+                creator = (rs, rowNum) -> SQLUtils.newInstance(entity, rs, columns);
+                CREATORS.put(entity.getName(), creator);
+            }
         }
 
         return creator;
@@ -964,6 +1074,40 @@ public abstract class AbstractGenericDao implements IGenericDao {
         }
 
         return result;
+    }
+
+    /**
+     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 6. 12.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <K>
+     * @param <V>
+     * @param <T>
+     *            {@link Map}을 상속받은 타입
+     * @param query
+     *            데이터 조회 요청쿼리
+     * @param entity
+     *            결과 데이터 타입.
+     * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     * 
+     * @return 쿼리 처리결과
+     *         <ul>
+     *         <li>&lt;T&gt; 요청받을 데이타 타입
+     *         </ul>
+     * @return
+     *
+     * @since 2020. 6. 12.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public <V, T extends Map<String, V>> Result<List<T>> getListAsMap(@NotNull String query, @NotNull Class<T> entity, String... columns) {
+        return getList(query, (IConnectionCallbackSetter) null, entity, columns);
     }
 
     /**
