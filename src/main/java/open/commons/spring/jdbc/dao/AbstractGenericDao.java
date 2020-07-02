@@ -1108,7 +1108,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2020. 6. 12.
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    public <V, T extends FIFOMap<String, V>> Result<List<T>> getListAsMap(@NotNull String query, @NotNull Class<T> entity, String... columns) {
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public <V> Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, String... columns) {
+        Class<Map<String, Object>> entity = (Class<Map<String, Object>>) (Class) FIFOMap.class;
         return getList(query, (IConnectionCallbackSetter) null, entity, columns);
     }
 

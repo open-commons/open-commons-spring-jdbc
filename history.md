@@ -1,3 +1,8 @@
+[2020/07/02]
+- Bugfix
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    + getListAsMap(String, Class<T>, String...): resolve a compile incompliant.
+
 [2020/06/15]
 - Add
   + open.commons.spring.jdbc.dao.AbstractGenericDao
