@@ -59,6 +59,7 @@ import org.springframework.validation.annotation.Validated;
 
 import open.commons.Result;
 import open.commons.annotation.ColumnDef;
+import open.commons.collection.FIFOMap;
 import open.commons.database.ConnectionCallbackBroker;
 import open.commons.database.ConnectionCallbackBroker2;
 import open.commons.database.DefaultConCallbackBroker2;
@@ -1107,7 +1108,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2020. 6. 12.
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    public <V, T extends Map<String, V>> Result<List<T>> getListAsMap(@NotNull String query, @NotNull Class<T> entity, String... columns) {
+    public <V, T extends FIFOMap<String, V>> Result<List<T>> getListAsMap(@NotNull String query, @NotNull Class<T> entity, String... columns) {
         return getList(query, (IConnectionCallbackSetter) null, entity, columns);
     }
 
