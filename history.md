@@ -1,3 +1,25 @@
+[2020/07/30]
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - getObjectAsMap(String, boolean, String...)
+    - getObjectAsMap(String, SQLConsumer<PreparedStatement>, boolean, String...)
+    - getObjectAsMap(String, SQLConsumer<PreparedStatement>, String...)
+    - getObjectAsMap(String, String...)
+    - getValue(String, SQLConsumer<PreparedStatement>, boolean, String)
+    - getValue(String, String)
+    - getValue(String, String, boolean)
+    - getValues(String, SQLConsumer<PreparedStatement>, String)
+    - getValues(String, String)
+    
+[2020/07/28]
+- Add
+  + open.commons.spring.jdbc.dao.postgresql.AbstractPostgreSingleDataSourceDao
+- Update
+  + open.commons.spring.jdbc.dao
+    - AbstractGenericDao
+    - AbstractMultiDataSourceDao
+    - AbstractSingleDataSourceDao
+
 [2020/07/02]
 - Bugfix
   + open.commons.spring.jdbc.dao.AbstractGenericDao

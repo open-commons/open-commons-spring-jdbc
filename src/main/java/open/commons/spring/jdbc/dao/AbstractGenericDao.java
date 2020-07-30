@@ -36,15 +36,16 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import org.slf4j.Logger;
@@ -137,6 +138,10 @@ import open.commons.utils.SQLUtils;
  */
 @Validated
 public abstract class AbstractGenericDao implements IGenericDao {
+
+    /** {@link Map} 형태로 DB 조회결과를 제공하는 DTO 타입 */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    protected static final Class<Map<String, Object>> ENTITY_DTO_MAP = (Class<Map<String, Object>>) (Class) FIFOMap.class;
 
     /**
      * 데이터와 {@link PreparedStatement}를 연결하는 Setter를 제공한다.
@@ -276,6 +281,140 @@ public abstract class AbstractGenericDao implements IGenericDao {
         // AssertUtils.assertNull("QuerySource Source MUST NOT BE null", this.querySource);
     }
 
+    private <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBroker(@NotNull @NotEmpty List<E> data,
+            @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ,
+            String tailQuery) {
+
+        StringBuffer query = new StringBuffer();
+
+        query.append(headerQuery);
+        query.append(" ");
+        query.append(valueQuery);
+        query.append(" ");
+        for (int i = 1; i < data.size(); i++) {
+            query.append(concatForVQ);
+            query.append(" ");
+            query.append(valueQuery);
+        }
+
+        if (tailQuery != null) {
+            query.append(tailQuery);
+        }
+
+        // #2 데이터 Setter 생성 및 PreparedStatement 브로커 생성.
+        return new DefaultConCallbackBroker2(query.toString(), psSetterProvider.apply(data));
+    }
+
+    /**
+     * 하나의 {@link Connection}에서 실행되는 다중 실행 정보를 생성한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 21.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            저장할 데이터
+     * @param psSetterProvider
+     *            PreparedStatement 데이터 설정
+     * @param partitionSize
+     *            분할 크기
+     * @param headerQuery
+     *            다중 데이터 추가를 위한 쿼리 헤더
+     * @param valueQuery
+     *            데이터 바인딩 쿼리
+     * @param concatForVQ
+     *            데이터 바인딩 쿼리 연결자
+     * @param tailQuery
+     *            추가 쿼리
+     * @return
+     *
+     * @since 2020. 7. 21.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(@NotNull List<E> data,
+            @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize, @NotNull String headerQuery, @NotNull String valueQuery,
+            String concatForVQ, String tailQuery) {
+
+        if (data == null || data.size() < 1) {
+            return new DefaultConCallbackBroker2[0];
+        }
+
+        // #1. 분할된 데이터를 추가하기 위한 쿼리와 데이터 Setter 생성
+        List<ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>> brokers = new ArrayList<>();
+
+        List<E> part = new ArrayList<>();
+        for (E datum : data) {
+            part.add(datum);
+
+            // #1-1. 나누어진 데이터의 크기가 설정된 크기인지 확인
+            if (part.size() % partitionSize == 0) {
+                brokers.add(createBroker(part, psSetterProvider, headerQuery, valueQuery, concatForVQ, tailQuery));
+                part = new ArrayList<>();
+            }
+        }
+
+        // #2. 남은 데이터 추가
+        if (part.size() > 0) {
+            brokers.add(createBroker(part, psSetterProvider, headerQuery, valueQuery, concatForVQ, tailQuery));
+        }
+
+        return brokers.toArray(new DefaultConCallbackBroker2[0]);
+    }
+
+    /**
+     * 다중 데이터를 추가하는 실행정보를 제공한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 21.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     *            데이터 타입.
+     * @param data
+     *            추가하려는 데이타.
+     * @param dataSetter
+     *            객체 데이터를 {@link PreparedStatement}에 추가하는 주체.<br>
+     *            참조: {@link SQLTripleFunction#setParameters(String...)}
+     * @param partitionSize
+     *            데이터 분할 크기
+     * @param headerQuery
+     *            여러개 데이터 추가용 쿼리 헤더, INSERT ... 이 포함된 구문이 설정됨.
+     * @param valueQuery
+     *            여러개 데이터 바인딩용 쿼리. (?, ?, ...) 이 포함된 구문이 설정됨.
+     * @param concatForVQ
+     *            바인딩용 쿼리 연결자
+     * @param tailQuery
+     *            쿼리 마지막
+     * @return
+     *
+     * @since 2020. 7. 21.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(@NotNull List<E> data,
+            @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, @NotNull String headerQuery, @NotNull String valueQuery,
+            String concatForVQ, String tailQuery) {
+
+        Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider = params -> {
+            SQLConsumer<PreparedStatement> con = stmt -> {
+                int i = 0;
+                for (E param : params) {
+                    i = dataSetter.apply(stmt, i, param);
+                }
+            };
+
+            return con;
+        };
+
+        return createConnectionCallbackBrokers(data, psSetterProvider, partitionSize, headerQuery, valueQuery, concatForVQ, tailQuery);
+    }
+
     private <E> List<E> createObject(@NotNull ResultSet rs, @NotNull Class<E> entity, String... columns) throws SQLException {
 
         SQLBiFunction<ResultSet, Integer, E> creator = findCreator(entity, columns);
@@ -346,18 +485,28 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @see {@link ColumnDef}
      */
     private <E> List<E> executeQuery(@NotNull ConnectionCallbackBroker broker, @NotNull Class<E> entity, String... columns) throws SQLException {
-        return execute(con -> {
-            PreparedStatement pstmt = con.prepareStatement(broker.getQuery());
 
-            IConnectionCallbackSetter setter = broker.getSetter();
-            if (setter != null) {
-                setter.set(pstmt);
-            }
+        List<E> data = null;
+        StopWatch watch = new StopWatch();
+        watch.start();
+        try {
+            data = execute(con -> {
+                PreparedStatement pstmt = con.prepareStatement(broker.getQuery());
 
-            ResultSet rs = pstmt.executeQuery();
+                IConnectionCallbackSetter setter = broker.getSetter();
+                if (setter != null) {
+                    setter.set(pstmt);
+                }
 
-            return createObject(rs, entity, columns);
-        });
+                ResultSet rs = pstmt.executeQuery();
+
+                return createObject(rs, entity, columns);
+            });
+            return data;
+        } finally {
+            watch.stop();
+            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty());
+        }
     }
 
     /**
@@ -388,14 +537,23 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
     private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, @NotNull Class<E> entity, String... columns) throws SQLException {
-        return execute(con -> {
-            PreparedStatement pstmt = con.prepareStatement(broker.getQuery());
-            broker.set(pstmt);
+        List<E> data = null;
+        StopWatch watch = new StopWatch();
+        watch.start();
+        try {
+            data = execute(con -> {
+                PreparedStatement pstmt = con.prepareStatement(broker.getQuery());
+                broker.set(pstmt);
 
-            ResultSet rs = pstmt.executeQuery();
+                ResultSet rs = pstmt.executeQuery();
 
-            return createObject(rs, entity, columns);
-        });
+                return createObject(rs, entity, columns);
+            });
+            return data;
+        } finally {
+            watch.stop();
+            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty());
+        }
     }
 
     /**
@@ -446,22 +604,30 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
         Result<Integer> result = new Result<>();
 
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        Integer updated = 0;
         try {
-            StopWatch watch = new StopWatch();
-            watch.start();
-
-            Integer updated = execute(con -> {
-
+            updated = execute(con -> {
+                int pos = 0;
                 DefaultConnectionCallback2<E> action = null;
                 int total = 0;
                 int inserted = 0;
-                for (ConnectionCallbackBroker2<E> broker : brokers) {
-                    action = new DefaultConnectionCallback2<E>(broker);
-                    inserted = action.doInConnection(con);
-                    total += inserted;
+                try {
+                    for (ConnectionCallbackBroker2<E> broker : brokers) {
+                        action = new DefaultConnectionCallback2<E>(broker);
+                        inserted = action.doInConnection(con);
+                        total += inserted;
 
-                    watch.record("inserted");
-                    logger.trace("Data.count: {}, Elapsed.{}: {}", inserted, inserted, watch.getAsPretty("inserted"));
+                        watch.record("inserted");
+                        logger.trace("Data.count: {}, Elapsed.{}: {}", inserted, inserted, watch.getAsPretty("inserted"));
+
+                        pos++;
+                    }
+                } catch (Exception e) {
+                    logger.error("data.pos={}, cause={}", pos, e.getMessage(), e);
+                    throw e;
                 }
 
                 return total;
@@ -469,12 +635,12 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
             result.andTrue().setData(updated);
 
-            watch.stop();
-            logger.debug("Data.count: {}, Elapsed.total: {}", updated, watch.getAsPretty());
-
         } catch (Exception e) {
             logger.warn(e.getMessage(), e);
             result.setMessage(e.getMessage());
+        } finally {
+            watch.stop();
+            logger.trace("Data.count: {}, Elapsed.total: {}", updated, watch.getAsPretty());
         }
 
         return result;
@@ -502,8 +668,12 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
         Result<Integer> result = new Result<>();
 
+        StopWatch watch = new StopWatch();
+        watch.start();
+
+        Integer updated = 0;
         try {
-            Integer updated = execute(con -> {
+            updated = execute(con -> {
                 DefaultConnectionCallback action = null;
                 int inserted = 0;
                 for (ConnectionCallbackBroker broker : brokers) {
@@ -518,6 +688,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
         } catch (Exception e) {
             logger.warn(e.getMessage(), e);
             result.setMessage(e.getMessage());
+        } finally {
+            watch.stop();
+            logger.trace("Data.count: {}, Elapsed.total: {}", updated, watch.getAsPretty());
         }
 
         return result;
@@ -598,55 +771,11 @@ public abstract class AbstractGenericDao implements IGenericDao {
             return new Result<>(0, true);
         }
 
-        // #1. 나누어진 데이터를 담기 위한 버퍼.
-        List<List<E>> partitions = new ArrayList<>();
-        List<E> part = new ArrayList<>();
-        for (E datum : data) {
-            part.add(datum);
-
-            // #1-1. 나누어진 데이터의 크기가 설정된 크기인지 확인
-            if (part.size() % partitionSize == 0) {
-                partitions.add(part);
-                part = new ArrayList<>();
-            }
-        }
-
-        // #1-2. 남은 데이터 추가
-        if (part.size() > 0) {
-            partitions.add(part);
-        }
-
-        // #2. 분할된 데이터를 추가하기 위한 쿼리와 데이터 Setter 생성
-        List<ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>> brokers = new ArrayList<>();
-
-        StringBuffer query = new StringBuffer();
-        Iterator<List<E>> itr = partitions.iterator();
-        while (itr.hasNext()) {
-            part = itr.next();
-
-            // #2-1. 쿼리 생성
-            query.append(headerQuery);
-            query.append(" ");
-            query.append(valueQuery);
-            query.append(" ");
-            for (int i = 1; i < part.size(); i++) {
-                query.append(concatForVQ);
-                query.append(" ");
-                query.append(valueQuery);
-            }
-            if (tailQuery != null) {
-                query.append(tailQuery);
-            }
-
-            // #2-2. 데이터 Setter 생성 및 PreparedStatement 브로커 생성.
-            brokers.add(new DefaultConCallbackBroker2(query.toString(), psSetterProvider.apply(part)));
-
-            // #2-3. 쿼리 버퍼 초기화.
-            query.setLength(0);
-        }
-
-        // #3. 데이터 추가 실행.
-        return executeUpdate(brokers.toArray(new DefaultConCallbackBroker2[] {}));
+        // #1. 데이터 추가 다중 실행 정보 생성.
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, psSetterProvider, partitionSize, headerQuery, valueQuery,
+                concatForVQ, tailQuery);
+        // #2. 데이터 추가 실행.
+        return executeUpdate(brokers);
     }
 
     /**
@@ -761,19 +890,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
-
-        Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider = params -> {
-            SQLConsumer<PreparedStatement> con = stmt -> {
-                int i = 0;
-                for (E param : params) {
-                    i = dataSetter.apply(stmt, i, param);
-                }
-            };
-
-            return con;
-        };
-
-        return executeUpdate(data, psSetterProvider, partitionSize, headerQuery, valueQuery, concatForVQ, tailQuery);
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ,
+                tailQuery);
+        return executeUpdate(brokers);
     }
 
     /**
@@ -1043,6 +1162,51 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
+     * 2020. 7. 22.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     *            요청받을 데이타 타입
+     * @param query
+     *            데이터 조회 요청쿼리
+     * @param size
+     *            한번에 불러올 데이터 개수
+     * @param setter
+     *            요청쿼리 파라미터 설정 객체
+     * @param entity
+     *            결과 데이타 타입
+     * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     * 
+     * @return 쿼리 처리결과
+     *         <ul>
+     *         <li>&lt;T&gt; 요청받을 데이타 타입
+     *         </ul>
+     *
+     * @since 2020. 7. 22.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public <E> Result<List<E>> getList(@NotNull String query, int size, @NotNull IConnectionCallbackSetter setter, @NotNull Class<E> entity, String... columns) {
+
+        Result<List<E>> result = new Result<>();
+
+        try {
+            List<E> list = executeQuery(new ConnectionCallbackBroker(query, setter), entity, columns);
+            result.andTrue().setData(list);
+        } catch (SQLException e) {
+            result.setMessage(e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
      * 2019. 3. 28.		박준홍			최초 작성
      * </pre>
      *
@@ -1064,7 +1228,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @version 0.1.0
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    public <E> Result<List<E>> getList(@NotNull String query, @NotNull SQLConsumer<PreparedStatement> setter, @NotNull Class<E> entity, String... columns) {
+    public <E> Result<List<E>> getList(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<E> entity, String... columns) {
 
         Result<List<E>> result = new Result<>();
 
@@ -1085,13 +1249,42 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
+     * 2020. 7. 22.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            데이터 조회 요청쿼리
+     * @param setter
+     *            데이터 바인더
+     * @param entity
+     *            결과 데이터 타입.
+     * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     * 
+     * @return 쿼리 처리결과
+     *         <ul>
+     *         <li>&lt;T&gt; 요청받을 데이타 타입
+     *         </ul>
+     *
+     * @since 2020. 7. 22.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    @SuppressWarnings({ "unchecked", "rawtypes" })
+    public Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, String... columns) {
+        Class<Map<String, Object>> entity = (Class<Map<String, Object>>) (Class) FIFOMap.class;
+        return getList(query, setter, entity, columns);
+    }
+
+    /**
+     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
      * 2020. 6. 12.		박준홍			최초 작성
      * </pre>
      *
-     * @param <K>
-     * @param <V>
-     * @param <T>
-     *            {@link Map}을 상속받은 타입
      * @param query
      *            데이터 조회 요청쿼리
      * @param entity
@@ -1103,15 +1296,12 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
      *         </ul>
-     * @return
      *
      * @since 2020. 6. 12.
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    @SuppressWarnings({ "unchecked", "rawtypes" })
-    public <V> Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, String... columns) {
-        Class<Map<String, Object>> entity = (Class<Map<String, Object>>) (Class) FIFOMap.class;
-        return getList(query, (IConnectionCallbackSetter) null, entity, columns);
+    public Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, String... columns) {
+        return getListAsMap(query, null, columns);
     }
 
     /**
@@ -1131,6 +1321,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @param required
      *            필수여부
      * @param columns
+     * 
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
      *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
@@ -1206,7 +1397,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @version 0.1.0
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    public <T> Result<T> getObject(@NotNull String query, @NotNull SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, boolean required, String... columns) {
+    public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, boolean required, String... columns) {
         Result<T> result = new Result<>();
 
         try {
@@ -1263,8 +1454,107 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @version 0.1.0
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    public <T> Result<T> getObject(@NotNull String query, @NotNull SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, String... columns) {
+    public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, String... columns) {
         return getObject(query, setter, entity, false, columns);
+    }
+
+    /**
+     * 데이터 1개를 제공한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            조회 쿼리
+     * @param required
+     *            데이터 존재 필수 여부
+     * @param columns
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, boolean required, String... columns) {
+        return getObjectAsMap(query, null, required, columns);
+    }
+
+    /**
+     * 데이터 1개를 제공한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            요청쿼리
+     * @param setter
+     *            요췅쿼리 파라미터 설정 객체
+     * @param required
+     * @param columns
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String... columns) {
+        return getObject(query, setter, ENTITY_DTO_MAP, required, columns);
+    }
+
+    /**
+     * 데이터 1개를 제공한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            요청쿼리
+     * @param setter
+     *            요췅쿼리 파라미터 설정 객체
+     * @param columns
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, String... columns) {
+        return getObjectAsMap(query, setter, false, columns);
+    }
+
+    /**
+     * 데이터 1개를 제공한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            요청쿼리
+     * @param columns
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, String... columns) {
+        return getObjectAsMap(query, null, false, columns);
     }
 
     /**
@@ -1298,6 +1588,158 @@ public abstract class AbstractGenericDao implements IGenericDao {
     @Override
     public ReloadableResourceBundleMessageSource getQuerySource() {
         return this.querySource;
+    }
+
+    /**
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회 쿼리
+     * @param setter
+     *            쿼리 파라미터 설정 객체
+     * @param required
+     *            데이터 필수 반환 여부
+     * @param column
+     *            컬럼명
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Result<T> getValue(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String column) {
+        Result<Map<String, Object>> mapResult = getObjectAsMap(query, setter, required, column);
+
+        if (!mapResult.getResult()) {
+            return new Result<T>().setMessage(mapResult.getMessage());
+        }
+
+        Map<String, Object> mapData = mapResult.getData();
+
+        return new Result<T>((T) mapData.get(column), true);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회쿼리
+     * @param column
+     *            조회할 컬럼명
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column) {
+        return getValue(query, null, false, column);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     *            데이터 타입
+     * @param query
+     *            조회 쿼리
+     * @param column
+     *            조회할 컬럼명
+     * @param required
+     *            데이터 필수 여부
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column, boolean required) {
+        return getValue(query, null, required, column);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회쿼리
+     * @param setter
+     *            쿼리 파라미터 설정 객체
+     * @param column
+     *            컬럼명
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotNull @NotEmpty String column) {
+        Result<List<Map<String, Object>>> mapResult = getListAsMap(query, column);
+
+        if (!mapResult.getResult()) {
+            return new Result<List<T>>().setMessage(mapResult.getMessage());
+        }
+
+        List<Map<String, Object>> mapData = mapResult.getData();
+
+        List<T> data = mapData.stream() //
+                .map(m -> (T) m.get(column)) //
+                .collect(Collectors.toList());
+
+        return new Result<>(data, true);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2020. 7. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회쿼리
+     * @param column
+     *            조회할 컬럼명
+     * @return
+     *
+     * @since 2020. 7. 30.
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column) {
+        return getValues(query, null, column);
     }
 
     /**
