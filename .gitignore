@@ -1,3 +1,26 @@
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+!/.mvn/wrapper/maven-wrapper.jar
+
+# eclipse
+.classpath
+.project
+.settings/
+
+# custom
+ant.build/
+doc/
+.sts4-cache
+
 # Compiled class file
 *.class
 
@@ -88,4 +111,7 @@ local.properties
 .scala_dependencies
 .worksheet
 
+
+
+mvn-deploy.sh
 

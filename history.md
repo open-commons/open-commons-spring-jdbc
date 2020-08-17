@@ -1,3 +1,11 @@
+[2020/08/12]
+- Update
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - createConnectionCallbackBrokers(List<E>, SQLTripleFunction<PreparedStatement, Integer, E, Integer>, int, String, String, String, String)
+      - 내부 PreparedStatement Setter 내부 코드 개선: Variable Binding 직후 파라미터 변수 초기화
+    - getValue(String, SQLConsumer<PreparedStatement>, boolean, String)
+      - 데이타 필수 여부에 따른 객체 확인 코드 추가
+
 [2020/07/30]
 - Add
   + open.commons.spring.jdbc.dao.AbstractGenericDao

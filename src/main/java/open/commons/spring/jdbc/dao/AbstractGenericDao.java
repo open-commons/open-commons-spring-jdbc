@@ -407,6 +407,10 @@ public abstract class AbstractGenericDao implements IGenericDao {
                 for (E param : params) {
                     i = dataSetter.apply(stmt, i, param);
                 }
+
+                // begin - PATCH [2020. 8. 12.]: 데이터 바인딩 직후 Collection 해제 | Park_Jun_Hong_(fafanmama_at_naver_com)
+                params.clear();
+                // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 8. 12.
             };
 
             return con;
@@ -1599,6 +1603,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 8. 13.     박준홍         required == false 인 경우 Map<> 데이터 검증 추가.
      * </pre>
      *
      * @param <T>
@@ -1624,6 +1629,12 @@ public abstract class AbstractGenericDao implements IGenericDao {
         }
 
         Map<String, Object> mapData = mapResult.getData();
+        // begin - PATCH [2020. 8. 13.]: required == false 인 경우 Map<> 데이터 검증 추가. |
+        // Park_Jun_Hong_(fafanmama_at_naver_com)
+        if (mapData == null && !required) {
+            return new Result<T>(null, true);
+        }
+        // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 8. 13.
 
         return new Result<T>((T) mapData.get(column), true);
     }
