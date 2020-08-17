@@ -106,7 +106,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
             StringBuffer msg = new StringBuffer();
             msg.append("con=");
             msg.append(con.toString());
-            msg.append("con-to-work=");
+            msg.append(", con-to-work=");
             msg.append(conToWork != null ? conToWork.toString() : null);
 
             DataAccessException dae = jdbcTemplate.getExceptionTranslator().translate("ConnectionCallback", msg.toString(), e);
