@@ -23,6 +23,7 @@
 		<compile.target-version>1.8</compile.target-version>
 
 		<!-- >>> begin: dependencies -->
+		<slf4j-api.version>1.7.26</slf4j-api.version>
 		<org.springframework-version>5.1.13.RELEASE</org.springframework-version>
 		<org.apache.logging.log4j-version>2.1</org.apache.logging.log4j-version>
 		<jackson-databind.version>[2.9.10.5,)</jackson-databind.version>
@@ -67,7 +68,7 @@
 			</snapshots>
 		</repository>
 		<repository>
-			<id>ymtech.kr</id>
+			<id>ymtech-maven-repo</id>
 			<name>YMTECH Maven Repository</name>
 			<url>http://nexus3.ymtech.co.kr/repository/maven-public/</url>
 			<layout>default</layout>
@@ -116,7 +117,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>1.7.26</version>
+			<version>${slf4j-api.version}</version>
 		</dependency>
 		<!-- end: slf4j -->
 		<!-- ********************** -->
@@ -133,11 +134,11 @@
 		<!-- ********************** -->
 
 		<!-- >>> begin: Jackson for JSON -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-databind</artifactId>
-			<version>${jackson-databind.version}</version>
-		</dependency>
+<!-- 		<dependency> -->
+<!-- 			<groupId>com.fasterxml.jackson.core</groupId> -->
+<!-- 			<artifactId>jackson-databind</artifactId> -->
+<!-- 			<version>${jackson-databind.version}</version> -->
+<!-- 		</dependency> -->
 		<!-- <<< end: Jackson for JSON -->
 
 		<!-- >>> begin: Apache Commons -->
