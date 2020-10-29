@@ -1,3 +1,6 @@
+[2020/10/29]
+- Release: 0.2.0
+
 [2020/08/12]
 - Update
   + open.commons.spring.jdbc.dao.AbstractGenericDao
