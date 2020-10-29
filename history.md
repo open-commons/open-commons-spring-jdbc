@@ -1,5 +1,17 @@
 [2020/10/29]
+- Snapshot: 0.3.0-SNAPSHOT
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - executeUpdate(String, SQLConsumer&lt;PreparedStatement&gt;, boolean)
+- Update
+  + open.commons.spring.jdbc.dao.DefaultConnectionCallback2
+    - doInConnection(Connection):  PreparedStatement 를 ConnectionCallbackBroker2에서 제공받도록 수정. 이를 통해서 PreparedStatement와 CallableStatement 를 구분해서 제공한다.
+    
+
+[2020/10/29]
 - Release: 0.2.0
+- Resolve vulnerability
+  + GHSA-269g-pwp5-87pp
 
 [2020/08/12]
 - Update

@@ -72,11 +72,11 @@ public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer
      */
     @Override
     public Integer doInConnection(Connection con) throws SQLException, DataAccessException {
-        
+
         int count = 0;
         PreparedStatement stmt = null;
-        try {            
-            stmt = con.prepareStatement(broker.getQuery());
+        try {
+            stmt = this.broker.getStatement(con);
 
             broker.set(stmt);
 

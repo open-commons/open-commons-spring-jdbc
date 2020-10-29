@@ -577,6 +577,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * 
+     * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
      */
     public Result<Integer> executeUpdate(ConnectionCallbackBroker... brokers) {
         return executeUpdate(Arrays.asList(brokers));
@@ -667,6 +669,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * 
+     * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
      */
     public Result<Integer> executeUpdate(@NotNull List<ConnectionCallbackBroker> brokers) {
 
@@ -729,7 +733,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2020. 1. 20.
      * @version 0.0.6
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
-     * @deprecated Use {@link #executeUpdate(List, Function, int, String, String, String, String)
+     * 
+     * @deprecated Not use anoy more.
      */
     @SuppressWarnings("unused")
     private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
@@ -767,6 +772,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 6. 15.
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * 
+     * @deprecated Not use any more.
      */
     private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
             @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
@@ -918,6 +925,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * 
+     * @deprecated Not support any more.
      */
     public Result<Integer> executeUpdate(@NotNull String query, IConnectionCallbackSetter setter) {
         return executeUpdate(new ConnectionCallbackBroker(query, setter));
@@ -943,9 +952,13 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @version 0.0.6
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
-    @SuppressWarnings("unchecked")
     public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter) {
-        return executeUpdate(new DefaultConCallbackBroker2(query, setter));
+        return executeUpdate(query, setter, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) {
+        return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
 
     /**
