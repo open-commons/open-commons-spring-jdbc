@@ -71,6 +71,7 @@ import open.commons.function.SQLFunction;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.dto.CountDTO;
 import open.commons.test.StopWatch;
+import open.commons.utils.NumberUtils;
 import open.commons.utils.SQLUtils;
 
 /**
@@ -556,7 +557,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
         }
     }
 
