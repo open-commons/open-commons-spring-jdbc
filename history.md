@@ -1,3 +1,8 @@
+[2020/11/21]
+- Bugfix
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - getValues(String, SQLConsumer&lt;PreparedStatement&gt;, String):  getListAsMap(String, SQLConsumer&lt;PreparedStatement&gt;, String...)에 SQLConsumer&lt;PreparedStatement&gt; 전달 누락 수정
+
 [2020/10/29]
 - Snapshot: 0.3.0-SNAPSHOT
 - Add

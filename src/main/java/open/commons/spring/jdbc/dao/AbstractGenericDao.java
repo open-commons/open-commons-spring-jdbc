@@ -138,6 +138,7 @@ import open.commons.utils.SQLUtils;
  * @author Park_Jun_Hong_(fafanmama_at_naver_com)
  */
 @Validated
+@SuppressWarnings("deprecation")
 public abstract class AbstractGenericDao implements IGenericDao {
 
     /** {@link Map} 형태로 DB 조회결과를 제공하는 DTO 타입 */
@@ -1712,6 +1713,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 11. 21.    박준홍			내부 버그 수정. getListAsMap(String, SQLConsumer<PreparedStatement>, String...)에 SQLConsumer<PreparedStatement> 전달 누락 수정
      * </pre>
      *
      * @param <T>
@@ -1728,7 +1730,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     @SuppressWarnings("unchecked")
     public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotNull @NotEmpty String column) {
-        Result<List<Map<String, Object>>> mapResult = getListAsMap(query, column);
+        Result<List<Map<String, Object>>> mapResult = getListAsMap(query, setter, column);
 
         if (!mapResult.getResult()) {
             return new Result<List<T>>().setMessage(mapResult.getMessage());
