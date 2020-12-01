@@ -44,6 +44,7 @@ import open.commons.database.IConnectionCallbackSetter;
  * @author Park_Jun_Hong_(fafanmama_at_naver_com)
  * @version 0.1.0
  */
+@SuppressWarnings("deprecation")
 public class DefaultConnectionCallback implements ConnectionCallback<Integer> {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
