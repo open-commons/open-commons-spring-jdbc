@@ -1,6 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.2.6.RELEASE</version>
+	</parent>
 	<groupId>open.commons</groupId>
 	<artifactId>open-commons-spring-jdbc</artifactId>
 	<version>0.3.0-SNAPSHOT</version>
@@ -89,25 +94,39 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
+			<!-- <version>${org.springframework-version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework-version}</version>
+			<!-- <version>${org.springframework-version}</version> -->
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework-version}</version>
+			<!-- <version>${org.springframework-version}</version> -->
 		</dependency>
 		<!-- <<< end: Spring -->
+
+		<!-- ********************** -->
+		<!-- begin: jdbc -->
+		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+		<!-- end: jdbc -->
+		<!-- ********************** -->
 
 		<!-- begin: Validation -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
+			<!-- <version>2.0.1.Final</version> -->
 		</dependency>
 		<!-- end : Validation -->
 
@@ -117,7 +136,7 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j-api.version}</version>
+			<!-- <version>${slf4j-api.version}</version> -->
 		</dependency>
 		<!-- end: slf4j -->
 		<!-- ********************** -->
@@ -134,11 +153,11 @@
 		<!-- ********************** -->
 
 		<!-- >>> begin: Jackson for JSON -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.fasterxml.jackson.core</groupId> -->
-<!-- 			<artifactId>jackson-databind</artifactId> -->
-<!-- 			<version>${jackson-databind.version}</version> -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>com.fasterxml.jackson.core</groupId> -->
+		<!-- <artifactId>jackson-databind</artifactId> -->
+		<!-- <version>${jackson-databind.version}</version> -->
+		<!-- </dependency> -->
 		<!-- <<< end: Jackson for JSON -->
 
 		<!-- >>> begin: Apache Commons -->
@@ -169,7 +188,7 @@
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-core</artifactId>
-			<version>2.1</version>
+			<!-- <version>2.1</version> -->
 			<scope>test</scope>
 		</dependency>
 		<!-- <<< end: junit -->
@@ -200,7 +219,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
+				<!-- <version>${maven-compiler-plugin.version}</version> -->
 				<configuration>
 					<encoding>${compile.encoding-version}</encoding>
 					<source>${compile.source-version}</source>
@@ -212,7 +231,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven-source-plugin.version}</version>
+				<!-- <version>${maven-source-plugin.version}</version> -->
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
@@ -230,7 +249,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
+				<!-- <version>${maven-javadoc-plugin.version}</version> -->
 				<configuration>
 					<goal>deploy</goal>
 					<show>private</show>

@@ -1,3 +1,13 @@
+[2020/12/03]
+- New
+  + open.commons.spring.jdbc.config
+    - ConfigUtils: Configuration용 함수 제공
+    - MultipleDataSourceConfig: 다중 DBMS 연결을 위한 설정 지원
+- dependencies
+  + spring-boot-starter-parent 적용
+
+
+
 [2020/11/21]
 - Bugfix
   + open.commons.spring.jdbc.dao.AbstractGenericDao
