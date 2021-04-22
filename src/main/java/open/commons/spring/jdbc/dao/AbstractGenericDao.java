@@ -506,12 +506,19 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 ResultSet rs = pstmt.executeQuery();
 
-                return createObject(rs, entity, columns);
+                watch.record("execute-query");
+
+                try {
+                    return createObject(rs, entity, columns);
+                } finally {
+                    watch.record("create-objects");
+                }
             });
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.query={}, Elapsed.objects={}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty("execute-query"),
+                    watch.getAsPretty("create-objects"), watch.getAsPretty());
         }
     }
 
@@ -553,12 +560,19 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 ResultSet rs = pstmt.executeQuery();
 
-                return createObject(rs, entity, columns);
+                watch.record("execute-query");
+
+                try {
+                    return createObject(rs, entity, columns);
+                } finally {
+                    watch.record("create-objects");
+                }
             });
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.query={}, Elapsed.objects={}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0,
+                    watch.getAsPretty("execute-query"), watch.getAsPretty("create-objects"), watch.getAsPretty());
         }
     }
 

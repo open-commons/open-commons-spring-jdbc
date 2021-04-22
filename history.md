@@ -1,3 +1,9 @@
+[2021/04/23]
+- Modify
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - executeQuery(ConnectionCallbackBroker, Class&lt;E&gt;, String...): 소요시간 로그 추가
+    - executeQuery(ConnectionCallbackBroker2&lt;S&gt;, Class&lt;E&gt;, String...): 소요시간 로그 추가
+
 [2020/12/03]
 - New
   + open.commons.spring.jdbc.config
