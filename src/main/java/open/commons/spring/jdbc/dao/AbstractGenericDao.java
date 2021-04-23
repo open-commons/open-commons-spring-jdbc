@@ -506,19 +506,22 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 ResultSet rs = pstmt.executeQuery();
 
-                watch.record("execute-query");
+                String label = "execute-query";
+                watch.record(label);
+                logger.trace("Elapsed.execute-query={}", watch.getAsPretty(label));
 
                 try {
                     return createObject(rs, entity, columns);
                 } finally {
-                    watch.record("create-objects");
+                    label = "create-objects";
+                    watch.record(label);
+                    logger.trace("Elapsed.create-objects={}", watch.getAsPretty(label));
                 }
             });
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.query={}, Elapsed.objects={}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty("execute-query"),
-                    watch.getAsPretty("create-objects"), watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
         }
     }
 
@@ -560,19 +563,22 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 ResultSet rs = pstmt.executeQuery();
 
-                watch.record("execute-query");
+                String label = "execute-query";
+                watch.record(label);
+                logger.trace("Elapsed.execute-query={}", watch.getAsPretty(label));
 
                 try {
                     return createObject(rs, entity, columns);
                 } finally {
-                    watch.record("create-objects");
+                    label = "create-objects";
+                    watch.record(label);
+                    logger.trace("Elapsed.create-objects={}", watch.getAsPretty(label));
                 }
             });
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.query={}, Elapsed.objects={}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0,
-                    watch.getAsPretty("execute-query"), watch.getAsPretty("create-objects"), watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
         }
     }
 
