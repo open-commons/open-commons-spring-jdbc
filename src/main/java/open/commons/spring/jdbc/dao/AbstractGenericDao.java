@@ -553,6 +553,62 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      */
     private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, @NotNull Class<E> entity, String... columns) throws SQLException {
+        return executeQuery(broker, rs -> createObject(rs, entity, columns));
+        // List<E> data = null;
+        // StopWatch watch = new StopWatch();
+        // watch.start();
+        // try {
+        // data = execute(con -> {
+        // PreparedStatement pstmt = con.prepareStatement(broker.getQuery());
+        // broker.set(pstmt);
+        //
+        // ResultSet rs = pstmt.executeQuery();
+        //
+        // String label = "execute-query";
+        // watch.record(label);
+        // logger.trace("Elapsed.execute-query={}", watch.getAsPretty(label));
+        //
+        // try {
+        // return createObject(rs, entity, columns);
+        // } finally {
+        // label = "create-objects";
+        // watch.record(label);
+        // logger.trace("Elapsed.create-objects={}", watch.getAsPretty(label));
+        // }
+        // });
+        // return data;
+        // } finally {
+        // watch.stop();
+        // logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) :
+        // 0, watch.getAsPretty());
+        // }
+    }
+
+    /**
+     * 요청쿼리를 실행하고 결과를 제공한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 4. 23.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <S>
+     * @param <E>
+     *            요청받을 데이터 타입
+     * @param broker
+     *            쿼리와 쿼리 파라미터를 처리하는 객체
+     * @param creator
+     *            데이터를 생성하는 객체
+     * @return
+     * @throws SQLException
+     *
+     * @since 2021. 4. 23.
+     * @version 0.3.0
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, SQLFunction<ResultSet, List<E>> creator) throws SQLException {
         List<E> data = null;
         StopWatch watch = new StopWatch();
         watch.start();
@@ -565,10 +621,10 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 String label = "execute-query";
                 watch.record(label);
-                logger.trace("Elapsed.execute-query={}", watch.getAsPretty(label));
+                logger.trace("Elapsed.execute-query={}, next='create-objects'", watch.getAsPretty(label));
 
                 try {
-                    return createObject(rs, entity, columns);
+                    return creator.apply(rs);
                 } finally {
                     label = "create-objects";
                     watch.record(label);
@@ -1273,6 +1329,85 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
         try {
             List<E> list = executeQuery(new DefaultConCallbackBroker2(query, setter), entity, columns);
+            result.andTrue().setData(list);
+        } catch (SQLException e) {
+            result.setMessage(e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 4. 23.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            데이터 조회 요청쿼리
+     * @param setter
+     *            요청쿼리 파라미터 설정 객체 <br>
+     * @param creator
+     *            데이터 생성 함수
+     * 
+     * @return 쿼리 처리결과
+     *         <ul>
+     *         <li>&lt;T&gt; 요청받을 데이타 타입
+     *         </ul>
+     *
+     * @since 2032. 4. 23.
+     * @version 0.3.0
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public <E> Result<List<E>> getList(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull SQLFunction<ResultSet, List<E>> creator) {
+
+        Result<List<E>> result = new Result<>();
+
+        try {
+            List<E> list = executeQuery(new DefaultConCallbackBroker2(query, setter), creator);
+            result.andTrue().setData(list);
+        } catch (SQLException e) {
+            result.setMessage(e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 4. 23.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param query
+     *            데이터 조회 요청쿼리
+     * @param creator
+     *            데이터 생성 함수
+     * @return 쿼리 처리결과
+     *         <ul>
+     *         <li>&lt;T&gt; 요청받을 데이타 타입
+     *         </ul>
+     *
+     * @since 2021. 4. 23.
+     * @version _._._
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     */
+    public <E> Result<List<E>> getList(@NotNull String query, @NotNull SQLFunction<ResultSet, List<E>> creator) {
+
+        Result<List<E>> result = new Result<>();
+
+        try {
+            List<E> list = executeQuery(new DefaultConCallbackBroker2(query, null), creator);
             result.andTrue().setData(list);
         } catch (SQLException e) {
             result.setMessage(e.getMessage());

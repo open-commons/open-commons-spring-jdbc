@@ -1,4 +1,7 @@
 [2021/04/23]
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - getList(String, SQLFunction&lt;ResultSet, List&lt;E&gt;&gt;)
 - Modify
   + open.commons.spring.jdbc.dao.AbstractGenericDao
     - executeQuery(ConnectionCallbackBroker, Class&lt;E&gt;, String...): 소요시간 로그 추가
