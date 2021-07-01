@@ -812,7 +812,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @version 0.0.6
      * @author Park_Jun_Hong_(fafanmama_at_naver_com)
      * 
-     * @deprecated Not use anoy more.
+     * @deprecated Not use any more.
      */
     @SuppressWarnings("unused")
     private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
