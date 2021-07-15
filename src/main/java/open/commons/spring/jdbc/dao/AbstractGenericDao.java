@@ -554,34 +554,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, @NotNull Class<E> entity, String... columns) throws SQLException {
         return executeQuery(broker, rs -> createObject(rs, entity, columns));
-        // List<E> data = null;
-        // StopWatch watch = new StopWatch();
-        // watch.start();
-        // try {
-        // data = execute(con -> {
-        // PreparedStatement pstmt = con.prepareStatement(broker.getQuery());
-        // broker.set(pstmt);
-        //
-        // ResultSet rs = pstmt.executeQuery();
-        //
-        // String label = "execute-query";
-        // watch.record(label);
-        // logger.trace("Elapsed.execute-query={}", watch.getAsPretty(label));
-        //
-        // try {
-        // return createObject(rs, entity, columns);
-        // } finally {
-        // label = "create-objects";
-        // watch.record(label);
-        // logger.trace("Elapsed.create-objects={}", watch.getAsPretty(label));
-        // }
-        // });
-        // return data;
-        // } finally {
-        // watch.stop();
-        // logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) :
-        // 0, watch.getAsPretty());
-        // }
     }
 
     /**
