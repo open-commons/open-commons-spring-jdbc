@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  *
  * Date  : 2019. 3. 28. 오후 3:42:37
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -135,7 +135,7 @@ import open.commons.utils.SQLUtils;
  * 
  * @since 2019. 3. 28.
  * @version 0.1.0
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
 @Validated
 @SuppressWarnings("deprecation")
@@ -218,7 +218,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 6. 12.
      * @version
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected void addQueryForInClause(StringBuffer sqlBuffer, int inParamCount) {
 
@@ -257,7 +257,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 6. 12.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected void addQueryForInClause(StringBuffer sqlBuffer, String concatenator, String columnName, int inParamCount) {
 
@@ -335,7 +335,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(@NotNull List<E> data,
             @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize, @NotNull String headerQuery, @NotNull String valueQuery,
@@ -397,7 +397,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(@NotNull List<E> data,
             @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, @NotNull String headerQuery, @NotNull String valueQuery,
@@ -410,9 +410,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
                     i = dataSetter.apply(stmt, i, param);
                 }
 
-                // begin - PATCH [2020. 8. 12.]: 데이터 바인딩 직후 Collection 해제 | Park_Jun_Hong_(fafanmama_at_naver_com)
+                // begin - PATCH [2020. 8. 12.]: 데이터 바인딩 직후 Collection 해제 | Park_Jun_Hong_(parkjunhong77@gmail.com)
                 params.clear();
-                // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 8. 12.
+                // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 8. 12.
             };
 
             return con;
@@ -457,7 +457,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected abstract <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException;
 
@@ -487,7 +487,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * 
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @see {@link ColumnDef}
      */
     private <E> List<E> executeQuery(@NotNull ConnectionCallbackBroker broker, @NotNull Class<E> entity, String... columns) throws SQLException {
@@ -550,7 +550,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, @NotNull Class<E> entity, String... columns) throws SQLException {
         return executeQuery(broker, rs -> createObject(rs, entity, columns));
@@ -578,7 +578,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2021. 4. 23.
      * @version 0.3.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, SQLFunction<ResultSet, List<E>> creator) throws SQLException {
         List<E> data = null;
@@ -626,7 +626,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
      */
@@ -653,7 +653,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
     public <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) {
@@ -718,7 +718,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
      */
@@ -782,7 +782,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @deprecated Not use any more.
      */
@@ -821,7 +821,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 6. 15.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @deprecated Not use any more.
      */
@@ -862,7 +862,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 17.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
@@ -903,7 +903,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
@@ -945,7 +945,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 6. 15.
      * @version 0.2.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
@@ -974,7 +974,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @deprecated Not support any more.
      */
@@ -1000,7 +1000,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 29.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter) {
         return executeUpdate(query, setter, false);
@@ -1034,7 +1034,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private <R> SQLBiFunction<ResultSet, Integer, R> findCreator(@NotNull Class<R> entity, String... columns) {
@@ -1043,7 +1043,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
         SQLBiFunction<ResultSet, Integer, R> creator = (SQLBiFunction<ResultSet, Integer, R>) CREATORS.get(key);
 
         if (creator == null) {
-            // begin - PATCH [2020. 6. 12.]: 조회 결과를 java.util.Map 형태로 받는 경우 지원.| Park_Jun_Hong_(fafanmama_at_naver_com)
+            // begin - PATCH [2020. 6. 12.]: 조회 결과를 java.util.Map 형태로 받는 경우 지원.| Park_Jun_Hong_(parkjunhong77@gmail.com)
             if (Map.class.isAssignableFrom(entity)) {
                 // DAO Entity가 Map.class 인 경우는 Map.class 가 여러 가지의 데이터 타입을 대신하는 것이기 때문에,
                 // Entity 생성 함수를 별도로 저장하지 않는다.
@@ -1059,7 +1059,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
                         throw new SQLException(String.format("%s 객체 생성시 에러가 발생하였습니다. 원인=%s", entity, e.getMessage()), e);
                     }
                 };
-                // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 6. 12.
+                // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 6. 12.
             } else {
                 creator = (rs, rowNum) -> SQLUtils.newInstance(entity, rs, columns);
                 CREATORS.put(entity.getName(), creator);
@@ -1097,7 +1097,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 6. 5.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final Connection getConnection(@NotNull Connection con, @NotNull JdbcTemplate jdbcTemplate) throws SQLException {
         try {
@@ -1132,7 +1132,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Integer> getCount(@NotNull String selectQuery, Object... params) {
         String query = wrapQueryForCount(selectQuery);
@@ -1171,7 +1171,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, @NotNull Class<E> entity, String... columns) {
         return getList(query, (IConnectionCallbackSetter) null, entity, columns);
@@ -1206,7 +1206,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, @NotNull IConnectionCallbackSetter setter, @NotNull Class<E> entity, String... columns) {
 
@@ -1251,7 +1251,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         </ul>
      *
      * @since 2020. 7. 22.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, int size, @NotNull IConnectionCallbackSetter setter, @NotNull Class<E> entity, String... columns) {
 
@@ -1293,7 +1293,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<E> entity, String... columns) {
 
@@ -1333,7 +1333,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2032. 4. 23.
      * @version 0.3.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull SQLFunction<ResultSet, List<E>> creator) {
 
@@ -1372,7 +1372,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2021. 4. 23.
      * @version _._._
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, @NotNull SQLFunction<ResultSet, List<E>> creator) {
 
@@ -1413,7 +1413,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         </ul>
      *
      * @since 2020. 7. 22.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, String... columns) {
@@ -1444,7 +1444,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         </ul>
      *
      * @since 2020. 6. 12.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, String... columns) {
         return getListAsMap(query, null, columns);
@@ -1477,7 +1477,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, boolean required, String... columns) {
         return getObject(query, null, entity, required, columns);
@@ -1507,7 +1507,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, String... columns) {
         return getObject(query, null, entity, false, columns);
@@ -1541,7 +1541,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, boolean required, String... columns) {
         Result<T> result = new Result<>();
@@ -1557,7 +1557,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
                     result.andTrue();
                     break;
                 case 1:
-                    // (start) [BUG-FIX]: Result#result 설정 누락 수정 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 12.
+                    // (start) [BUG-FIX]: Result#result 설정 누락 수정 / Park_Jun_Hong_(parkjunhong77@gmail.com): 2019. 6. 12.
                     // 오후 4:15:28
                     result.andTrue().setData(list.get(0));
                     // (end): 2019. 6. 12. 오후 4:15:28
@@ -1598,7 +1598,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, String... columns) {
         return getObject(query, setter, entity, false, columns);
@@ -1623,7 +1623,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, boolean required, String... columns) {
         return getObjectAsMap(query, null, required, columns);
@@ -1649,7 +1649,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String... columns) {
         return getObject(query, setter, ENTITY_DTO_MAP, required, columns);
@@ -1674,7 +1674,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, String... columns) {
         return getObjectAsMap(query, setter, false, columns);
@@ -1697,7 +1697,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, String... columns) {
         return getObjectAsMap(query, null, false, columns);
@@ -1760,7 +1760,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
     public <T> Result<T> getValue(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String column) {
@@ -1772,11 +1772,11 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
         Map<String, Object> mapData = mapResult.getData();
         // begin - PATCH [2020. 8. 13.]: required == false 인 경우 Map<> 데이터 검증 추가. |
-        // Park_Jun_Hong_(fafanmama_at_naver_com)
+        // Park_Jun_Hong_(parkjunhong77@gmail.com)
         if (mapData == null && !required) {
             return new Result<T>(null, true);
         }
-        // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 8. 13.
+        // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 8. 13.
 
         return new Result<T>((T) mapData.get(column), true);
     }
@@ -1799,7 +1799,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column) {
         return getValue(query, null, false, column);
@@ -1826,7 +1826,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column, boolean required) {
         return getValue(query, null, required, column);
@@ -1853,7 +1853,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
     public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotNull @NotEmpty String column) {
@@ -1890,7 +1890,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column) {
         return getValues(query, null, column);
@@ -1910,7 +1910,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public abstract void setQuerySource(@NotNull ReloadableResourceBundleMessageSource querySource);
 
@@ -1929,7 +1929,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public String wrapQueryForCount(@NotNull String query) {
         StringBuffer queryBuffer = new StringBuffer("SELECT count(*) AS count FROM ( ");

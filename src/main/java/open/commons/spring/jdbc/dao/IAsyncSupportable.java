@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  *
  * Date  : 2020. 1. 22. 오전 12:50:06
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -51,7 +51,7 @@ import open.commons.function.HexaFunction;
  * {@link ThreadPoolTaskExecutor}를 기반으로
  * 
  * @since 2020. 1. 22.
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  * @version 0.0.6
  */
 @Validated
@@ -89,7 +89,7 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <E> List<Future<Result<List<E>>>> callAsync(@NotNull HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
             , @NotNull String query, int totalCount, int partitionSize, @NotNull Class<E> type, @NotNull Supplier<Object[]> params, @NotNull Supplier<String[]> columns) {
@@ -142,7 +142,7 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <E> Result<List<E>> executeParallel(@NotNull String query, int totalCount, int partitionSize, @NotNull Class<E> type, @NotNull Supplier<Object[]> params,
             @NotNull Supplier<String[]> columns) {
@@ -209,7 +209,7 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <E> Consumer<Result<List<E>>> getCollector(@NotNull final List<E> collector) {
         return t -> collector.addAll(t.getData());
@@ -233,7 +233,7 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Integer> getCount(@NotNull String selectQuery, Object... params);
 
@@ -256,7 +256,7 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <P> Result<Integer> getCount(@NotNull Supplier<Result<Integer>> m, @NotNull P parameters) {
         return m.get();
@@ -281,7 +281,7 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <P> Result<Integer> getCountBy(@NotNull Function<P, Result<Integer>> m, @NotNull P parameters) {
         return m.apply(parameters);
@@ -313,7 +313,7 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <E, P> Result<List<E>> getList(@NotNull String query, int partitionSize, @NotNull Class<E> type, Object... params) {
         return getList(query, partitionSize, type, () -> params, SUPPLIER_STRING_ARR);
@@ -345,7 +345,7 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version _._._
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <E, P> Result<List<E>> getList(@NotNull String query, int partitionSize, @NotNull Class<E> type, String... columns) {
         return getList(query, partitionSize, type, SUPPLIER_OBJECT_ARR, () -> columns);
@@ -379,7 +379,7 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <E, P> Result<List<E>> getList(@NotNull String query, int partitionSize, @NotNull Class<E> type, @NotNull Supplier<Object[]> params,
             @NotNull Supplier<String[]> columns) {
@@ -421,7 +421,7 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, int offset, int fetch, @NotNull Class<E> dataType, @NotNull Supplier<Object[]> params,
             @NotNull Supplier<String[]> columns) throws NullPointerException, IllegalArgumentException;
@@ -442,7 +442,7 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public @NotNull ThreadPoolTaskExecutor getThreadPoolExecutor();
 

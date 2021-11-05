@@ -4,7 +4,7 @@
  *
  * Date  : 2020. 4. 15. 오후 12:59:20
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -32,7 +32,7 @@ import open.commons.function.SQLFunction;
  * 
  * @since 2020. 4. 15.
  * @version
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
 @Validated
 public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
@@ -77,7 +77,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
 
                 con.setAutoCommit(false);
                 // (start) [BUG-FIX]: spring 5.x 부터 4.x에 존재하던 public NativeJdbcExtractor getNativeJdbcExtractor()
-                // 를 제거함에 따라 호환성 지원 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 5. 오후 5:14:17
+                // 를 제거함에 따라 호환성 지원 / Park_Jun_Hong_(parkjunhong77@gmail.com): 2019. 6. 5. 오후 5:14:17
                 consToWork.add(conToWork = getConnection(con, jdbcTemplate));
                 // (end): 2019. 6. 5. 오후 5:14:17
 
@@ -163,7 +163,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      *
      * @since 2020. 4. 15.
      * @version
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     private JdbcTemplate getJdbcTemplate(@NotNull DataSource dataSource) {
         return new JdbcTemplate(dataSource);
@@ -183,7 +183,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      * 
      * @since 2020. 4. 15.
      * @version
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      */
     public abstract void setDataSources(@NotNull @NotEmpty Collection<DataSource> dataSources);

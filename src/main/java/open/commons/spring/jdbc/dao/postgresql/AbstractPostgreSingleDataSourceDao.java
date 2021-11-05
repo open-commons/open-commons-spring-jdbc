@@ -4,7 +4,7 @@
  *
  * Date  : 2020. 7. 28. 오후 7:17:07
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -22,7 +22,7 @@ import open.commons.utils.ArrayUtils;
  * 
  * @since 2020. 7. 28.
  * @version
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
 public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleDataSourceDao {
 
@@ -68,7 +68,7 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      * @return
      *
      * @since 2020. 7. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(String query, Object[] parameters, int begin, int count, Class<E> entity, String... columns) {
         String partQuery = wrapQueryForPartition(query);
@@ -93,7 +93,7 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      * @return
      *
      * @since 2020. 7. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final String wrapQueryForPartition(String query) {
         StringBuffer queryBuffer = new StringBuffer("SELECT * FROM ( ");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@
  *
  * Date  : 2020. 1. 17. 오전 12:59:31
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -42,7 +42,7 @@ import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
  * Oracle DBMS 연동 기능이 추가된 클래스.
  * 
  * @since 2020. 1. 17.
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  * @version 0.0.6
  */
 @Validated

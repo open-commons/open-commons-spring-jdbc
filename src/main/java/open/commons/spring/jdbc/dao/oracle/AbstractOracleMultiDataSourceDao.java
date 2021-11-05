@@ -4,7 +4,7 @@
  *
  * Date  : 2020. 4. 15. 오후 3:25:48
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -25,7 +25,7 @@ import open.commons.spring.jdbc.dao.AbstractMultiDataSourceDao;
  * 
  * @since 2020. 4. 15.
  * @version
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
 public abstract class AbstractOracleMultiDataSourceDao extends AbstractMultiDataSourceDao {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
  *
  * Date  : 2019. 3. 28. 오후 3:37:48
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -39,7 +39,7 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
  * DAO 클래스 공통 기능 정의 클래스.
  * 
  * @since 2019. 3. 28.
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  * @version 0.1.0
  */
 public interface IGenericDao extends InitializingBean, DisposableBean {
@@ -57,7 +57,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
 //    JdbcTemplate getJdbcTemplate();
@@ -77,7 +77,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      * 
      * @see #getQuerySource()
@@ -104,7 +104,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      * 
      * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[], String, Locale)
@@ -132,7 +132,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     String getQuery(@NotNull String name, Object[] args, String defaultMessage, Locale locale);
@@ -150,7 +150,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     ReloadableResourceBundleMessageSource getQuerySource();
