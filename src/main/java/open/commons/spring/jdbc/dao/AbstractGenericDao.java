@@ -56,7 +56,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.ConnectionProxy;
 import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.validation.annotation.Validated;
 
 import open.commons.Result;
 import open.commons.annotation.ColumnDef;
@@ -137,7 +136,6 @@ import open.commons.utils.SQLUtils;
  * @version 0.1.0
  * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
-@Validated
 @SuppressWarnings("deprecation")
 public abstract class AbstractGenericDao implements IGenericDao {
 

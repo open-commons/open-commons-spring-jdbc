@@ -32,8 +32,6 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.validation.annotation.Validated;
-
 import open.commons.Result;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
@@ -45,7 +43,6 @@ import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
  * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  * @version 0.0.6
  */
-@Validated
 public abstract class AbstractOracleGenericDao extends AbstractSingleDataSourceDao {
 
     /**

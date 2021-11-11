@@ -32,8 +32,6 @@ import java.util.List;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.validation.annotation.Validated;
-
 /**
  * 다수 개의 DBMS에 동일한 작업을 수행하기 위한 설정을 지원하는 클래스.
  * 
@@ -41,7 +39,6 @@ import org.springframework.validation.annotation.Validated;
  * @version 0.3.0
  * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
-@Validated
 public class MultipleDataSourceConfig {
 
     /** 접속계정명 */
