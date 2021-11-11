@@ -838,7 +838,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다수 개의 데이터를 설정된 크기로 나누어 데이터를 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -849,6 +849,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @param <E>
      * @param data
+     *            추가할 데이터
      * @param dataSetter
      *            다수 개의 객체형 파라미터를 {@link PreparedStatement}에 설정하는 기능.<br>
      *            참조: {@link SQLTripleFunction#setParameters(String...)}
@@ -871,7 +872,41 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 여러 개의 데이터를 나누어서 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param dataSetter
+     *            다수 개의 객체형 파라미터를 {@link PreparedStatement}에 설정하는 기능.<br>
+     *            참조: {@link SQLTripleFunction#setParameters(String...)}
+     * @param partitionSize
+     *            데이터 분할 크기
+     * @param headerQuery
+     *            데이터 추가 헤더 쿼리. (테이블 및 컬럼 정보가 기재됨)
+     * @param valueQuery
+     *            데이터 바인딩 쿼리
+     * @return
+     *
+     * @since 2021. 11. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            @NotNull String headerQuery, @NotNull String valueQuery) {
+        // !!! 세부 기능을 구현해야 합니다. !!!
+        throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
+    }
+
+    /**
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
      * 
      * <br>
      * 
@@ -911,7 +946,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 여러 개의 데이터를 나누어서 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
      * 
      * <br>
      * 
@@ -1369,7 +1404,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         </ul>
      *
      * @since 2021. 4. 23.
-     * @version _._._
+     * @version 0.3.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, @NotNull SQLFunction<ResultSet, List<E>> creator) {

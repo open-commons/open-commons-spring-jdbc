@@ -1,3 +1,10 @@
+[2021/11/11]
+- New
+  + open.commons.spring.jdbc.dao.mariadb.AbstractMariadbGenericDao: 단일 Mariadb 연동 객체
+- Add
+  + open.commons.spring.jdbc.dao.mariadb.AbstractGenericDao
+    + executeUpdate(List&lt;E&gt;, SQLTripleFunction&lt;PreparedStatement, Integer, E, Integer&gt;, int, String, String)
+
 [2021/04/23]
 - Add
   + open.commons.spring.jdbc.dao.AbstractGenericDao
