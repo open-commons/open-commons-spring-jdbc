@@ -1,3 +1,13 @@
+[2021/11/19]
+- Depencencies Vulnerabilities
+  + commons-io:commons-io
+    - [CVE-2021-29425](https://github.com/advisories/GHSA-gwrp-pvrq-jmwv) __moderate severity__
+    - Vulnerable versions: < 2.7
+    - Patched version: 2.7
+    - In Apache Commons IO before 2.7, When invoking the method FileNameUtils.normalize with an improper input string,\
+      like "//../foo", or "\..\foo", the result would be the same value, thus possibly providing access to files in the parent directory,\
+      but not further above (thus "limited" path traversal), if the calling code would use the result to construct a path value.
+
 [2021/11/11]
 - New
   + open.commons.spring.jdbc.dao.mariadb.AbstractMariadbGenericDao: 단일 Mariadb 연동 객체
