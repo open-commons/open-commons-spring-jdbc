@@ -182,7 +182,23 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      */
     protected abstract int getPartitionSize();
 
-    private String getTableName() {
+    /**
+     * 테이블 이름을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 26.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 26.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String getTableName() {
         TableDef tblAnno = this.entityType.getAnnotation(TableDef.class);
         AssertUtils.assertNull("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", tblAnno, UnsupportedOperationException.class);
         return tblAnno.table();
