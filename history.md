@@ -1,3 +1,9 @@
+[2021/11/26]
+- New
+  + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
+  + open.commons.spring.jdbc.repository.IGenericRepository  
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository
+
 [2021/11/19]
 - Depencencies Vulnerabilities
   + commons-io:commons-io
