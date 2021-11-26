@@ -243,7 +243,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      */
     @Override
     public Result<Integer> insert(T data) {
-        return null;
+        return executeUpdate(queryForInsert(), SQLConsumer.setParameters(data));
     }
 
     protected final String queryForInsert() {
