@@ -27,12 +27,19 @@
 package open.commons.spring.jdbc.repository;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
 import open.commons.Result;
 import open.commons.annotation.ColumnDef;
@@ -74,6 +81,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
 
     /**
      * 1개의 데이터를 추가하는 쿼리.<br>
+     * 패턴:
      * <code>INSERT INTO {table-name} ( {comma-separated-column-names} ) VALUES ( {comma-separated-question-marks} )</code>
      * 
      * @see #queryForInsert()
@@ -82,11 +90,11 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
 
     /**
      * 전체 데이터를 조회하는 쿼리.<br>
-     * <code>SEELCT * FROM {table-name}</code>
+     * 패턴: <code>SEELCT * FROM {table-name}</code>
      * 
-     * @see #queryForSelectAll()
+     * @see #queryForSelect()
      */
-    protected final String QUERY_FOR_SELECT_ALL;
+    protected final String QUERY_FOR_SELECT;
 
     /**
      * 여러 개 데이터를 추가하는 쿼리 중 테이블 및 데이터 선언 관련 쿼리<br>
@@ -114,6 +122,22 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
     protected final String QUERY_FOR_PARTITION_TAIL;
 
     /**
+     * 데이터를 삭제하는 쿼리의 테이블 선언 관련 쿼리<br>
+     * 패턴: <code>DELETE FROM {table-name}</code>
+     * 
+     * @see #queryForDeleteHeader()
+     */
+    protected final String QUERY_FOR_DELETE_HEADER;
+
+    /**
+     * 데이터를 변경하는 쿼리의 테이블 선언 관련 쿼리<br>
+     * 패턴: <code>UPDATE {table-name}</code>
+     * 
+     * @see #queryForUpdateHeader()
+     */
+    protected final String QUERY_FOR_UPDATE_HEADER;
+
+    /**
      * <br>
      * 
      * <pre>
@@ -135,12 +159,91 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
         this.tableName = getTableName();
 
         this.QUERY_FOR_INSERT = queryForInsert();
-        this.QUERY_FOR_SELECT_ALL = queryForSelectAll();
+        this.QUERY_FOR_SELECT = queryForSelect();
 
         this.QUERY_FOR_PARTITION_HEADER = queryForPartitionHeader();
-        this.QUERY_FOR_PARTITION_VALUE = queryForSelectAll();
+        this.QUERY_FOR_PARTITION_VALUE = queryForSelect();
         this.QUERY_FOR_PARTITION_CONCAT_VQ = queryForPartitionConcatValue();
         this.QUERY_FOR_PARTITION_TAIL = queryForPartitionTail();
+
+        this.QUERY_FOR_DELETE_HEADER = queryForDeleteHeader();
+        this.QUERY_FOR_UPDATE_HEADER = queryForUpdateHeader();
+    }
+
+    /**
+     * 주어진 파라미터를 이용하여 생성한 데이터 변경 쿼리를 제공합니다. <br>
+     * 패턴: <code>{query} SET {column} = ? (, {column} = ?)*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2021. 11. 29.        박준홍         최초 작성
+     * </pre>
+     * 
+     * @param queryHeader
+     *            중요 쿼리
+     * @param method
+     * @param args
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private String attachSetClause(String queryHeader) {
+
+        List<String> columns = getUpdatableColumnNames();
+
+        if (columns.size() < 1) {
+            throw new IllegalArgumentException(String.format("데이터를 변경할 컬럼 정보가 존재하지 않습니다. entity={}", this.entityType));
+        }
+
+        String query = String.join(" ", queryHeader, createSetClause(columns));
+        logger.debug("Query: {}", query);
+
+        return query;
+    }
+
+    /**
+     * 주어진 파라미터를 이용하여 생성한 데이터 조회 쿼리를 제공합니다. <br>
+     * 패턴: <code>{query} WHERE {column} = ? (AND {column} = ?)*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param queryHeader
+     *            중요 쿼리
+     * @param method
+     * @param args
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private String attachWhereClause(String queryHeader, Method method, Object... args) {
+
+        List<String> columns = getColumnNamesOfParameters(method);
+
+        if (columns.size() != args.length) {
+            throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), args.length));
+        }
+
+        String query = String.join(" ", queryHeader, createWhereClause(columns));
+        logger.debug("Query: {}", query);
+
+        for (int i = 0; i < args.length; i++) {
+            logger.debug("param >> {}={}", columns.get(i), args[i]);
+        }
+
+        return query;
     }
 
     /**
@@ -174,6 +277,29 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
     }
 
     /**
+     * 데이터를 삭제합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <V>
+     * @param method
+     * @param pk
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> deleteBy(Method method, Object... args) {
+        return executeUpdate(attachWhereClause(QUERY_FOR_DELETE_HEADER, method, args), SQLConsumer.setParameters(args));
+    }
+
+    /**
      * 컬럼 데이터를 제공하는 {@link Method} 목록을 제공합니다.<br>
      * 
      * <pre>
@@ -194,7 +320,34 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
 
         AssertUtils.assertTrue("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", methods.size() < 1, UnsupportedOperationException.class);
 
+        methods.sort(Comparator.comparing(m -> m.getAnnotation(ColumnValue.class).order()));
+
         return methods;
+    }
+
+    /**
+     * 실행 중인 메소드 파라미터에 설정된 컬럼이름을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2021. 11. 29.        박준홍         최초 작성
+     * </pre>
+     *
+     * @param method
+     *            실행 중인 메소드
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * 
+     * @see ColumnValue
+     */
+    protected final String getColumnNameOfParameter(Method method) {
+        Parameter param = getParameterHasColumnValue(method);
+        return param.getAnnotation(ColumnValue.class).name();
     }
 
     /**
@@ -216,13 +369,96 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @see ColumnValue
      */
     protected final List<String> getColumnNames() {
-        List<Method> methods = getColumnMethods();
-        // #1. ColumnValue#order() 오름차순으로 정렬.
-        methods.sort(Comparator.comparing(m -> m.getAnnotation(ColumnValue.class).order()));
-        // #2. ColumnValue#name() 추출
-        return methods.stream() //
+        return getColumnMethods().stream() //
                 .map(m -> SQLUtils.getColumnName(m)) //
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private List<String> getColumnNamesOfParameters(Method method) {
+        List<Parameter> params = getParametersHasColumnValue(method);
+        return params.stream() //
+                .map(p -> p.getAnnotation(ColumnValue.class).name()) //
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 주어진 메소드에 {@link ColumnValue} 어노테이션이 설정되어 있는 파라미터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private Parameter getParameterHasColumnValue(Method method) {
+        for (Parameter param : method.getParameters()) {
+            if (param.isAnnotationPresent(ColumnValue.class)) {
+                return param;
+            }
+        }
+
+        throw new UnsupportedOperationException(String.format("%s에 컬럼정보를 제공하는 %s가/이 설정되지 않았습니다.", method, ColumnValue.class));
+    }
+
+    /**
+     * 주어진 메소드 파라미터 중에 {@link ColumnValue} 어노테이션이 설정되어 있는 파라미터를 제공합니다. <br>
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private List<Parameter> getParametersHasColumnValue(Method method) {
+        List<Parameter> params = new ArrayList<>();
+
+        for (Parameter param : method.getParameters()) {
+            if (param.isAnnotationPresent(ColumnValue.class)) {
+                params.add(param);
+            }
+        }
+
+        if (params.size() < 1) {
+            throw new UnsupportedOperationException(String.format("%s에 컬럼정보를 제공하는 %s가/이 설정되지 않았습니다.", method, ColumnValue.class));
+        }
+
+        return params;
     }
 
     /**
@@ -263,6 +499,52 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
         TableDef tblAnno = this.entityType.getAnnotation(TableDef.class);
         AssertUtils.assertNull("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", tblAnno, UnsupportedOperationException.class);
         return tblAnno.table();
+    }
+
+    /**
+     * 변경 대상인 컬럼 데이터를 제공하는 {@link Method} 목록을 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final List<Method> getUpdatableColumn() {
+        return getColumnMethods().stream() //
+                .filter(m -> m.getAnnotation(ColumnValue.class).updatable()) //
+                .collect(Collectors.toList()) //
+        ;
+    }
+
+    /**
+     * 변경 대상인 컬럼 목록을 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final List<String> getUpdatableColumnNames() {
+        return getUpdatableColumn().stream() //
+                .map(m -> m.getAnnotation(ColumnValue.class).name()) //
+                .collect(Collectors.toList())//
+        ;
     }
 
     /**
@@ -323,15 +605,15 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      * 
-     * @see #getColumnNames();
+     * @see #getColumnNames()
      */
     protected String queryForColumnNames() {
         return String.join(", ", getColumnNames().toArray(new String[0]));
     }
 
     /**
-     * 
-     * <br>
+     * 데이터를 삭제하는 쿼리의 테이블 선언 관련 쿼리를 제공합니다.<br>
+     * 패턴: <code>DELETE FROM {table-name}</code>
      * 
      * <pre>
      * [개정이력]
@@ -346,7 +628,33 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected final String queryForInsert() {
+    protected String queryForDeleteHeader() {
+        return new StringBuffer() //
+                .append("DELETE FROM") //
+                .append(" ") //
+                .append(this.tableName) //
+                .toString();
+    }
+
+    /**
+     * 1개의 데이터를 추가하는 쿼리를 제공합니다.<br>
+     * 패턴:
+     * <code>INSERT INTO {table-name} ( {comma-separated-column-names} ) VALUES ( {comma-separated-question-marks} )</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForInsert() {
         return new StringBuffer() //
                 .append("INSERT INTO") //
                 .append(" ") //
@@ -458,6 +766,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
 
     /**
      * 전체 데이터를 조회하는 쿼리를 제공합니다. <br>
+     * 패턴: <code>SEELCT * FROM {table-name}</code>
      * 
      * <pre>
      * [개정이력]
@@ -472,13 +781,38 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected String queryForSelectAll() {
+    protected String queryForSelect() {
         return new StringBuffer() //
                 .append("SELECT") //
                 .append(" ") //
                 .append("*") //
                 .append(" ") //
                 .append("FROM") //
+                .append(" ") //
+                .append(this.tableName) //
+                .toString();
+    }
+
+    /**
+     * 데이터를 변경하는 쿼리의 테이블 선언 관련 쿼리를 제공합니다.<br>
+     * 패턴: <code>UPDATE {table-name}</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForUpdateHeader() {
+        return new StringBuffer() //
+                .append("UPDATE") //
                 .append(" ") //
                 .append(this.tableName) //
                 .toString();
@@ -523,9 +857,9 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
     @Override
     public Result<List<T>> selectAll() {
 
-        logger.debug("Query: {}", QUERY_FOR_SELECT_ALL);
+        logger.debug("Query: {}", QUERY_FOR_SELECT);
 
-        return getList(QUERY_FOR_SELECT_ALL, SQLConsumer.setParameters(), this.entityType);
+        return getList(QUERY_FOR_SELECT, SQLConsumer.setParameters(), this.entityType);
     }
 
     /**
@@ -540,7 +874,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
     public Result<List<T>> selectAll(int offset, int limit) {
 
         StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append(QUERY_FOR_SELECT_ALL);
+        queryBuf.append(QUERY_FOR_SELECT);
         queryBuf.append(" ");
         queryBuf.append(queryForOffset(offset, limit));
 
@@ -549,5 +883,166 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
         logger.debug("Query: {}", query);
 
         return getList(query, SQLConsumer.setParameters(offset, limit), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            조회 메소드
+     * @param whereArgs
+     *            파라미터.
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiBy(Method method, Object... whereArgs) {
+        return getList(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs), SQLConsumer.setParameters(whereArgs), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            조회 메소드
+     * @param required
+     *            필수 존재 여부.
+     * @param whereArgs
+     *            파라미터
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<T> selectSingleBy(Method method, boolean required, Object... whereArgs) {
+        return getObject(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs), SQLConsumer.setParameters(whereArgs), this.entityType, required);
+    }
+
+    /**
+     * 주어진 조건에 맞는 데이터를 갱신합니다. <br>
+     * 패턴: <code>UPDATE {table-name} SET {column} = ? (, {column} = ?)*  WHERE {column} = ? ( AND {column} = ? )*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param data
+     *            TODO
+     * @param whereArgs
+     * @param m
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> updateBy(T data, Method method, Object... whereArgs) {
+
+        String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
+
+        return executeUpdate(attachWhereClause(querySet, method, whereArgs), SQLConsumer.setParameters(whereArgs));
+    }
+
+    /**
+     * 주어진 컬럼값을 변경하는 'Set' 구문을 제공합니다. <br>
+     * 패턴: <code>SET {column} = ? (, {column} = ? )*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param columns
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private static String createSetClause(@NotEmpty List<String> columns) {
+
+        StringBuffer buf = new StringBuffer();
+
+        buf.append("SET");
+        buf.append(" ");
+
+        // variable binding
+        Iterator<String> itr = columns.iterator();
+        buf.append(itr.next());
+        buf.append(" = ?");
+
+        while (itr.hasNext()) {
+            buf.append(", ");
+            buf.append(itr.next());
+            buf.append(" = ?");
+        }
+
+        return buf.toString();
+    }
+
+    /**
+     * 주어진 컬럼명으로 'AND'로 연결된 Where 구문을 제공합니다. <br>
+     * 패턴: <code>WHERE {column} = ? ( AND {column} = ? )*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param columns
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private static String createWhereClause(@NotEmpty List<String> columns) {
+
+        StringBuffer buf = new StringBuffer();
+
+        buf.append("WHERE");
+        buf.append(" ");
+
+        // variable binding
+        Iterator<String> itr = columns.iterator();
+        buf.append(itr.next());
+        buf.append(" = ?");
+
+        while (itr.hasNext()) {
+            buf.append(" AND ");
+            buf.append(itr.next());
+            buf.append(" = ?");
+        }
+
+        return buf.toString();
     }
 }

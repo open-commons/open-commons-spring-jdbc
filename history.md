@@ -1,3 +1,8 @@
+[2021/11/29]
+- Add
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository
+    + getColumnNameOfParameter(Method): 메소드 파라미터에 설정된 컬럼명을 제공.
+  
 [2021/11/26]
 - New
   + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
