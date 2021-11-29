@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.NotNull;
 
 import open.commons.Result;
+import open.commons.annotation.ColumnDef;
 import open.commons.annotation.ColumnValue;
 import open.commons.database.ConnectionCallbackBroker2;
 import open.commons.database.annotation.TableDef;
@@ -54,11 +55,63 @@ import open.commons.utils.SQLUtils;
  * @since 2021. 11. 26.
  * @version 0.3.0
  * @author parkjunhong77@gmail.com
+ * 
+ * @see TableDef
+ * @see ColumnDef
+ * @see ColumnValue
  */
 public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSingleDataSourceDao implements IGenericRepository<T> {
 
+    /** DB Table 데이터 타입. */
     protected final Class<T> entityType;
+    /**
+     * 테이블 이름<br>
+     *
+     * @see TableDef
+     * @see TableDef#table()
+     */
     protected final String tableName;
+
+    /**
+     * 1개의 데이터를 추가하는 쿼리.<br>
+     * <code>INSERT INTO {table-name} ( {comma-separated-column-names} ) VALUES ( {comma-separated-question-marks} )</code>
+     * 
+     * @see #queryForInsert()
+     */
+    protected final String QUERY_FOR_INSERT;
+
+    /**
+     * 전체 데이터를 조회하는 쿼리.<br>
+     * <code>SEELCT * FROM {table-name}</code>
+     * 
+     * @see #queryForSelectAll()
+     */
+    protected final String QUERY_FOR_SELECT_ALL;
+
+    /**
+     * 여러 개 데이터를 추가하는 쿼리 중 테이블 및 데이터 선언 관련 쿼리<br>
+     * 
+     * @see #queryForPartitionHeader()
+     */
+    protected final String QUERY_FOR_PARTITION_HEADER;
+    /**
+     * 여러 개 데이터를 추가하는 쿼리 중 데이터 연결(Variable Binding) 관련 쿼리<br>
+     * 
+     * @see #queryForPartitionValue()
+     */
+    protected final String QUERY_FOR_PARTITION_VALUE;
+    /**
+     * 여러 개 데이터를 추가하는 쿼리 중 데이터 연결(Variable Binding) 쿼리를 이어주는 쿼리<br>
+     * 
+     * @see #queryForPartitionConcatValue()
+     */
+    protected final String QUERY_FOR_PARTITION_CONCAT_VQ;
+    /**
+     * 여러 개 데이터를 추가하는 쿼리 중 마지막 쿼리<br>
+     * 
+     * @see #queryForPartitionTail()
+     */
+    protected final String QUERY_FOR_PARTITION_TAIL;
 
     /**
      * <br>
@@ -80,6 +133,14 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
     public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType) {
         this.entityType = entityType;
         this.tableName = getTableName();
+
+        this.QUERY_FOR_INSERT = queryForInsert();
+        this.QUERY_FOR_SELECT_ALL = queryForSelectAll();
+
+        this.QUERY_FOR_PARTITION_HEADER = queryForPartitionHeader();
+        this.QUERY_FOR_PARTITION_VALUE = queryForSelectAll();
+        this.QUERY_FOR_PARTITION_CONCAT_VQ = queryForPartitionConcatValue();
+        this.QUERY_FOR_PARTITION_TAIL = queryForPartitionTail();
     }
 
     /**
@@ -102,14 +163,14 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @author parkjunhong77@gmail.com
      */
     protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<T> data, int partitionSize) {
-        // 데이터 추가
-        String headerQuery = queryForPartitionHeader();
-        String valueQuery = queryForPartitionValue();
 
-        logger.debug("query.header={}, query.value={}, data.size={}", headerQuery, valueQuery, data.size());
+        logger.debug("query.header={}, query.value={}, data.size={}", QUERY_FOR_PARTITION_HEADER, QUERY_FOR_PARTITION_VALUE, data.size());
 
-        return createConnectionCallbackBrokers(data, SQLTripleFunction.setParameters(), partitionSize, headerQuery, valueQuery, queryForPartitionConcatValue(),
-                queryForPartitionTail());
+        return createConnectionCallbackBrokers(data, SQLTripleFunction.setParameters(), partitionSize //
+                , QUERY_FOR_PARTITION_HEADER //
+                , QUERY_FOR_PARTITION_VALUE //
+                , QUERY_FOR_PARTITION_CONCAT_VQ //
+                , QUERY_FOR_PARTITION_VALUE);
     }
 
     /**
@@ -243,18 +304,55 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      */
     @Override
     public Result<Integer> insert(T data) {
-        return executeUpdate(queryForInsert(), SQLConsumer.setParameters(data));
+        return executeUpdate(QUERY_FOR_INSERT, SQLConsumer.setParameters(data));
     }
 
-    protected final String queryForInsert() {
-        List<String> columns = getColumnNames();
+    /**
+     * 컬럼이름을 콤마(,)로 연결시킨 문자열을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see #getColumnNames();
+     */
+    protected String queryForColumnNames() {
+        return String.join(", ", getColumnNames().toArray(new String[0]));
+    }
 
+    /**
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final String queryForInsert() {
         return new StringBuffer() //
                 .append("INSERT INTO") //
                 .append(" ") //
                 .append(this.tableName) //
                 .append(" (")//
-                .append(String.join(", ", columns.toArray(new String[0]))) //
+                .append(queryForColumnNames()) //
                 .append(") ") //
                 .append("VALUES") //
                 .append(" (")//
@@ -371,7 +469,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @return
      *
      * @since 2021. 11. 26.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected String queryForSelectAll() {
@@ -425,11 +523,9 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
     @Override
     public Result<List<T>> selectAll() {
 
-        String query = queryForSelectAll();
+        logger.debug("Query: {}", QUERY_FOR_SELECT_ALL);
 
-        logger.debug("Query: {}", query);
-
-        return getList(query, SQLConsumer.setParameters(), this.entityType);
+        return getList(QUERY_FOR_SELECT_ALL, SQLConsumer.setParameters(), this.entityType);
     }
 
     /**
@@ -444,7 +540,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
     public Result<List<T>> selectAll(int offset, int limit) {
 
         StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append(queryForSelectAll());
+        queryBuf.append(QUERY_FOR_SELECT_ALL);
         queryBuf.append(" ");
         queryBuf.append(queryForOffset(offset, limit));
 

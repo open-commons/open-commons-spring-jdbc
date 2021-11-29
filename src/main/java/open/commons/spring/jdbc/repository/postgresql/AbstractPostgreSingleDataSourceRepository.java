@@ -179,6 +179,23 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
         return String.join(" ", "(", queryForVariableBinding(), ")");
     }
 
+    /**
+     * 원하는 개수의 데이터를 조회하는 쿼리를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 26.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     * @return
+     *
+     * @since 2021. 11. 26.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
     protected final String wrapQueryForPartition(String query) {
         StringBuffer queryBuffer = new StringBuffer("SELECT * FROM ( ");
         queryBuffer.append(query);
