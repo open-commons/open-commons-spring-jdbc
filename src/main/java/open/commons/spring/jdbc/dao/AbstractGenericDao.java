@@ -277,8 +277,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        // AssertUtils.assertNull("DataSource MUST NOT BE null", this.dataSource);
-        // AssertUtils.assertNull("QuerySource Source MUST NOT BE null", this.querySource);
     }
 
     private <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBroker(@NotNull @NotEmpty List<E> data,

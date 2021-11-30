@@ -74,7 +74,6 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
         AssertUtils.assertNull("DataSource MUST NOT BE null", this.dataSource);
-        AssertUtils.assertNull("QuerySource Source MUST NOT BE null", this.querySource);
     }
 
     /**
