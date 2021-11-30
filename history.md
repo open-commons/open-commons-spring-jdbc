@@ -1,3 +1,7 @@
+[2021/11/30]
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao.objectArray(Object...)
+
 [2021/11/29]
 - Add
   + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository

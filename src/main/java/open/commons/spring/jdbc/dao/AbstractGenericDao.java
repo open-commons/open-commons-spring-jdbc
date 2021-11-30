@@ -113,11 +113,11 @@ import open.commons.utils.SQLUtils;
  * 
  *     // select
  *     query = "SELECT ...";
- *     Result&lt;List&lt;QueryObj>> getList = dao.getList(query, setter, QueryObj.class);
+ *     Result&lt;List&lt;EntityType>> getList = dao.getList(query, setter, EntityType.class);
  * 
  *     // select
  *     query = "SELECT ...";
- *     Result&lt;QueryObj> getObject = dao.getObject(query, setter, QueryObj.class);
+ *     Result&lt;EntityType> getObject = dao.getObject(query, setter, EntityType.class);
  * }
  * </pre>
  * 
@@ -144,7 +144,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     protected static final Class<Map<String, Object>> ENTITY_DTO_MAP = (Class<Map<String, Object>>) (Class) FIFOMap.class;
 
     /**
-     * 데이터와 {@link PreparedStatement}를 연결하는 Setter를 제공한다.
+     * 데이터와 {@link PreparedStatement}를 연결하는 Setter를 제공합니다.
      * 
      * @params 파라미터 배열. NotNull
      * 
@@ -200,7 +200,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 기존 쿼리에 IN Clause(<code>"IN ( ?, ?, ...)")를 추가한다. <br>
+     * 기존 쿼리에 IN Clause(<code>"IN ( ?, ?, ...)")를 추가합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -234,7 +234,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 기존 쿼리 WHERE Clause에 IN Clause (<code>"IN ( ?, ?, ...)")를 추가한다.. <br>
+     * 기존 쿼리 WHERE Clause에 IN Clause (<code>"IN ( ?, ?, ...)")를 추가합니다.. <br>
      * <br>
      * 
      * <pre>
@@ -306,7 +306,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 하나의 {@link Connection}에서 실행되는 다중 실행 정보를 생성한다. <br>
+     * 하나의 {@link Connection}에서 실행되는 다중 실행 정보를 생성합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -366,7 +366,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다중 데이터를 추가하는 실행정보를 제공한다. <br>
+     * 다중 데이터를 추가하는 실행정보를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -439,7 +439,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 쿼리 요청을 처리하고 결과를 제공한다. <br>
+     * 쿼리 요청을 처리하고 결과를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -460,7 +460,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     protected abstract <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException;
 
     /**
-     * 요청쿼리를 실행하고 결과를 제공한다. <br>
+     * 요청쿼리를 실행하고 결과를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -524,7 +524,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 요청쿼리를 실행하고 결과를 제공한다. <br>
+     * 요청쿼리를 실행하고 결과를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -555,7 +555,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 요청쿼리를 실행하고 결과를 제공한다. <br>
+     * 요청쿼리를 실행하고 결과를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -609,7 +609,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리한다.<br>
+     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -633,7 +633,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리한다.<br>
+     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -701,7 +701,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다중 (Insert/Update/Delete) 쿼리 요청을 처리한다.<br>
+     * 다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -838,7 +838,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -872,7 +872,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -906,7 +906,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <br>
      * 
@@ -946,7 +946,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다수 개의 데이터를 설정된 크기로 나누어 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <br>
      * 
@@ -990,7 +990,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 단일 요청쿼리를 처리한다.<br>
+     * 단일 요청쿼리를 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -1016,7 +1016,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 단일 요청쿼리를 처리한다. <br>
+     * 단일 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1045,7 +1045,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이타 타입에 맞는 객체 생성자를 제공한다. <br>
+     * 데이타 타입에 맞는 객체 생성자를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1103,8 +1103,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 작업용 Connection 객체를 제공한다.<br>
-     * Springframework 5.x 부터 4.x에 존재하던 아래 메소드를 제거함에 따라 호환성 제공을 목적으로 한다.
+     * 작업용 Connection 객체를 제공합니다.<br>
+     * Springframework 5.x 부터 4.x에 존재하던 아래 메소드를 제거함에 따라 호환성 제공을 목적으로 합니다.
      * 
      * <pre>
      * public NativeJdbcExtractor getNativeJdbcExtractor() {
@@ -1148,7 +1148,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 전달된 쿼리에 대한 조회 결과 데이터 개수를 제공한다. <br>
+     * 전달된 쿼리에 대한 조회 결과 데이터 개수를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1181,7 +1181,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1211,7 +1211,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1256,7 +1256,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1301,7 +1301,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1343,7 +1343,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1383,7 +1383,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * <br>
      * 
      * <pre>
@@ -1422,7 +1422,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1455,7 +1455,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1484,7 +1484,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1517,7 +1517,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1547,7 +1547,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1606,7 +1606,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1638,7 +1638,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1663,7 +1663,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1689,7 +1689,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1714,7 +1714,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1815,7 +1815,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1839,7 +1839,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1866,7 +1866,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1906,7 +1906,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1930,7 +1930,29 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 쿼리 정보 객체를 설정한다. <br>
+     * 쿼리 파라미터를 배열로 반환합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param parameters
+     *            쿼리 파라미터.
+     * @return
+     *
+     * @since 2021. 11. 30.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected final Object[] objectArray(Object... parameters) {
+        return parameters == null ? new Object[0] : parameters;
+    }
+
+    /**
+     * 쿼리 정보 객체를 설정합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1948,7 +1970,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     public abstract void setQuerySource(@NotNull ReloadableResourceBundleMessageSource querySource);
 
     /**
-     * 특정 쿼리에 대한 개수를 제공하는 쿼리를 제공한다. <br>
+     * 특정 쿼리에 대한 개수를 제공하는 쿼리를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
