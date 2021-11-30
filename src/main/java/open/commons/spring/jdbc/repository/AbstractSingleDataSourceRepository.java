@@ -183,8 +183,6 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * 
      * @param queryHeader
      *            중요 쿼리
-     * @param method
-     * @param args
      *
      * @return
      *
@@ -220,7 +218,9 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @param queryHeader
      *            중요 쿼리
      * @param method
-     * @param args
+     *            사용자 정의 메소드 정보
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
      *
      * @return
      *
@@ -228,19 +228,19 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private String attachWhereClause(String queryHeader, Method method, Object... args) {
+    private String attachWhereClause(String queryHeader, Method method, Object... whereArgs) {
 
         List<String> columns = getColumnNamesOfParameters(method);
 
-        if (columns.size() != args.length) {
-            throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), args.length));
+        if (columns.size() != whereArgs.length) {
+            throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), whereArgs.length));
         }
 
         String query = String.join(" ", queryHeader, createWhereClause(columns));
         logger.debug("Query: {}", query);
 
-        for (int i = 0; i < args.length; i++) {
-            logger.debug("param >> {}={}", columns.get(i), args[i]);
+        for (int i = 0; i < whereArgs.length; i++) {
+            logger.debug("param >> {}={}", columns.get(i), whereArgs[i]);
         }
 
         return query;
@@ -288,15 +288,17 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      *
      * @param <V>
      * @param method
-     * @param pk
+     *            사용자 정의 메소드 정보
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
      * @return
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> deleteBy(Method method, Object... args) {
-        return executeUpdate(attachWhereClause(QUERY_FOR_DELETE_HEADER, method, args), SQLConsumer.setParameters(args));
+    protected Result<Integer> deleteBy(Method method, Object... whereArgs) {
+        return executeUpdate(attachWhereClause(QUERY_FOR_DELETE_HEADER, method, whereArgs), SQLConsumer.setParameters(whereArgs));
     }
 
     /**
@@ -387,6 +389,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * </pre>
      *
      * @param method
+     *            사용자 정의 메소드
      * @return
      *
      * @since 2021. 11. 29.
@@ -411,6 +414,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * </pre>
      *
      * @param method
+     *            사용자 정의 메소드
      * @return
      *
      * @since 2021. 11. 29.
@@ -440,6 +444,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * </pre>
      *
      * @param method
+     *            사용자 정의 메소드
      * @return
      *
      * @since 2021. 11. 29.
@@ -896,9 +901,9 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * </pre>
      *
      * @param method
-     *            조회 메소드
+     *            사용자 정의 메소드
      * @param whereArgs
-     *            파라미터.
+     *            'WHERE' 절에 사용될 파라미터.
      * @return
      *
      * @since 2021. 11. 29.
@@ -921,11 +926,11 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * </pre>
      *
      * @param method
-     *            조회 메소드
+     *            사용자 정의 메소드
      * @param required
      *            필수 존재 여부.
      * @param whereArgs
-     *            파라미터
+     *            'WHERE' 절에 사용될 파라미터.
      * @return
      * @throws EmptyResultDataAccessException
      *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
@@ -953,9 +958,11 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * </pre>
      * 
      * @param data
-     *            TODO
+     *            변경할 데이터 정보.
+     * @param method
+     *            사용자 정의 메소드 정보
      * @param whereArgs
-     * @param m
+     *            'WHERE' 절에 사용될 파라미터.
      *
      * @return
      *
