@@ -73,7 +73,7 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        AssertUtils.assertNull("DataSource MUST NOT BE null", this.dataSource);
+        AssertUtils.assertNull("DataSource MUST NOT BE null.", this.dataSource);
     }
 
     /**

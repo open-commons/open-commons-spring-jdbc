@@ -110,7 +110,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository#queryForOffset(int, int)
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForOffset(int, int)
      */
     @Override
     protected String queryForOffset(int offset, int limit) {
@@ -123,7 +123,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository#queryForPartitionConcatValue()
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionConcatValue()
      */
     @Override
     protected String queryForPartitionConcatValue() {
@@ -136,7 +136,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository#queryForPartitionHeader()
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionHeader()
      */
     @Override
     protected String queryForPartitionHeader() {
@@ -159,7 +159,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository#queryForPartitionTail()
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionTail()
      */
     @Override
     protected String queryForPartitionTail() {
@@ -172,7 +172,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository#queryForPartitionValue()
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionValue()
      */
     @Override
     protected String queryForPartitionValue() {

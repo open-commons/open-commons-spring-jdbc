@@ -42,6 +42,7 @@ import org.springframework.validation.annotation.Validated;
 
 import open.commons.TwoValueObject;
 import open.commons.function.SQLFunction;
+import open.commons.utils.AssertUtils;
 
 /**
  * 여러 개의 DBMS에 동일한 작업(SQL)를 수행하는 기능을 지원.
@@ -69,6 +70,16 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      * @version
      */
     public AbstractMultiDataSourceDao() {
+    }
+
+    /**
+     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#afterPropertiesSet()
+     */
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        super.afterPropertiesSet();
+        AssertUtils.assertNull("DataSource MUST NOT BE null.", this.dataSources);
+        AssertUtils.assertTrue("DataSource MUST NOT BE empty.", this.dataSources.size() < 1);
     }
 
     /**

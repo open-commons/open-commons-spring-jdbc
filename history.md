@@ -1,4 +1,13 @@
 [2021/11/30]
+- New
+  + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
+- Rename
+  + open.commons.spring.jdbc.repository.<strike>AbstractSingleDataSourceRepository</strike>AbstractGenericRepository
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+  + <strike>open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository</strike>
+    + selectMultiBy(Method, Object[], String...)
+    + selectSingleBy(Method, boolean, Object[], String...)  
 - Add
   + open.commons.spring.jdbc.dao.AbstractGenericDao.objectArray(Object...)
 
