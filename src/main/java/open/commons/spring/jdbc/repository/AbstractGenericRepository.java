@@ -398,9 +398,20 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     private List<String> getColumnNamesOfParameters(Method method) {
         List<Parameter> params = getParametersHasColumnValue(method);
-        return params.stream() //
+        List<String> whereColumns = params.stream() //
                 .map(p -> p.getAnnotation(ColumnValue.class).name()) //
                 .collect(Collectors.toList());
+
+        List<String> columns = getColumnNames();
+
+        // 메소드 파라미터에서 추출한 컬럼이 실제 존재하는지 검증.
+        for (String wc : whereColumns) {
+            if (!columns.contains(wc)) {
+                throw new UnsupportedOperationException(String.format("'%s' 컬럼이 %s에 존재하지 않습니다. 컬럼목록=%s", wc, this.entityType.getName(), columns));
+            }
+        }
+
+        return whereColumns;
     }
 
     /**

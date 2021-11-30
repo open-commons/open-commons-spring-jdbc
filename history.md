@@ -1,4 +1,6 @@
 [2021/11/30]
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository.getColumnNamesOfParameters(Method): 'Where' 절에 사용되는 컬럼이름 검증.
 - New
   + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
 - Rename
