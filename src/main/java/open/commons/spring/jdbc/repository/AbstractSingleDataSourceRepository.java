@@ -316,6 +316,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @author parkjunhong77@gmail.com
      */
     private final List<Method> getColumnMethods() {
+
         List<Method> methods = AnnotationUtils.getAnnotatedMethodsAll(this.entityType, ColumnValue.class);
 
         AssertUtils.assertTrue("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", methods.size() < 1, UnsupportedOperationException.class);
@@ -570,9 +571,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      */
     @Override
     public Result<Integer> insert(List<T> data, int partitionSize) {
-
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createInsertBrokers(data, partitionSize);
-
         return executeUpdate(brokers);
     }
 
@@ -835,6 +834,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @author parkjunhong77@gmail.com
      */
     protected String queryForVariableBinding() {
+
         int columnCount = getColumnMethods().size();
 
         StringBuffer queryBuf = new StringBuffer();
@@ -906,7 +906,8 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @author parkjunhong77@gmail.com
      */
     protected Result<List<T>> selectMultiBy(Method method, Object... whereArgs) {
-        return getList(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs), SQLConsumer.setParameters(whereArgs), this.entityType);
+        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
+        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
     }
 
     /**
@@ -936,7 +937,8 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @author parkjunhong77@gmail.com
      */
     protected Result<T> selectSingleBy(Method method, boolean required, Object... whereArgs) {
-        return getObject(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs), SQLConsumer.setParameters(whereArgs), this.entityType, required);
+        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
+        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
     }
 
     /**
@@ -962,10 +964,9 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractSing
      * @author parkjunhong77@gmail.com
      */
     protected Result<Integer> updateBy(T data, Method method, Object... whereArgs) {
-
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
-
-        return executeUpdate(attachWhereClause(querySet, method, whereArgs), SQLConsumer.setParameters(whereArgs));
+        String query = attachWhereClause(querySet, method, whereArgs);
+        return executeUpdate(query, SQLConsumer.setParameters(whereArgs));
     }
 
     /**
