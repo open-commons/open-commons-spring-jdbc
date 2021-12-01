@@ -26,6 +26,7 @@
 
 package open.commons.spring.jdbc.repository;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
@@ -50,6 +51,7 @@ import open.commons.function.SQLConsumer;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.AbstractGenericDao;
 import open.commons.utils.AnnotationUtils;
+import open.commons.utils.ArrayUtils;
 import open.commons.utils.AssertUtils;
 import open.commons.utils.SQLUtils;
 
@@ -565,6 +567,36 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 데이터 갱신에 사용될 정보를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param data
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Object[] getUpdateParameters(T data) {
+        return getUpdatableColumn().stream() //
+                .map(m -> {
+                    try {
+                        return m.invoke(data);
+                    } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                        String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s", data.getClass(), e.getMessage());
+                        logger.error(errMsg, e);
+                        throw new UnsupportedOperationException(errMsg, e);
+                    }
+                }).toArray();
+    }
+
+    /**
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
@@ -1042,7 +1074,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected Result<Integer> updateBy(T data, Method method, Object... whereArgs) {
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
         String query = attachWhereClause(querySet, method, whereArgs);
-        return executeUpdate(query, SQLConsumer.setParameters(whereArgs));
+        Object[] params = ArrayUtils.add(getUpdateParameters(data), whereArgs);
+        return executeUpdate(query, SQLConsumer.setParameters(params));
     }
 
     /**

@@ -1,3 +1,9 @@
+[2021/12/01]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository.getUpdateParameters(T): 객체에서 변경에 사용할 정보 제공
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository.updateBy(T, Method, Object...): 버그 수정
+
 [2021/11/30]
 - Modify
   + open.commons.spring.jdbc.repository.AbstractGenericRepository.getColumnNamesOfParameters(Method): 'Where' 절에 사용되는 컬럼이름 검증.
