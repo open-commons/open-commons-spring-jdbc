@@ -949,11 +949,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         Iterator<ColumnValue> itr = getColumnValues().iterator();
 
         final StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append(getVariableBindingQuery(itr.next()));
+        queryBuf.append(itr.next().variableBinding());
 
         while (itr.hasNext()) {
             queryBuf.append(", ");
-            queryBuf.append(getVariableBindingQuery(itr.next()));
+            queryBuf.append(itr.next().variableBinding());
         }
 
         return queryBuf.toString();
@@ -1164,7 +1164,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version _._._
      * @author parkjunhong77@gmail.com
      */
-    private static void createColumnAssignQueris(StringBuffer buf, String concat, List<ColumnValue> columns) {
+    private static void createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
 
         // variable binding
         Iterator<ColumnValue> itr = columns.iterator();
@@ -1203,7 +1203,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         buf.append("SET");
         buf.append(" ");
 
-        createColumnAssignQueris(buf, ",", columns);
+        createColumnAssignQueries(buf, ",", columns);
 
         return buf.toString();
     }
@@ -1233,7 +1233,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         buf.append("WHERE");
         buf.append(" ");
 
-        createColumnAssignQueris(buf, "AND", columns);
+        createColumnAssignQueries(buf, "AND", columns);
 
         return buf.toString();
     }
@@ -1257,33 +1257,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     private static final String getAssignQuery(ColumnValue cv) {
-        return String.join(" = ", cv.name(), getVariableBindingQuery(cv));
-    }
-
-    /**
-     * JDBC Variable Binding 에 사용될 문자열을 제공합니다. <br>
-     * 일반적으로 물음표(?)를 사용하지만, 연동하는 DBMS에서 제공하는 함수나 프로시저와 같은 정보를 사용하는 경우 지원하기 위합입니다.
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 12. 1.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param cv
-     * @return
-     *
-     * @since 2021. 12. 1.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private static final String getVariableBindingQuery(ColumnValue cv) {
-        String vbq = cv.variableBinding();
-        if (vbq == null || (vbq = vbq.trim()).isEmpty()) {
-            return "?";
-        } else {
-            return vbq;
-        }
+        return String.join(" = ", cv.name(), cv.variableBinding());
     }
 }
