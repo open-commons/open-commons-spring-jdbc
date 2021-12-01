@@ -174,7 +174,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      * 주어진 파라미터를 이용하여 생성한 데이터 변경 쿼리를 제공합니다. <br>
-     * 패턴: <code>{query} SET {column} = ? (, {column} = ?)*</code>
+     * 패턴: <code>{query} SET {column} = {variable-binding-query} (, {column} = {variable-binding-query})*</code>
      * 
      * <pre>
      * [개정이력]
@@ -194,7 +194,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     private String attachSetClause(String queryHeader) {
 
-        List<String> columns = getUpdatableColumnNames();
+        List<ColumnValue> columns = getUpdatableColumnValues();
 
         if (columns.size() < 1) {
             throw new IllegalArgumentException(String.format("데이터를 변경할 컬럼 정보가 존재하지 않습니다. entity={}", this.entityType));
@@ -208,7 +208,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      * 주어진 파라미터를 이용하여 생성한 데이터 조회 쿼리를 제공합니다. <br>
-     * 패턴: <code>{query} WHERE {column} = ? (AND {column} = ?)*</code>
+     * 패턴: <code>{query} WHERE {column} = {variable-binding-query} (AND {column} = {variable-binding-query})*</code>
      * 
      * <pre>
      * [개정이력]
@@ -232,7 +232,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     private String attachWhereClause(String queryHeader, Method method, Object... whereArgs) {
 
-        List<String> columns = getColumnNamesOfParameters(method);
+        List<ColumnValue> columns = getColumnValuesOfParameters(method);
 
         if (columns.size() != whereArgs.length) {
             throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), whereArgs.length));
@@ -242,7 +242,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         logger.debug("Query: {}", query);
 
         for (int i = 0; i < whereArgs.length; i++) {
-            logger.debug("param >> {}={}", columns.get(i), whereArgs[i]);
+            logger.debug("param >> {}={}", columns.get(i).name(), whereArgs[i]);
         }
 
         return query;
@@ -380,8 +380,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 
-     * <br>
+     * 메소드 파라미터에에서 'Where'절에 사용될 컬럼목록을 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -398,20 +397,62 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private List<String> getColumnNamesOfParameters(Method method) {
+    protected List<String> getColumnNamesOfParameters(Method method) {
         List<Parameter> params = getParametersHasColumnValue(method);
+
         List<String> whereColumns = params.stream() //
                 .map(p -> p.getAnnotation(ColumnValue.class).name()) //
                 .collect(Collectors.toList());
 
-        List<String> columns = getColumnNames();
+        return whereColumns;
+    }
 
-        // 메소드 파라미터에서 추출한 컬럼이 실제 존재하는지 검증.
-        for (String wc : whereColumns) {
-            if (!columns.contains(wc)) {
-                throw new UnsupportedOperationException(String.format("'%s' 컬럼이 %s에 존재하지 않습니다. 컬럼목록=%s", wc, this.entityType.getName(), columns));
-            }
-        }
+    /**
+     * Entity의 컬럼 정보를 {@link Iterator} 형태로 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected List<ColumnValue> getColumnValues() {
+        return getColumnMethods().stream() //
+                .map(m -> m.getAnnotation(ColumnValue.class)) //
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 메소드 파라미터에에서 'Where'절에 사용될 컬럼정보을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    private List<ColumnValue> getColumnValuesOfParameters(Method method) {
+        List<Parameter> params = getParametersHasColumnValue(method);
+
+        List<ColumnValue> whereColumns = params.stream() //
+                .map(p -> p.getAnnotation(ColumnValue.class)) //
+                .collect(Collectors.toList());
 
         return whereColumns;
     }
@@ -521,29 +562,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 변경 대상인 컬럼 데이터를 제공하는 {@link Method} 목록을 제공합니다.<br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 29.		박준홍			최초 작성
-     * </pre>
-     *
-     * @return
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    protected final List<Method> getUpdatableColumn() {
-        return getColumnMethods().stream() //
-                .filter(m -> m.getAnnotation(ColumnValue.class).updatable()) //
-                .collect(Collectors.toList()) //
-        ;
-    }
-
-    /**
      * 변경 대상인 컬럼 목록을 제공합니다.<br>
      * 
      * <pre>
@@ -560,10 +578,55 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected final List<String> getUpdatableColumnNames() {
-        return getUpdatableColumn().stream() //
+        return getUpdatableColumns().stream() //
                 .map(m -> m.getAnnotation(ColumnValue.class).name()) //
                 .collect(Collectors.toList())//
         ;
+    }
+
+    /**
+     * 변경 대상인 컬럼 데이터를 제공하는 {@link Method} 목록을 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final List<Method> getUpdatableColumns() {
+        return getColumnMethods().stream() //
+                .filter(m -> m.getAnnotation(ColumnValue.class).updatable()) //
+                .collect(Collectors.toList()) //
+        ;
+    }
+
+    /**
+     * 변경 대상인 컬럼 정보를 {@link Iterator}형태로 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected final List<ColumnValue> getUpdatableColumnValues() {
+        return getUpdatableColumns().stream() //
+                .map(m -> m.getAnnotation(ColumnValue.class)) //
+                .collect(Collectors.toList());
     }
 
     /**
@@ -584,7 +647,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected Object[] getUpdateParameters(T data) {
-        return getUpdatableColumn().stream() //
+        return getUpdatableColumns().stream() //
                 .map(m -> {
                     try {
                         return m.invoke(data);
@@ -883,12 +946,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected String queryForVariableBinding() {
 
-        int columnCount = getColumnMethods().size();
+        Iterator<ColumnValue> itr = getColumnValues().iterator();
 
-        StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append("?");
-        for (int i = 1; i < columnCount; i++) {
-            queryBuf.append(", ?");
+        final StringBuffer queryBuf = new StringBuffer();
+        queryBuf.append(getVariableBindingQuery(itr.next()));
+
+        while (itr.hasNext()) {
+            queryBuf.append(", ");
+            queryBuf.append(getVariableBindingQuery(itr.next()));
         }
 
         return queryBuf.toString();
@@ -1079,6 +1144,41 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
+     * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param buf
+     *            쿼리 버퍼
+     * @param concat
+     *            컬럼 설정쿼리 연결 문자열
+     * @param columns
+     *            컬럼 정보
+     * @since 2021. 12. 1.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    private static void createColumnAssignQueris(StringBuffer buf, String concat, List<ColumnValue> columns) {
+
+        // variable binding
+        Iterator<ColumnValue> itr = columns.iterator();
+        buf.append(getAssignQuery(itr.next()));
+
+        while (itr.hasNext()) {
+            buf.append(" ");
+            buf.append(concat);
+            buf.append(" ");
+            buf.append(getAssignQuery(itr.next()));
+        }
+    }
+
+    /**
      * 주어진 컬럼값을 변경하는 'Set' 구문을 제공합니다. <br>
      * 패턴: <code>SET {column} = ? (, {column} = ? )*</code>
      * 
@@ -1096,30 +1196,21 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private static String createSetClause(@NotEmpty List<String> columns) {
+    private static String createSetClause(@NotEmpty List<ColumnValue> columns) {
 
         StringBuffer buf = new StringBuffer();
 
         buf.append("SET");
         buf.append(" ");
 
-        // variable binding
-        Iterator<String> itr = columns.iterator();
-        buf.append(itr.next());
-        buf.append(" = ?");
-
-        while (itr.hasNext()) {
-            buf.append(", ");
-            buf.append(itr.next());
-            buf.append(" = ?");
-        }
+        createColumnAssignQueris(buf, ",", columns);
 
         return buf.toString();
     }
 
     /**
      * 주어진 컬럼명으로 'AND'로 연결된 Where 구문을 제공합니다. <br>
-     * 패턴: <code>WHERE {column} = ? ( AND {column} = ? )*</code>
+     * 패턴: <code>WHERE {column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
      * 
      * <pre>
      * [개정이력]
@@ -1135,24 +1226,64 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private static String createWhereClause(@NotEmpty List<String> columns) {
+    private static String createWhereClause(@NotEmpty List<ColumnValue> columns) {
 
         StringBuffer buf = new StringBuffer();
 
         buf.append("WHERE");
         buf.append(" ");
 
-        // variable binding
-        Iterator<String> itr = columns.iterator();
-        buf.append(itr.next());
-        buf.append(" = ?");
-
-        while (itr.hasNext()) {
-            buf.append(" AND ");
-            buf.append(itr.next());
-            buf.append(" = ?");
-        }
+        createColumnAssignQueris(buf, "AND", columns);
 
         return buf.toString();
+    }
+
+    /**
+     * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
+     * 패턴: <code>{column-name} = {variable-binding-query}</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param cv
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private static final String getAssignQuery(ColumnValue cv) {
+        return String.join(" = ", cv.name(), getVariableBindingQuery(cv));
+    }
+
+    /**
+     * JDBC Variable Binding 에 사용될 문자열을 제공합니다. <br>
+     * 일반적으로 물음표(?)를 사용하지만, 연동하는 DBMS에서 제공하는 함수나 프로시저와 같은 정보를 사용하는 경우 지원하기 위합입니다.
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param cv
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private static final String getVariableBindingQuery(ColumnValue cv) {
+        String vbq = cv.variableBinding();
+        if (vbq == null || (vbq = vbq.trim()).isEmpty()) {
+            return "?";
+        } else {
+            return vbq;
+        }
     }
 }
