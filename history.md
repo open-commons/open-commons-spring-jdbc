@@ -3,7 +3,9 @@
   + open.commons.spring.jdbc.repository.AbstractGenericRepository
     + containsNull(Object...)
     + deleteBy(Object...)
+    + getCurrentMethod(boolean, Object...)
     + getCurrentMethod(Class&lt;?&gt;...)
+    + getCurrentMethod(int, boolean, Object...)
     + getCurrentMethod(int, Class&lt;?&gt;...)
     + getCurrentMethod(int, Object...)
     + getCurrentMethod(Object...)

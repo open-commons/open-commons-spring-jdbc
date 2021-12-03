@@ -505,6 +505,36 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 이 메소드({@link #getCurrentMethod(boolean, Object...)})를 호출하는 메소드 정보를 제공합니다. <br>
+     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
+     * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param forceToPrimitive
+     *            Wrapper {@link Class} 타입을 Primitive 타입으로 변경할지 여부.
+     * @param parameterTypes
+     *            <code>Caller</code> 메소드 파라미터
+     * @return
+     * @throws IllegalArgumentException
+     *             파라미터에 <code>null</code> 이 포함된 경우.
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see #getCurrentMethod(Class...)
+     */
+    protected final Method getCurrentMethod(boolean forceToPrimitive, @NotEmpty Object... parameters) throws IllegalArgumentException {
+        return getCurrentMethod(1, forceToPrimitive, parameters);
+    }
+
+    /**
      * 이 메소드({@link #getCurrentMethod(Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
      * 
      * <pre>
@@ -524,6 +554,41 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected final Method getCurrentMethod(@NotEmpty Class<?>... parameterTypes) {
         return getCurrentMethod(1, parameterTypes);
+    }
+
+    /**
+     * 이 메소드({@link #getCurrentMethod(Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
+     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
+     * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param distance
+     *            이 메소드를 호출하는 함수와의 거리
+     * @param forceToPrimitive
+     *            Wrapper {@link Class} 타입을 Primitive 타입으로 변경할지 여부.
+     * @param parameterTypes
+     *            <code>Caller</code> 메소드 파라미터
+     * @return
+     * @throws IllegalArgumentException
+     *             파라미터에 <code>null</code> 이 포함된 경우.
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see #getCurrentMethod(Class...)
+     */
+    protected final Method getCurrentMethod(int distance, boolean forceToPrimitive, @NotEmpty Object... parameters) throws IllegalArgumentException {
+
+        AssertUtils.assertNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
+
+        return getCurrentMethod(distance + 1, ObjectUtils.readClasses(forceToPrimitive, parameters));
     }
 
     /**
@@ -586,10 +651,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see #getCurrentMethod(Class...)
      */
     protected final Method getCurrentMethod(int distance, @NotEmpty Object... parameters) throws IllegalArgumentException {
-
-        AssertUtils.assertNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
-
-        return getCurrentMethod(distance + 1, ObjectUtils.readClasses(parameters));
+        return getCurrentMethod(distance + 1, false, parameters);
     }
 
     /**
@@ -1238,7 +1300,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected Result<List<T>> selectMultiBy(@NotNull Object... whereArgs) {
         return selectMultiBy(getCurrentMethod(1, whereArgs), whereArgs);
     }
-
+    
     /**
      * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
      * 
@@ -1263,6 +1325,88 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<List<T>> selectMultiBy(@NotNull Object[] whereArgs, String... columnNames) {
         return selectMultiBy(getCurrentMethod(1, whereArgs), whereArgs, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, int offset, int limit, Object... whereArgs) {
+
+        StringBuffer queryBuf = new StringBuffer();
+
+        queryBuf.append(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs));
+        queryBuf.append(" ");
+        queryBuf.append(queryForOffset(offset, limit));
+
+        String query = queryBuf.toString();
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, int offset, int limit, Object[] whereArgs, String... columnNames) {
+
+        StringBuffer queryBuf = new StringBuffer();
+
+        queryBuf.append(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs));
+        queryBuf.append(" ");
+        queryBuf.append(queryForOffset(offset, limit));
+
+        String query = queryBuf.toString();
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType, columnNames);
     }
 
     /**
