@@ -1415,6 +1415,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
      */
     protected Result<Integer> updateBy(T data, @NotNull Method method, Object... whereArgs) {
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
@@ -1443,6 +1445,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 12. 3.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
      */
     protected Result<Integer> updateBy(T data, Object... whereArgs) {
         return updateBy(data, getCurrentMethod(1, whereArgs), whereArgs);
