@@ -1,6 +1,28 @@
+[2021/12/03]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + containsNull(Object...)
+    + deleteBy(Object...)
+    + getCurrentMethod(Class&lt;?&gt;...)
+    + getCurrentMethod(int, Class&lt;?&gt;...)
+    + getCurrentMethod(int, Object...)
+    + getCurrentMethod(Object...)
+    + selectMultiBy(Object...)
+    + selectMultiBy(Object[], String...)
+    + selectSingleBy(boolean, Object...)
+    + selectSingleBy(boolean, Object[], String...)
+    + updateBy(T, Object...)
+
 [2021/12/01]
 - Add
-  + open.commons.spring.jdbc.repository.AbstractGenericRepository.getUpdateParameters(T): 객체에서 변경에 사용할 정보 제공
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + getColumnValues()
+    + getColumnValuesOfParameters(Method)
+    + getUpdateParameters(T): 객체에서 변경에 사용할 정보 제공
+    + getUpdateParameters(T)
+    + createColumnAssignQueries(StringBuffer, String, List&lt;ColumnValue&gt;)
+    + getAssignQuery(ColumnValue)
+    
 - Modify
   + open.commons.spring.jdbc.repository.AbstractGenericRepository.updateBy(T, Method, Object...): 버그 수정
 

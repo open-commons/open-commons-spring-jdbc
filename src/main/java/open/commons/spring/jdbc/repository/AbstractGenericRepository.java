@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -53,7 +54,9 @@ import open.commons.spring.jdbc.dao.AbstractGenericDao;
 import open.commons.utils.AnnotationUtils;
 import open.commons.utils.ArrayUtils;
 import open.commons.utils.AssertUtils;
+import open.commons.utils.ObjectUtils;
 import open.commons.utils.SQLUtils;
+import open.commons.utils.ThreadUtils;
 
 /**
  * DBMS Table Entity에 기반하여 공통 기능을 제공하는 클래스.
@@ -230,7 +233,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private String attachWhereClause(String queryHeader, Method method, Object... whereArgs) {
+    private String attachWhereClause(String queryHeader, @NotNull Method method, Object... whereArgs) {
 
         List<ColumnValue> columns = getColumnValuesOfParameters(method);
 
@@ -242,10 +245,31 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         logger.debug("Query: {}", query);
 
         for (int i = 0; i < whereArgs.length; i++) {
-            logger.debug("param >> {}={}", columns.get(i).name(), whereArgs[i]);
+            logger.debug("[parameter] {}={}", columns.get(i).name(), whereArgs[i]);
         }
 
         return query;
+    }
+
+    /**
+     * 주어진 파라미터에 <code>null</code>이 포함되어 있는지 여부를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param parameters
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final boolean containsNull(Object... parameters) {
+        return ObjectUtils.containsNull(parameters);
     }
 
     /**
@@ -299,8 +323,31 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> deleteBy(Method method, Object... whereArgs) {
+    protected Result<Integer> deleteBy(@NotNull Method method, Object... whereArgs) {
         return executeUpdate(attachWhereClause(QUERY_FOR_DELETE_HEADER, method, whereArgs), SQLConsumer.setParameters(whereArgs));
+    }
+
+    /**
+     * 데이터를 삭제합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2021. 11. 3.        박준홍         최초 작성
+     * </pre>
+     *
+     * @param <V>
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> deleteBy(Object... whereArgs) {
+        return deleteBy(getCurrentMethod(1, whereArgs), whereArgs);
     }
 
     /**
@@ -350,7 +397,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * 
      * @see ColumnValue
      */
-    protected final String getColumnNameOfParameter(Method method) {
+    protected final String getColumnNameOfParameter(@NotNull Method method) {
         Parameter param = getParameterHasColumnValue(method);
         return param.getAnnotation(ColumnValue.class).name();
     }
@@ -397,7 +444,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected List<String> getColumnNamesOfParameters(Method method) {
+    protected List<String> getColumnNamesOfParameters(@NotNull Method method) {
         List<Parameter> params = getParametersHasColumnValue(method);
 
         List<String> whereColumns = params.stream() //
@@ -420,7 +467,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 1.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected List<ColumnValue> getColumnValues() {
@@ -444,10 +491,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 1.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private List<ColumnValue> getColumnValuesOfParameters(Method method) {
+    private List<ColumnValue> getColumnValuesOfParameters(@NotNull Method method) {
         List<Parameter> params = getParametersHasColumnValue(method);
 
         List<ColumnValue> whereColumns = params.stream() //
@@ -455,6 +502,122 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 .collect(Collectors.toList());
 
         return whereColumns;
+    }
+
+    /**
+     * 이 메소드({@link #getCurrentMethod(Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param parameterTypes
+     *            <code>Caller</code> 메소드 파라미터 타입.
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final Method getCurrentMethod(@NotEmpty Class<?>... parameterTypes) {
+        return getCurrentMethod(1, parameterTypes);
+    }
+
+    /**
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param distance
+     *            이 메소드를 호출하는 함수와의 거리
+     * @param parameterTypes
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final Method getCurrentMethod(int distance, @NotEmpty Class<?>... parameterTypes) {
+
+        String name = ThreadUtils.getMethodName(distance + 1);
+
+        try {
+            return getClass().getMethod(name, parameterTypes);
+        } catch (NoSuchMethodException | SecurityException e) {
+            String errMsg = String.format("메소드 정보 추출 중 에러가 발생하였습니다. 이름=%s, 파라미터=%s, 원인=%s", name, Arrays.toString(parameterTypes), e.getMessage());
+            logger.error(errMsg, e);
+            throw new InternalError(errMsg, e);
+        }
+    }
+
+    /**
+     * 이 메소드({@link #getCurrentMethod(Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
+     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
+     * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param distance
+     *            이 메소드를 호출하는 함수와의 거리
+     * @param parameterTypes
+     *            <code>Caller</code> 메소드 파라미터
+     * @return
+     * @throws IllegalArgumentException
+     *             파라미터에 <code>null</code> 이 포함된 경우.
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see #getCurrentMethod(Class...)
+     */
+    protected final Method getCurrentMethod(int distance, @NotEmpty Object... parameters) throws IllegalArgumentException {
+
+        AssertUtils.assertNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
+
+        return getCurrentMethod(distance + 1, ObjectUtils.readClasses(parameters));
+    }
+
+    /**
+     * 이 메소드({@link #getCurrentMethod(Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
+     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
+     * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param parameterTypes
+     *            <code>Caller</code> 메소드 파라미터
+     * @return
+     * @throws IllegalArgumentException
+     *             파라미터에 <code>null</code> 이 포함된 경우.
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see #getCurrentMethod(Class...)
+     */
+    protected final Method getCurrentMethod(@NotEmpty Object... parameters) throws IllegalArgumentException {
+        return getCurrentMethod(1, parameters);
     }
 
     /**
@@ -475,7 +638,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private Parameter getParameterHasColumnValue(Method method) {
+    private Parameter getParameterHasColumnValue(@NotNull Method method) {
         for (Parameter param : method.getParameters()) {
             if (param.isAnnotationPresent(ColumnValue.class)) {
                 return param;
@@ -505,7 +668,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private List<Parameter> getParametersHasColumnValue(Method method) {
+    private List<Parameter> getParametersHasColumnValue(@NotNull Method method) {
         List<Parameter> params = new ArrayList<>();
 
         for (Parameter param : method.getParameters()) {
@@ -620,7 +783,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 1.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected final List<ColumnValue> getUpdatableColumnValues() {
@@ -1017,8 +1180,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiBy(Method method, Object... whereArgs) {
+    protected Result<List<T>> selectMultiBy(@NotNull Method method, Object... whereArgs) {
         String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
         return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
     }
@@ -1044,10 +1208,123 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 30.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiBy(Method method, Object[] whereArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiBy(@NotNull Method method, Object[] whereArgs, String... columnNames) {
         String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
         return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiBy(@NotNull Object... whereArgs) {
+        return selectMultiBy(getCurrentMethod(1, whereArgs), whereArgs);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.@param method
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiBy(@NotNull Object[] whereArgs, String... columnNames) {
+        return selectMultiBy(getCurrentMethod(1, whereArgs), whereArgs, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param required
+     *            필수 존재 여부.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     *
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<T> selectSingleBy(boolean required, Object... whereArgs) {
+        return selectSingleBy(getCurrentMethod(1, whereArgs), required, whereArgs);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param required
+     *            필수 존재 여부.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param columnNames
+     *
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
+     */
+    protected Result<T> selectSingleBy(boolean required, Object[] whereArgs, String... columnNames) {
+        return selectSingleBy(getCurrentMethod(1, whereArgs), required, whereArgs, columnNames);
     }
 
     /**
@@ -1075,8 +1352,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * @see ColumnValue
      */
-    protected Result<T> selectSingleBy(Method method, boolean required, Object... whereArgs) {
+    protected Result<T> selectSingleBy(@NotNull Method method, boolean required, Object... whereArgs) {
         String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
         return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
     }
@@ -1107,8 +1385,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 30.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
      */
-    protected Result<T> selectSingleBy(Method method, boolean required, Object[] whereArgs, String... columnNames) {
+    protected Result<T> selectSingleBy(@NotNull Method method, boolean required, Object[] whereArgs, String... columnNames) {
         String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
         return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required, columnNames);
     }
@@ -1136,11 +1416,36 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> updateBy(T data, Method method, Object... whereArgs) {
+    protected Result<Integer> updateBy(T data, @NotNull Method method, Object... whereArgs) {
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
         String query = attachWhereClause(querySet, method, whereArgs);
         Object[] params = ArrayUtils.add(getUpdateParameters(data), whereArgs);
         return executeUpdate(query, SQLConsumer.setParameters(params));
+    }
+
+    /**
+     * 주어진 조건에 맞는 데이터를 갱신합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param data
+     *            변경할 데이터 정보.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     *
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> updateBy(T data, Object... whereArgs) {
+        return updateBy(data, getCurrentMethod(1, whereArgs), whereArgs);
     }
 
     /**
@@ -1161,7 +1466,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param columns
      *            컬럼 정보
      * @since 2021. 12. 1.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     private static void createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
@@ -1196,14 +1501,16 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private static String createSetClause(@NotEmpty List<ColumnValue> columns) {
+    private static String createSetClause(@NotNull List<ColumnValue> columns) {
 
         StringBuffer buf = new StringBuffer();
 
-        buf.append("SET");
-        buf.append(" ");
+        if (columns.size() > 1) {
+            buf.append("SET");
+            buf.append(" ");
 
-        createColumnAssignQueries(buf, ",", columns);
+            createColumnAssignQueries(buf, ",", columns);
+        }
 
         return buf.toString();
     }
@@ -1226,14 +1533,16 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private static String createWhereClause(@NotEmpty List<ColumnValue> columns) {
+    private static String createWhereClause(@NotNull List<ColumnValue> columns) {
 
         StringBuffer buf = new StringBuffer();
 
-        buf.append("WHERE");
-        buf.append(" ");
+        if (columns.size() > 0) {
+            buf.append("WHERE");
+            buf.append(" ");
 
-        createColumnAssignQueries(buf, "AND", columns);
+            createColumnAssignQueries(buf, "AND", columns);
+        }
 
         return buf.toString();
     }
