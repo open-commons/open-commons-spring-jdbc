@@ -1,6 +1,15 @@
 [2021/12/03]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + AbstractGenericRepository(Class&lt;T&gt;, boolean)
+  + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
+    + AbstractSingleDataSourceRepository(Class&lt;T&gt;, boolean)
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository
+    + AbstractPostgreSingleDataSourceRepository(Class&lt;T&gt;, boolean)
+
+[2021/12/03]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
     + containsNull(Object...)
     + deleteBy(Object...)
     + getCurrentMethod(boolean, Object...)

@@ -46,8 +46,27 @@ import open.commons.utils.ArrayUtils;
 public abstract class AbstractPostgreSingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
 
     /**
-     * <br>
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 6.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param entityType
+     *            DBMS Table에 연결된 데이터 타입.
+     *
+     * @since 2021. 12. 6.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
      * 
+     * @see #AbstractPostgreSingleDataSourceRepository(Class, boolean)
+     */
+    public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType) {
+        this(entityType, true);
+    }
+
+    /**
      * <pre>
      * [개정이력]
      *      날짜    	| 작성자	|	내용

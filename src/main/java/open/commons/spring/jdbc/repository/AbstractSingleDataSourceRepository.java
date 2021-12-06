@@ -61,6 +61,29 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
+     * 2021. 12. 6.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param entityType
+     *            DBMS Table에 연결된 데이터 타입.
+     *
+     * @since 2021. 12. 6.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see #AbstractSingleDataSourceRepository(Class, boolean)
+     */
+    public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType) {
+        this(entityType, true);
+    }
+
+    /**
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
      * 2021. 11. 30.		박준홍			최초 작성
      * </pre>
      *
