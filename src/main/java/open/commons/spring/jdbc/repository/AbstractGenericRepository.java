@@ -545,13 +545,15 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 12. 3.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see #getCurrentMethod(int, Class...)
      */
     protected final Method getCurrentMethod(@NotEmpty Class<?>... parameterTypes) {
         return getCurrentMethod(1, parameterTypes);
     }
 
     /**
-     * 
+     * 이 메소드({@link #getCurrentMethod(int, Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
      * <br>
      * 
      * <pre>
@@ -584,7 +586,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 이 메소드({@link #getCurrentMethod(Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
+     * 이 메소드({@link #getCurrentMethod(int, Object...)})를 호출하는 메소드 정보를 제공합니다. <br>
      * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
      * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
      * 
@@ -607,7 +609,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      * 
-     * @see #getCurrentMethod(Class...)
+     * @see #getCurrentMethod(int, Class...)
      */
     protected final Method getCurrentMethod(int distance, @NotEmpty Object... parameters) throws IllegalArgumentException {
         AssertUtils.assertNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
@@ -616,7 +618,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 이 메소드({@link #getCurrentMethod(Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
+     * 이 메소드({@link #getCurrentMethod(Object...)})를 호출하는 메소드 정보를 제공합니다. <br>
      * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
      * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
      * 
@@ -637,7 +639,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      * 
-     * @see #getCurrentMethod(Class...)
+     * @see #getCurrentMethod(int, Object...)
      */
     protected final Method getCurrentMethod(@NotEmpty Object... parameters) throws IllegalArgumentException {
         return getCurrentMethod(1, parameters);
