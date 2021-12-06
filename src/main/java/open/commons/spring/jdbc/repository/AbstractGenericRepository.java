@@ -646,6 +646,19 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     *
+     * @since 2021. 12. 6.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#getEntityType()
+     */
+    @Override
+    public Class<T> getEntityType() {
+        return this.entityType;
+    }
+
+    /**
      * 주어진 메소드에 {@link ColumnValue} 어노테이션이 설정되어 있는 파라미터를 제공합니다. <br>
      * 
      * <pre>

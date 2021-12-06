@@ -41,6 +41,8 @@ import open.commons.annotation.ColumnValue;
  */
 public interface IGenericRepository<T> {
 
+    public Class<T> getEntityType();
+
     /**
      * 여러 개의 데이터를 추가합니다. <br>
      * 

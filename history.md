@@ -1,3 +1,10 @@
+[2021/12/06]
+- Add
+  + open.commons.spring.jdbc.repository.IGenericRepository
+    + getEntityType()
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + getEntityType()
+  
 [2021/12/03]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository
