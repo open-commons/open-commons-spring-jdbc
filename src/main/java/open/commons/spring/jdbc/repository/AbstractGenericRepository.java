@@ -142,6 +142,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected final String QUERY_FOR_UPDATE_HEADER;
 
+    /** Wrapper Class인 경우 Primitive 타입으로 강제로 변환할지 여부. */
+    protected final boolean forceToPrimitive;
+
     /**
      * <br>
      * 
@@ -154,12 +157,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * 
      * @param entityType
      *            DBMS Table에 연결된 데이터 타입.
-     *
+     * @param forceToPrimitive TODO
      * @since 2021. 11. 26.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    public AbstractGenericRepository(@NotNull Class<T> entityType) {
+    public AbstractGenericRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         this.entityType = entityType;
         this.tableName = getTableName();
 
@@ -173,6 +176,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         this.QUERY_FOR_DELETE_HEADER = queryForDeleteHeader();
         this.QUERY_FOR_UPDATE_HEADER = queryForUpdateHeader();
+        
+        this.forceToPrimitive = forceToPrimitive;
     }
 
     /**
@@ -1300,7 +1305,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected Result<List<T>> selectMultiBy(@NotNull Object... whereArgs) {
         return selectMultiBy(getCurrentMethod(1, whereArgs), whereArgs);
     }
-    
+
     /**
      * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
      * 

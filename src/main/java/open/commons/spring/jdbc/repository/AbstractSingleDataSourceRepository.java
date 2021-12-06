@@ -65,13 +65,16 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * </pre>
      *
      * @param entityType
+     *            DBMS Table에 연결된 데이터 타입.
+     * @param forceToPrimitive
+     *            Wrapper Class인 경우 Primitive 타입으로 강제로 변환할지 여부.
      *
      * @since 2021. 11. 30.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType) {
-        super(entityType);
+    public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+        super(entityType, forceToPrimitive);
     }
 
     /**
