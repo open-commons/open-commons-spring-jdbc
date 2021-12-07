@@ -1547,6 +1547,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      * 주어진 조건에 맞는 데이터를 갱신합니다. <br>
+     * 이 메소드({@link #updateBy(Object, Object...)})를 호출하는 메소드의 파라미터는 (갱신할 데이터, Where ...) 순서이어야 합니다.
      * 
      * <pre>
      * [개정이력]
@@ -1569,7 +1570,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<Integer> updateBy(T data, Object... whereArgs) {
-        return updateBy(data, getCurrentMethod(1, whereArgs), whereArgs);
+        return updateBy(data, getCurrentMethod(1, ArrayUtils.prepend(whereArgs, data)), whereArgs);
     }
 
     /**
