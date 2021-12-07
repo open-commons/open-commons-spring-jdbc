@@ -44,6 +44,24 @@ public interface IGenericRepository<T> {
     public Class<T> getEntityType();
 
     /**
+     * 테이블 이름을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2021. 11. 26.        박준홍         최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 26.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public String getTableName();
+
+    /**
      * 여러 개의 데이터를 추가합니다. <br>
      * 
      * <pre>
