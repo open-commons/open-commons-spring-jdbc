@@ -323,7 +323,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 , QUERY_FOR_PARTITION_HEADER //
                 , QUERY_FOR_PARTITION_VALUE //
                 , QUERY_FOR_PARTITION_CONCAT_VQ //
-                , QUERY_FOR_PARTITION_VALUE);
+                , QUERY_FOR_PARTITION_TAIL);
     }
 
     /**
