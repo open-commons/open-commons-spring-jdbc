@@ -1,3 +1,13 @@
+[2021/12/08]
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + Add
+      + selectSingleBy(boolean, Method, Object...)
+      + selectSingleBy(boolean, Method, Object[], String...)  
+    + Delete
+      + selectSingleBy(Method, boolean, Object...)
+      + selectSingleBy(Method, boolean, Object[], String...)  
+  
 [2021/12/07]
 - Add
   + open.commons.spring.jdbc.repository.IGenericRepository

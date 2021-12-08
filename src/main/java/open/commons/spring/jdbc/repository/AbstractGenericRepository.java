@@ -1385,6 +1385,74 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param required
+     *            필수 존재 여부.
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     *
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<T> selectSingleBy(boolean required, @NotNull Method method, Object... whereArgs) {
+        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
+        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 30.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param required
+     *            필수 존재 여부.
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param columnNames
+     *
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2021. 11. 30.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
+     */
+    protected Result<T> selectSingleBy(boolean required, @NotNull Method method, Object[] whereArgs, String... columnNames) {
+        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
+        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
      * 2021. 12. 3.		박준홍			최초 작성
      * </pre>
      * 
@@ -1405,7 +1473,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<T> selectSingleBy(boolean required, Object... whereArgs) {
-        return selectSingleBy(getCurrentMethod(1, whereArgs), required, whereArgs);
+        return selectSingleBy(required, getCurrentMethod(1, whereArgs), whereArgs);
     }
 
     /**
@@ -1437,73 +1505,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<T> selectSingleBy(boolean required, Object[] whereArgs, String... columnNames) {
-        return selectSingleBy(getCurrentMethod(1, whereArgs), required, whereArgs, columnNames);
-    }
-
-    /**
-     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 29.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param method
-     *            사용자 정의 메소드
-     * @param required
-     *            필수 존재 여부.
-     * @param whereArgs
-     *            'WHERE' 절에 사용될 파라미터.
-     * @return
-     * @throws EmptyResultDataAccessException
-     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
-     * @throws IncorrectResultSizeDataAccessException
-     *             조회 결과 데이터 개수가 2개 이상인 경우
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     * @see ColumnValue
-     */
-    protected Result<T> selectSingleBy(@NotNull Method method, boolean required, Object... whereArgs) {
-        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
-        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
-    }
-
-    /**
-     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 30.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param method
-     *            사용자 정의 메소드
-     * @param required
-     *            필수 존재 여부.
-     * @param whereArgs
-     *            'WHERE' 절에 사용될 파라미터.
-     * @param columnNames
-     * @return
-     * @throws EmptyResultDataAccessException
-     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
-     * @throws IncorrectResultSizeDataAccessException
-     *             조회 결과 데이터 개수가 2개 이상인 경우
-     *
-     * @since 2021. 11. 30.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     * 
-     * @see ColumnValue
-     */
-    protected Result<T> selectSingleBy(@NotNull Method method, boolean required, Object[] whereArgs, String... columnNames) {
-        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
-        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required, columnNames);
+        return selectSingleBy(required, getCurrentMethod(1, whereArgs), whereArgs, columnNames);
     }
 
     /**
@@ -1540,7 +1542,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      * 주어진 조건에 맞는 데이터를 갱신합니다. <br>
-     * 이 메소드({@link #updateBy(Object, Object...)})를 호출하는 메소드의 파라미터는 (갱신할 데이터, Where ...) 순서이어야 합니다.
+     * 이 메소드({@link #updateBy(Object, Object...)})를 호출하는 메소드의 파라미터는 이 메소드의 파라미터 순서와 동일한 순서(갱신할 데이터, Where ...)이어야 합니다.
      * 
      * <pre>
      * [개정이력]
