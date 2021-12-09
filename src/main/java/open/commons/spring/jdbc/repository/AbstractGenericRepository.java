@@ -419,10 +419,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
             throw new IllegalArgumentException(String.format("데이터를 변경할 컬럼 정보가 존재하지 않습니다. entity={}", this.entityType));
         }
 
-        String query = String.join(" ", queryHeader, createSetClause(columns));
-        logger.debug("Query: {}", query);
-
-        return query;
+        return String.join(" ", queryHeader, createSetClause(columns));
     }
 
     /**
@@ -457,14 +454,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
             throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), whereArgs.length));
         }
 
-        String query = String.join(" ", queryHeader, createWhereClause(columns));
-        logger.debug("Query: {}", query);
-
-        for (int i = 0; i < whereArgs.length; i++) {
-            logger.debug("[parameter] {}={}", columns.get(i).name(), whereArgs[i]);
-        }
-
-        return query;
+        return String.join(" ", queryHeader, createWhereClause(columns));
     }
 
     /**
@@ -1682,7 +1672,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiBy(@NotNull Method method, Object... whereArgs) {
+
         String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
+
+        logger.debug("Query: {}, where.columns={}", query, Arrays.toString(whereArgs));
+
         return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
     }
 
@@ -1711,7 +1705,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiBy(@NotNull Method method, Object[] whereArgs, String... columnNames) {
+
         String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
+
+        logger.debug("Query: {}, where.columns={}", query, Arrays.toString(whereArgs));
+
         return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType, columnNames);
     }
 
