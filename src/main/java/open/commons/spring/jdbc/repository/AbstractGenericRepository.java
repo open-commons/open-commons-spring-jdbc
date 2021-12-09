@@ -1317,7 +1317,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.util.List, int)
      */
     @Override
-    public Result<Integer> insert(List<T> data, int partitionSize) {
+    public Result<Integer> insert(List<T> data, @Min(1) int partitionSize) {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createInsertBrokers(data, partitionSize);
         return executeUpdate(brokers);
     }

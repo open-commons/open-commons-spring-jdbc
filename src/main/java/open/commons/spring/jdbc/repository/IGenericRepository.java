@@ -28,6 +28,8 @@ package open.commons.spring.jdbc.repository;
 
 import java.util.List;
 
+import javax.validation.constraints.Min;
+
 import open.commons.Result;
 import open.commons.annotation.ColumnValue;
 
@@ -101,7 +103,7 @@ public interface IGenericRepository<T> {
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    public Result<Integer> insert(List<T> data, int partitionSize);
+    public Result<Integer> insert(List<T> data, @Min(1) int partitionSize);
 
     /**
      * 데이터를 추가합니다. <br>
@@ -162,7 +164,7 @@ public interface IGenericRepository<T> {
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    public Result<List<T>> selectAll(int offset, int limit);
+    public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit);
 
     /**
      * 주어진 조건에 따라 정렬된 모든 데이터를 제공합니다. <br>
@@ -189,7 +191,7 @@ public interface IGenericRepository<T> {
      * @version _._._
      * @author parkjunhong77@gmail.com
      */
-    public Result<List<T>> selectAll(int offset, int limit, String... orderByArgs);
+    public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit, String... orderByArgs);
 
     /**
      * 주어진 조건에 따라 정렬된 모든 데이터를 제공합니다. <br>
