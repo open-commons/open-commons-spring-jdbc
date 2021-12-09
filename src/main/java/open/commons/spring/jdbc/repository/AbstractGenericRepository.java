@@ -226,8 +226,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected void addOffsetClause(StringBuffer queryBuf, @Min(0) int offset, @Min(1) int limit) {
         queryBuf.append(" ");
         queryBuf.append(queryForOffset(offset, limit));
-
-        logger.debug("Query: {}", queryBuf.toString());
     }
 
     /**
@@ -1624,7 +1622,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         String query = attachOffsetClause(QUERY_FOR_SELECT, offset, limit);
 
-        logger.debug("Query: {}", query);
+        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
         return getList(query, SQLConsumer.setParameters(offset, limit), this.entityType);
     }
@@ -1646,7 +1644,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         addOrderByClause(queryBuf, orderByArgs);
         addOffsetClause(queryBuf, offset, limit);
 
-        logger.debug("Query: {}", queryBuf.toString());
+        logger.debug("Query: {}, offset={}, limit={}", queryBuf.toString(), offset, limit);
 
         return getList(queryBuf.toString(), SQLConsumer.setParameters(offset, limit), this.entityType);
     }
@@ -1840,7 +1838,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         String query = createQueryForSelectForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs);
 
-        logger.debug("Query: {}", query);
+        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
         return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType, columnNames);
     }
@@ -2020,7 +2018,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
                 , offset, limit);
 
-        logger.debug("Query: {}", query);
+        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
         return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType);
     }
@@ -2064,7 +2062,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
                 , offset, limit);
 
-        logger.debug("Query: {}", query);
+        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
         return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType, columnNames);
     }
@@ -2257,5 +2255,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<Integer> updateBy(T data, Object... whereArgs) {
         return updateBy(data, getCurrentMethod(1, ArrayUtils.prepend(whereArgs, data)), whereArgs);
+    }
+
+    protected static Object[] array(Object... any) {
+        return any != null ? any : new Object[0];
     }
 }
