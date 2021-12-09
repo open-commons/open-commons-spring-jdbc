@@ -1,4 +1,21 @@
 [2021/12/08]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + addOffsetClause(StringBuffer, int, int)
+    + addOrderByClause(StringBuffer, String...)
+    + createOrderByClause(String...)
+    + createQueryForSelectForPagination(String, Method, int, int, Object...)
+    + createQueryForSelectOrderBy(String, Method, Object[], String...)
+    + selectAll(int, int, String...)
+    + selectAll(String...)
+    + selectMultiOrderBy(Method, Object[], String...)
+    + selectMultiOrderBy(Method, Object[], String[], String...)
+    + selectMultiOrderBy(Object[], String...)
+    + selectMultiOrderBy(Object[], String[], String...)
+    + selectMultiOrderByForPagination(Method, int, int, Object[], String...)
+    + selectMultiOrderByForPagination(Method, int, int, Object[], String[], String...)
+
+[2021/12/08]
 - Modify
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
     + Add

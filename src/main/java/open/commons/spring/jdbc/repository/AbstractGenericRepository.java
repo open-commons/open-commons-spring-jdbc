@@ -37,6 +37,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
@@ -51,6 +52,7 @@ import open.commons.database.annotation.TableDef;
 import open.commons.function.SQLConsumer;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.AbstractGenericDao;
+import open.commons.util.ArrayItr;
 import open.commons.utils.AnnotationUtils;
 import open.commons.utils.ArrayUtils;
 import open.commons.utils.AssertUtils;
@@ -200,6 +202,63 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 주어진 조건에 맞는 데이터를 조회하는 쿼리를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryHeader
+     *            데이터 조회 쿼리.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected void addOffsetClause(StringBuffer queryBuf, @Min(0) int offset, @Min(1) int limit) {
+        queryBuf.append(" ");
+        queryBuf.append(queryForOffset(offset, limit));
+
+        logger.debug("Query: {}", queryBuf.toString());
+    }
+
+    /**
+     * 기존 쿼리에 정렬 기준 구문을 추가하여 반환합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryHeader
+     *            데이터 조회 쿼리.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected void addOrderByClause(StringBuffer queryBuf, String... orderByArgs) {
+        queryBuf.append(" ");
+        queryBuf.append(createOrderByClause(orderByArgs));
+    }
+
+    /**
      * 주어진 파라미터를 이용하여 생성한 데이터 변경 쿼리를 제공합니다. <br>
      * 패턴: <code>{query} SET {column} = {variable-binding-query} (, {column} = {variable-binding-query})*</code>
      * 
@@ -219,7 +278,149 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private String attachSetClause(String queryHeader) {
+    protected void addSetClause(StringBuffer queryBuf) {
+
+        List<ColumnValue> columns = getUpdatableColumnValues();
+
+        if (columns.size() < 1) {
+            throw new IllegalArgumentException(String.format("데이터를 변경할 컬럼 정보가 존재하지 않습니다. entity={}", this.entityType));
+        }
+
+        queryBuf.append(" ");
+        queryBuf.append(createSetClause(columns));
+
+        logger.debug("Query: {}", queryBuf.toString());
+    }
+
+    /**
+     * 주어진 파라미터를 이용하여 생성한 데이터 조회 쿼리를 제공합니다. <br>
+     * 패턴: <code>{query} WHERE {column} = {variable-binding-query} (AND {column} = {variable-binding-query})*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param queryHeader
+     *            중요 쿼리
+     * @param method
+     *            사용자 정의 메소드 정보
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected void addWhereClause(StringBuffer queryBuf, @NotNull Method method, Object... whereArgs) {
+
+        List<ColumnValue> columns = getColumnValuesOfParameters(method);
+
+        if (columns.size() != whereArgs.length) {
+            throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), whereArgs.length));
+        }
+
+        queryBuf.append(" ");
+        queryBuf.append(createWhereClause(columns));
+
+        logger.debug("Query: {}", queryBuf.toString());
+
+        for (int i = 0; i < whereArgs.length; i++) {
+            logger.debug("[parameter] {}={}", columns.get(i).name(), whereArgs[i]);
+        }
+
+    }
+
+    /**
+     * 주어진 조건에 맞는 데이터를 조회하는 쿼리를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryHeader
+     *            데이터 조회 쿼리.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected String attachOffsetClause(String queryHeader, @Min(0) int offset, @Min(1) int limit) {
+
+        StringBuffer queryBuf = new StringBuffer();
+        queryBuf.append(queryHeader);
+        queryBuf.append(" ");
+        queryBuf.append(queryForOffset(offset, limit));
+
+        return queryBuf.toString();
+    }
+
+    /**
+     * 기존 쿼리에 정렬 기준 구문을 추가하여 반환합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryHeader
+     *            데이터 조회 쿼리.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected String attachOrderByClause(String queryHeader, String... orderByArgs) {
+
+        StringBuffer sqlBuf = new StringBuffer();
+
+        sqlBuf.append(queryHeader);
+        sqlBuf.append(createOrderByClause(orderByArgs));
+
+        return sqlBuf.toString();
+    }
+
+    /**
+     * 주어진 파라미터를 이용하여 생성한 데이터 변경 쿼리를 제공합니다. <br>
+     * 패턴: <code>{query} SET {column} = {variable-binding-query} (, {column} = {variable-binding-query})*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2021. 11. 29.        박준홍         최초 작성
+     * </pre>
+     * 
+     * @param queryHeader
+     *            중요 쿼리
+     *
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String attachSetClause(String queryHeader) {
 
         List<ColumnValue> columns = getUpdatableColumnValues();
 
@@ -257,7 +458,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    private String attachWhereClause(String queryHeader, @NotNull Method method, Object... whereArgs) {
+    protected String attachWhereClause(String queryHeader, @NotNull Method method, Object... whereArgs) {
 
         List<ColumnValue> columns = getColumnValuesOfParameters(method);
 
@@ -297,6 +498,41 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
+     * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param buf
+     *            쿼리 버퍼
+     * @param concat
+     *            컬럼 설정쿼리 연결 문자열
+     * @param columns
+     *            컬럼 정보
+     * @since 2021. 12. 1.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected void createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
+
+        // variable binding
+        Iterator<ColumnValue> itr = columns.iterator();
+        buf.append(getAssignQuery(itr.next()));
+
+        while (itr.hasNext()) {
+            buf.append(" ");
+            buf.append(concat);
+            buf.append(" ");
+            buf.append(getAssignQuery(itr.next()));
+        }
+    }
+
+    /**
      * 
      * <br>
      * 
@@ -324,6 +560,190 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 , QUERY_FOR_PARTITION_VALUE //
                 , QUERY_FOR_PARTITION_CONCAT_VQ //
                 , QUERY_FOR_PARTITION_TAIL);
+    }
+
+    /**
+     * 정렬을 위한 Order By 구분을 생성하여 제공합니다. <br>
+     * 패턴: <code>ORDER BY {column} {direction}(, {column} {direction})*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createOrderByClause(String... orderByArgs) {
+        if (orderByArgs == null || orderByArgs.length < 1) {
+            return "";
+        }
+
+        StringBuffer sqlBuf = new StringBuffer();
+        sqlBuf.append(" ORDER BY ");
+
+        ArrayItr<String> itr = new ArrayItr<>(orderByArgs);
+        sqlBuf.append(itr.next());
+
+        while (itr.hasNext()) {
+            sqlBuf.append(", ");
+            sqlBuf.append(itr.next());
+        }
+
+        return sqlBuf.toString();
+    }
+
+    /**
+     * 여러 개의 데이터를 제공하는 쿼리를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param selectQuery
+     *            데이터 조회 쿼리.
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     *
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createQueryForSelectForPagination(@NotEmpty String selectQuery, @NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
+
+        StringBuffer queryBuf = new StringBuffer();
+        queryBuf.append(selectQuery);
+
+        addWhereClause(queryBuf, method, whereArgs);
+        addOffsetClause(queryBuf, offset, limit);
+
+        return queryBuf.toString();
+    }
+
+    /**
+     * 데이터를 선택하는 쿼리를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param selectQuery
+     *            데이터 조회 쿼리.
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     *
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createQueryForSelectOrderBy(String selectQuery, @NotNull Method method, Object[] whereArgs, String... orderByArgs) {
+
+        StringBuffer queryBuf = new StringBuffer();
+        queryBuf.append(selectQuery);
+
+        addWhereClause(queryBuf, method, whereArgs);
+        addOrderByClause(queryBuf, orderByArgs);
+
+        logger.debug("Query: {}", queryBuf.toString());
+
+        return queryBuf.toString();
+    }
+
+    /**
+     * 주어진 컬럼값을 변경하는 'Set' 구문을 제공합니다. <br>
+     * 패턴: <code>SET {column} = ? (, {column} = ? )*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param columns
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createSetClause(@NotNull List<ColumnValue> columns) {
+
+        StringBuffer buf = new StringBuffer();
+
+        if (columns.size() > 1) {
+            buf.append("SET");
+            buf.append(" ");
+
+            createColumnAssignQueries(buf, ",", columns);
+        }
+
+        return buf.toString();
+    }
+
+    /**
+     * 주어진 컬럼명으로 'AND'로 연결된 Where 구문을 제공합니다. <br>
+     * 패턴: <code>WHERE {column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param columns
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createWhereClause(@NotNull List<ColumnValue> columns) {
+
+        StringBuffer buf = new StringBuffer();
+
+        if (columns.size() > 0) {
+            buf.append("WHERE");
+            buf.append(" ");
+
+            createColumnAssignQueries(buf, "AND", columns);
+        }
+
+        return buf.toString();
     }
 
     /**
@@ -372,6 +792,28 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<Integer> deleteBy(Object... whereArgs) {
         return deleteBy(getCurrentMethod(1, whereArgs), whereArgs);
+    }
+
+    /**
+     * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
+     * 패턴: <code>{column-name} = {variable-binding-query}</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param cv
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final String getAssignQuery(ColumnValue cv) {
+        return String.join(" = ", cv.name(), cv.variableBinding());
     }
 
     /**
@@ -994,7 +1436,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected abstract String queryForOffset(int offset, int limit);
+    protected abstract String queryForOffset(@Min(0) int offset, @Min(1) int limit);
 
     /**
      * 여러 개의 데이터를 추가하는 쿼리의 '데이터 쿼리' 연결 정보를 제공합니다. <br>
@@ -1178,18 +1620,55 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(int, int)
      */
     @Override
-    public Result<List<T>> selectAll(int offset, int limit) {
+    public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit) {
 
-        StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append(QUERY_FOR_SELECT);
-        queryBuf.append(" ");
-        queryBuf.append(queryForOffset(offset, limit));
-
-        String query = queryBuf.toString();
+        String query = attachOffsetClause(QUERY_FOR_SELECT, offset, limit);
 
         logger.debug("Query: {}", query);
 
         return getList(query, SQLConsumer.setParameters(offset, limit), this.entityType);
+    }
+
+    /**
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(int, int, java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
+
+        StringBuffer queryBuf = new StringBuffer();
+
+        queryBuf.append(QUERY_FOR_SELECT);
+        addOrderByClause(queryBuf, orderByArgs);
+        addOffsetClause(queryBuf, offset, limit);
+
+        logger.debug("Query: {}", queryBuf.toString());
+
+        return getList(queryBuf.toString(), SQLConsumer.setParameters(offset, limit), this.entityType);
+    }
+
+    /**
+     *
+     * @since 2021. 12. 9.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectAll(String... orderByArgs) {
+
+        StringBuffer queryBuf = new StringBuffer();
+        queryBuf.append(QUERY_FOR_SELECT);
+        addOrderByClause(queryBuf, orderByArgs);
+
+        logger.debug("Query: {}", queryBuf.toString());
+
+        return getList(queryBuf.toString(), SQLConsumer.setParameters(), this.entityType);
     }
 
     /**
@@ -1321,15 +1800,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, int offset, int limit, Object... whereArgs) {
+    protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
 
-        StringBuffer queryBuf = new StringBuffer();
-
-        queryBuf.append(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs));
-        queryBuf.append(" ");
-        queryBuf.append(queryForOffset(offset, limit));
-
-        String query = queryBuf.toString();
+        String query = createQueryForSelectForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs);
 
         logger.debug("Query: {}", query);
 
@@ -1363,15 +1836,233 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, int offset, int limit, Object[] whereArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... columnNames) {
 
-        StringBuffer queryBuf = new StringBuffer();
+        String query = createQueryForSelectForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs);
 
-        queryBuf.append(attachWhereClause(QUERY_FOR_SELECT, method, whereArgs));
-        queryBuf.append(" ");
-        queryBuf.append(queryForOffset(offset, limit));
+        logger.debug("Query: {}", query);
 
-        String query = queryBuf.toString();
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2021. 12. 9.     박준홍         최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * 
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiOrderBy(@NotNull Method method, Object[] whereArgs, String... orderByArgs) {
+
+        String query = createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs);
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.@param method
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiOrderBy(@NotNull Method method, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+
+        String query = createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs);
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiOrderBy(@NotNull Object[] whereArgs, String... orderByArgs) {
+
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+
+        return selectMultiOrderBy(getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 3.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.@param method
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2021. 12. 3.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiOrderBy(@NotNull Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+
+        return selectMultiOrderBy(getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiOrderByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... orderByArgs) {
+
+        String query = attachOffsetClause( //
+                createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
+                , offset, limit);
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 9.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2021. 12. 9.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiOrderByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String[] orderByArgs,
+            String... columnNames) {
+
+        String query = attachOffsetClause( //
+                createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
+                , offset, limit);
 
         logger.debug("Query: {}", query);
 
@@ -1566,126 +2257,5 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<Integer> updateBy(T data, Object... whereArgs) {
         return updateBy(data, getCurrentMethod(1, ArrayUtils.prepend(whereArgs, data)), whereArgs);
-    }
-
-    /**
-     * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
-     * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 12. 1.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param buf
-     *            쿼리 버퍼
-     * @param concat
-     *            컬럼 설정쿼리 연결 문자열
-     * @param columns
-     *            컬럼 정보
-     * @since 2021. 12. 1.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private static void createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
-
-        // variable binding
-        Iterator<ColumnValue> itr = columns.iterator();
-        buf.append(getAssignQuery(itr.next()));
-
-        while (itr.hasNext()) {
-            buf.append(" ");
-            buf.append(concat);
-            buf.append(" ");
-            buf.append(getAssignQuery(itr.next()));
-        }
-    }
-
-    /**
-     * 주어진 컬럼값을 변경하는 'Set' 구문을 제공합니다. <br>
-     * 패턴: <code>SET {column} = ? (, {column} = ? )*</code>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 29.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param columns
-     * @return
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private static String createSetClause(@NotNull List<ColumnValue> columns) {
-
-        StringBuffer buf = new StringBuffer();
-
-        if (columns.size() > 1) {
-            buf.append("SET");
-            buf.append(" ");
-
-            createColumnAssignQueries(buf, ",", columns);
-        }
-
-        return buf.toString();
-    }
-
-    /**
-     * 주어진 컬럼명으로 'AND'로 연결된 Where 구문을 제공합니다. <br>
-     * 패턴: <code>WHERE {column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 29.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param columns
-     * @return
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private static String createWhereClause(@NotNull List<ColumnValue> columns) {
-
-        StringBuffer buf = new StringBuffer();
-
-        if (columns.size() > 0) {
-            buf.append("WHERE");
-            buf.append(" ");
-
-            createColumnAssignQueries(buf, "AND", columns);
-        }
-
-        return buf.toString();
-    }
-
-    /**
-     * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
-     * 패턴: <code>{column-name} = {variable-binding-query}</code>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 12. 1.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param cv
-     * @return
-     *
-     * @since 2021. 12. 1.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private static final String getAssignQuery(ColumnValue cv) {
-        return String.join(" = ", cv.name(), cv.variableBinding());
     }
 }
