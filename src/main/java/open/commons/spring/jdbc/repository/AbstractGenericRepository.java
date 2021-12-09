@@ -324,13 +324,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         queryBuf.append(" ");
         queryBuf.append(createWhereClause(columns));
-
-        logger.debug("Query: {}", queryBuf.toString());
-
-        for (int i = 0; i < whereArgs.length; i++) {
-            logger.debug("[parameter] {}={}", columns.get(i).name(), whereArgs[i]);
-        }
-
     }
 
     /**
@@ -674,8 +667,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         addWhereClause(queryBuf, method, whereArgs);
         addOrderByClause(queryBuf, orderByArgs);
-
-        logger.debug("Query: {}", queryBuf.toString());
 
         return queryBuf.toString();
     }
@@ -2018,7 +2009,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
                 , offset, limit);
 
-        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
+        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
 
         return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType);
     }
