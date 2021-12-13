@@ -36,7 +36,7 @@
 		<!-- >>> end: plugin dependencies -->
 
 		<!-- >>> begin: dependencies -->
-		<slf4j-api.version>1.7.26</slf4j-api.version>
+		<slf4j-api.version>1.7.32</slf4j-api.version>
 		<commons-io.version>[2.7,)</commons-io.version>
 
 		<open-commons-core.version>1.8.0-SNAPSHOT</open-commons-core.version>
