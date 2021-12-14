@@ -729,7 +729,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 주어진 컬럼명으로 '{연산자}'로 연결된 Where 구문을 제공합니다. <br>
+     * 주어진 컬럼명으로 '{컬럼 접속자}'로 연결된 Where 구문을 제공합니다. <br>
      * 패턴:
      * <code>WHERE {column} {concatenator} {variable-binding-query} ( AND {column} {concatenator} {variable-binding-query} )*</code>
      * 
@@ -742,7 +742,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *
      * @param columns
      * @param concatenator
-     *            TODO
+     *            Where 구문 컬럼 접속자
      * @param parameterCount
      *            파라미터 개수
      * @return
@@ -911,7 +911,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 buf.append(vb.variableBinding());
                 break;
             case IN:
-                break;
             case NOT_IN:
                 buf.append(vb.operator().get());
                 buf.append(" (");
@@ -953,9 +952,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 break;
             case IS_NOT_NULL:
                 buf.append(vb.operator().get());
-                buf.append(" %");
-                buf.append(vb.variableBinding());
-                buf.append(" %");
                 break;
             default:
                 throw new UnsupportedOperationException(String.format("지원하지 않는 연산자입니다. 입력=%s", vb.operator()));
