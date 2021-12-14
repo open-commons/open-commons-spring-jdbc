@@ -729,7 +729,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 주어진 컬럼명으로 'AND'로 연결된 Where 구문을 제공합니다. <br>
+     * 주어진 컬럼명으로 '{연산자}'로 연결된 Where 구문을 제공합니다. <br>
      * 패턴:
      * <code>WHERE {column} {concatenator} {variable-binding-query} ( AND {column} {concatenator} {variable-binding-query} )*</code>
      * 
@@ -768,7 +768,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         buf.append(getAssignQuery(vbNow));
         parameterCount--;
 
-        do {
+        boolean hasNext = true;
+        while (hasNext) {
             JdbcVariableBinder vbLatest = vbNow;
             switch (vbLatest.operator()) {
                 case IN:
@@ -782,8 +783,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                         buf.append(" ?");
                     }
                     buf.append(")");
+                    hasNext = false;
                     break;
                 default:
+                    if (!itr.hasNext()) {
+                        hasNext = false;
+                        break;
+                    }
+
                     vbNow = itr.next();
                     buf.append(" ");
                     buf.append(concatenator);
@@ -792,7 +799,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                     parameterCount--;
                     break;
             }
-        } while (itr.hasNext());
+        }
 
         return buf.toString();
     }
