@@ -1,3 +1,20 @@
+[2021/12/14]
+- Modify
+  + open.commons.spring.jdbc.repository.annotation
+    - ColumnVariableBinder -> JdbcVariableBinder
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    - 그외 다수의 메소드 변경 및 추가
+- Delete
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    - getVariableBindingColumn(Method)
+    - getVariableBindingParameter(Method)  
+- Add
+  + open.commons.spring.jdbc.repository.exceptions.UnsupportedVariableBindingException
+
+[2021/12/13]
+- Add
+  + open.commons.spring.jdbc.repository.annotation.ColumnVariableBinder
+  
 [2021/12/08]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;

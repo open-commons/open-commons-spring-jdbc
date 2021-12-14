@@ -30,12 +30,12 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
@@ -52,6 +52,8 @@ import open.commons.database.annotation.TableDef;
 import open.commons.function.SQLConsumer;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.AbstractGenericDao;
+import open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder;
+import open.commons.spring.jdbc.repository.exceptions.UnsupportedVariableBindingException;
 import open.commons.util.ArrayItr;
 import open.commons.utils.AnnotationUtils;
 import open.commons.utils.ArrayUtils;
@@ -316,14 +318,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected void addWhereClause(StringBuffer queryBuf, @NotNull Method method, Object... whereArgs) {
 
-        List<ColumnValue> columns = getColumnValuesOfParameters(method);
+        List<JdbcVariableBinder> columns = getVariableBinders(method);
 
         if (columns.size() != whereArgs.length) {
-            throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), whereArgs.length));
+            logger.info("쿼리에 사용될 컬럼 개수({})와 파라미터 개수({})가 일치하지 않습니다.", columns.size(), whereArgs.length);
         }
 
         queryBuf.append(" ");
-        queryBuf.append(createWhereClause(columns));
+        queryBuf.append(createWhereClause(columns, "AND", whereArgs.length));
     }
 
     /**
@@ -448,13 +450,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected String attachWhereClause(String queryHeader, @NotNull Method method, Object... whereArgs) {
 
-        List<ColumnValue> columns = getColumnValuesOfParameters(method);
+        List<JdbcVariableBinder> columns = getVariableBinders(method);
 
         if (columns.size() != whereArgs.length) {
-            throw new IllegalArgumentException(String.format("쿼리에 사용될 컬럼 개수(%,d)와 파라미터 개수(%,d)가 일치하지 않습니다.", columns.size(), whereArgs.length));
+            logger.info("쿼리에 사용될 컬럼 개수({})와 파라미터 개수({})가 일치하지 않습니다.", columns.size(), whereArgs.length);
         }
 
-        return String.join(" ", queryHeader, createWhereClause(columns));
+        return String.join(" ", queryHeader, createWhereClause(columns, "AND", whereArgs.length));
     }
 
     /**
@@ -513,9 +515,42 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         }
     }
 
+    // /**
+    // * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
+    // * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
+    // *
+    // * <pre>
+    // * [개정이력]
+    // * 날짜 | 작성자 | 내용
+    // * ------------------------------------------
+    // * 2021. 12. 1. 박준홍 최초 작성
+    // * </pre>
+    // *
+    // * @param buf
+    // * 쿼리 버퍼
+    // * @param concat
+    // * 컬럼 설정쿼리 연결 문자열
+    // * @param columns
+    // * 컬럼 정보
+    // * @since 2021. 12. 13.
+    // * @version 0.3.0
+    // * @author parkjunhong77@gmail.com
+    // */
+    // protected void createColumnAssignQueries(StringBuffer buf, String concat, List<JdbcVariableBinder> columns) {
+    //
+    // // variable binding
+    // Iterator<JdbcVariableBinder> itr = columns.iterator();
+    // buf.append(getAssignQuery(itr.next()));
+    //
+    // while (itr.hasNext()) {
+    // buf.append(" ");
+    // buf.append(concat);
+    // buf.append(" ");
+    // buf.append(getAssignQuery(itr.next()));
+    // }
+    // }
+
     /**
-     * 
-     * <br>
      * 
      * <pre>
      * [개정이력]
@@ -695,7 +730,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      * 주어진 컬럼명으로 'AND'로 연결된 Where 구문을 제공합니다. <br>
-     * 패턴: <code>WHERE {column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
+     * 패턴:
+     * <code>WHERE {column} {concatenator} {variable-binding-query} ( AND {column} {concatenator} {variable-binding-query} )*</code>
      * 
      * <pre>
      * [개정이력]
@@ -705,22 +741,58 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param columns
+     * @param concatenator
+     *            TODO
+     * @param parameterCount
+     *            파라미터 개수
      * @return
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected String createWhereClause(@NotNull List<ColumnValue> columns) {
+    protected String createWhereClause(@NotNull List<JdbcVariableBinder> columns, String concatenator, int parameterCount) {
+
+        if (columns.size() < 1) {
+            return "";
+        }
 
         StringBuffer buf = new StringBuffer();
 
-        if (columns.size() > 0) {
-            buf.append("WHERE");
-            buf.append(" ");
+        buf.append("WHERE");
+        buf.append(" ");
 
-            createColumnAssignQueries(buf, "AND", columns);
-        }
+        Iterator<JdbcVariableBinder> itr = columns.iterator();
+
+        JdbcVariableBinder vbNow = itr.next();
+        buf.append(getAssignQuery(vbNow));
+        parameterCount--;
+
+        do {
+            JdbcVariableBinder vbLatest = vbNow;
+            switch (vbLatest.operator()) {
+                case IN:
+                case NOT_IN:
+                    if (itr.hasNext()) {
+                        throw new UnsupportedVariableBindingException(
+                                String.format("'IN' 구문 이후에 다른 연산자가 오는 경우는 지원하지 않습니다. 연산자=%s", columns.stream().map(c -> c.operator().get()).collect(Collectors.toList())));
+                    }
+                    for (int i = 0; i < parameterCount; i++) {
+                        buf.append(", ");
+                        buf.append(" ?");
+                    }
+                    buf.append(")");
+                    break;
+                default:
+                    vbNow = itr.next();
+                    buf.append(" ");
+                    buf.append(concatenator);
+                    buf.append(" ");
+                    buf.append(getAssignQuery(vbNow));
+                    parameterCount--;
+                    break;
+            }
+        } while (itr.hasNext());
 
         return buf.toString();
     }
@@ -796,6 +868,96 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
+     * 패턴: <code>{column-name} = {variable-binding-query}</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param cv
+     * @return
+     *
+     * @since 2021. 12. 13.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final String getAssignQuery(JdbcVariableBinder vb) {
+
+        StringBuffer buf = new StringBuffer();
+
+        buf.append(vb.name());
+        buf.append(" ");
+
+        switch (vb.operator()) {
+            case EQ:
+            case GE:
+            case GT:
+            case LE:
+            case LT:
+            case NOT:
+                buf.append(vb.operator().get());
+                buf.append(" ");
+                buf.append(vb.variableBinding());
+                break;
+            case IN:
+                break;
+            case NOT_IN:
+                buf.append(vb.operator().get());
+                buf.append(" (");
+                buf.append(vb.variableBinding());
+                break;
+            case LIKE:
+                buf.append(vb.operator().get());
+                buf.append(" %");
+                buf.append(vb.variableBinding());
+                buf.append(" %");
+                break;
+            case LIKE_PRE:
+                buf.append(vb.operator().get());
+                buf.append(" %");
+                buf.append(vb.variableBinding());
+                break;
+            case LIKE_POST:
+                buf.append(vb.operator().get());
+                buf.append(" ");
+                buf.append(vb.variableBinding());
+                buf.append(" %");
+                break;
+            case NOT_LIKE:
+                buf.append(vb.operator().get());
+                buf.append(" %");
+                buf.append(vb.variableBinding());
+                buf.append(" %");
+                break;
+            case NOT_LIKE_PRE:
+                buf.append(vb.operator().get());
+                buf.append(" %");
+                buf.append(vb.variableBinding());
+                break;
+            case NOT_LIKE_POST:
+                buf.append(vb.operator().get());
+                buf.append(" ");
+                buf.append(vb.variableBinding());
+                buf.append(" %");
+                break;
+            case IS_NOT_NULL:
+                buf.append(vb.operator().get());
+                buf.append(" %");
+                buf.append(vb.variableBinding());
+                buf.append(" %");
+                break;
+            default:
+                throw new UnsupportedOperationException(String.format("지원하지 않는 연산자입니다. 입력=%s", vb.operator()));
+        }
+
+        return buf.toString();
+    }
+
+    /**
      * 컬럼 데이터를 제공하는 {@link Method} 목록을 제공합니다.<br>
      * 
      * <pre>
@@ -823,31 +985,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 실행 중인 메소드 파라미터에 설정된 컬럼이름을 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜      | 작성자   |   내용
-     * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
-     * </pre>
-     *
-     * @param method
-     *            실행 중인 메소드
-     * @return
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
-     * 
-     * @see ColumnValue
-     */
-    protected final String getColumnNameOfParameter(@NotNull Method method) {
-        Parameter param = getParameterHasColumnValue(method);
-        return param.getAnnotation(ColumnValue.class).name();
-    }
-
-    /**
      * 컬럼명을 제공한다. <br>
      * 
      * <pre>
@@ -869,84 +1006,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         return getColumnMethods().stream() //
                 .map(m -> SQLUtils.getColumnName(m)) //
                 .collect(Collectors.toList());
-    }
-
-    /**
-     * 메소드 파라미터에에서 'Where'절에 사용될 컬럼목록을 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 29.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param method
-     *            사용자 정의 메소드
-     * @return
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    protected List<String> getColumnNamesOfParameters(@NotNull Method method) {
-        List<Parameter> params = getParametersHasColumnValue(method);
-
-        List<String> whereColumns = params.stream() //
-                .map(p -> p.getAnnotation(ColumnValue.class).name()) //
-                .collect(Collectors.toList());
-
-        return whereColumns;
-    }
-
-    /**
-     * Entity의 컬럼 정보를 {@link Iterator} 형태로 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 12. 1.		박준홍			최초 작성
-     * </pre>
-     *
-     * @return
-     *
-     * @since 2021. 12. 1.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    protected List<ColumnValue> getColumnValues() {
-        return getColumnMethods().stream() //
-                .map(m -> m.getAnnotation(ColumnValue.class)) //
-                .collect(Collectors.toList());
-    }
-
-    /**
-     * 메소드 파라미터에에서 'Where'절에 사용될 컬럼정보을 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 12. 1.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param method
-     *            사용자 정의 메소드
-     * @return
-     *
-     * @since 2021. 12. 1.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private List<ColumnValue> getColumnValuesOfParameters(@NotNull Method method) {
-        List<Parameter> params = getParametersHasColumnValue(method);
-
-        List<ColumnValue> whereColumns = params.stream() //
-                .map(p -> p.getAnnotation(ColumnValue.class)) //
-                .collect(Collectors.toList());
-
-        return whereColumns;
     }
 
     /**
@@ -975,7 +1034,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      * 이 메소드({@link #getCurrentMethod(int, Class...)})를 호출하는 메소드 정보를 제공합니다. <br>
-     * <br>
      * 
      * <pre>
      * [개정이력]
@@ -1067,6 +1125,28 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * Entity의 컬럼 정보를 {@link Iterator} 형태로 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected List<ColumnValue> getEntityColumnValues() {
+        return getColumnMethods().stream() //
+                .map(m -> m.getAnnotation(ColumnValue.class)) //
+                .collect(Collectors.toList());
+    }
+
+    /**
      *
      * @since 2021. 12. 6.
      * @version _._._
@@ -1077,70 +1157,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     @Override
     public Class<T> getEntityType() {
         return this.entityType;
-    }
-
-    /**
-     * 주어진 메소드에 {@link ColumnValue} 어노테이션이 설정되어 있는 파라미터를 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 29.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param method
-     *            사용자 정의 메소드
-     * @return
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private Parameter getParameterHasColumnValue(@NotNull Method method) {
-        for (Parameter param : method.getParameters()) {
-            if (param.isAnnotationPresent(ColumnValue.class)) {
-                return param;
-            }
-        }
-
-        throw new UnsupportedOperationException(String.format("%s에 컬럼정보를 제공하는 %s가/이 설정되지 않았습니다.", method, ColumnValue.class));
-    }
-
-    /**
-     * 주어진 메소드 파라미터 중에 {@link ColumnValue} 어노테이션이 설정되어 있는 파라미터를 제공합니다. <br>
-     * 
-     * <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 29.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param method
-     *            사용자 정의 메소드
-     * @return
-     *
-     * @since 2021. 11. 29.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    private List<Parameter> getParametersHasColumnValue(@NotNull Method method) {
-        List<Parameter> params = new ArrayList<>();
-
-        for (Parameter param : method.getParameters()) {
-            if (param.isAnnotationPresent(ColumnValue.class)) {
-                params.add(param);
-            }
-        }
-
-        if (params.size() < 1) {
-            throw new UnsupportedOperationException(String.format("%s에 컬럼정보를 제공하는 %s가/이 설정되지 않았습니다.", method, ColumnValue.class));
-        }
-
-        return params;
     }
 
     /**
@@ -1193,10 +1209,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected final List<String> getUpdatableColumnNames() {
-        return getUpdatableColumns().stream() //
-                .map(m -> m.getAnnotation(ColumnValue.class).name()) //
-                .collect(Collectors.toList())//
-        ;
+        return getUpdatableColumnsAsStream().map(m -> m.getAnnotation(ColumnValue.class).name()) //
+                .collect(Collectors.toList());
     }
 
     /**
@@ -1216,10 +1230,29 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected final List<Method> getUpdatableColumns() {
+        return getUpdatableColumnsAsStream() //
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 변경 대상인 컬럼 데이터를 제공하는 {@link Method} 목록을 {@link Stream}으로 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 14.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 12. 14.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final Stream<Method> getUpdatableColumnsAsStream() {
         return getColumnMethods().stream() //
-                .filter(m -> m.getAnnotation(ColumnValue.class).updatable()) //
-                .collect(Collectors.toList()) //
-        ;
+                .filter(m -> m.getAnnotation(ColumnValue.class).updatable());
     }
 
     /**
@@ -1239,8 +1272,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected final List<ColumnValue> getUpdatableColumnValues() {
-        return getUpdatableColumns().stream() //
-                .map(m -> m.getAnnotation(ColumnValue.class)) //
+        return getUpdatableColumnsAsStream().map(m -> m.getAnnotation(ColumnValue.class)) //
                 .collect(Collectors.toList());
     }
 
@@ -1272,6 +1304,104 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                         throw new UnsupportedOperationException(errMsg, e);
                     }
                 }).toArray();
+    }
+
+    /**
+     * 메소드 파라미터에에서 'Where'절에 사용될 컬럼정보을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @return
+     *
+     * @since 2021. 12. 1.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    private List<JdbcVariableBinder> getVariableBinders(@NotNull Method method) {
+
+        List<JdbcVariableBinder> whereColumns = getVariableBindingParametersAsStream(method) //
+                .map(p -> p.getAnnotation(JdbcVariableBinder.class)) //
+                .collect(Collectors.toList());
+
+        return whereColumns;
+    }
+
+    /**
+     * 메소드 파라미터에서 'Where'절에 사용될 컬럼목록을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected List<String> getVariableBindingColumnNames(@NotNull Method method) {
+
+        List<String> columnNames = getVariableBindingParametersAsStream(method) //
+                .map(p -> p.getAnnotation(JdbcVariableBinder.class).name()) //
+                .collect(Collectors.toList());
+
+        return columnNames;
+    }
+
+    /**
+     * 주어진 메소드 파라미터 중에 {@link JdbcVariableBinder} 어노테이션이 설정되어 있는 파라미터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @return
+     *
+     * @since 2021. 11. 29.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected List<Parameter> getVariableBindingParameters(@NotNull Method method) {
+        return getVariableBindingParametersAsStream(method).collect(Collectors.toList());
+    }
+
+    /**
+     * 주어진 메소드 파라미터 중에 {@link JdbcVariableBinder} 어노테이션이 설정되어 있는 파라미터를 {@link Stream} 형태로 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 14.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     * @return
+     *
+     * @since 2021. 12. 14.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected Stream<Parameter> getVariableBindingParametersAsStream(@NotNull Method method) {
+        return Arrays.stream(method.getParameters()) //
+                .filter(param -> param.isAnnotationPresent(JdbcVariableBinder.class));
     }
 
     /**
@@ -1395,8 +1525,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 
-     * <br>
      * 
      * <pre>
      * [개정이력]
@@ -1561,7 +1689,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected String queryForVariableBinding() {
 
-        Iterator<ColumnValue> itr = getColumnValues().iterator();
+        Iterator<ColumnValue> itr = getEntityColumnValues().iterator();
 
         final StringBuffer queryBuf = new StringBuffer();
         queryBuf.append(itr.next().variableBinding());
