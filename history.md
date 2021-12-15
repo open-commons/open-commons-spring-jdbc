@@ -1,3 +1,13 @@
+[2021/12/15]
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + addWhereClause(StringBuffer, Method, Object...): Variable Binding 컬럼 개수와  파리미터 개수 검증 기능 개선 
+    + attachWhereClause(String, Method, Object...): Variable Binding 컬럼 개수와  파리미터 개수 검증 기능 개선
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + hasNoWhereCompares(Collection&lt;JdbcVariableBinder&gt;, WhereCompare...)
+    + hasWhereCompares(Collection&ltJdbcVariableBinder&gt;, WhereCompare...)
+
 [2021/12/14]
 - Modify
   + open.commons.spring.jdbc.repository.annotation

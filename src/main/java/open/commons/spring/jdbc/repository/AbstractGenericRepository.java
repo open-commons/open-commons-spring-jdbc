@@ -31,6 +31,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
@@ -53,6 +54,7 @@ import open.commons.function.SQLConsumer;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.AbstractGenericDao;
 import open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder;
+import open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder.WhereCompare;
 import open.commons.spring.jdbc.repository.exceptions.UnsupportedVariableBindingException;
 import open.commons.util.ArrayItr;
 import open.commons.utils.AnnotationUtils;
@@ -320,7 +322,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         List<JdbcVariableBinder> columns = getVariableBinders(method);
 
-        if (columns.size() != whereArgs.length) {
+        if (hasNoWhereCompares(columns, WhereCompare.IN, WhereCompare.NOT_IN) && columns.size() != whereArgs.length) {
             logger.info("쿼리에 사용될 컬럼 개수({})와 파라미터 개수({})가 일치하지 않습니다.", columns.size(), whereArgs.length);
         }
 
@@ -452,7 +454,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         List<JdbcVariableBinder> columns = getVariableBinders(method);
 
-        if (columns.size() != whereArgs.length) {
+        if (hasNoWhereCompares(columns, WhereCompare.IN, WhereCompare.NOT_IN) && columns.size() != whereArgs.length) {
             logger.info("쿼리에 사용될 컬럼 개수({})와 파라미터 개수({})가 일치하지 않습니다.", columns.size(), whereArgs.length);
         }
 
@@ -515,6 +517,34 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         }
     }
 
+    /**
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 26.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param data
+     * @param partitionSize
+     * @return
+     *
+     * @since 2021. 11. 26.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<E> data, int partitionSize) {
+
+        logger.debug("query.header={}, query.value={}, data.size={}", QUERY_FOR_PARTITION_HEADER, QUERY_FOR_PARTITION_VALUE, data.size());
+
+        return createConnectionCallbackBrokers(data, SQLTripleFunction.setParameters(), partitionSize //
+                , QUERY_FOR_PARTITION_HEADER //
+                , QUERY_FOR_PARTITION_VALUE //
+                , QUERY_FOR_PARTITION_CONCAT_VQ //
+                , QUERY_FOR_PARTITION_TAIL);
+    }
+
     // /**
     // * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
     // * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
@@ -549,34 +579,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     // buf.append(getAssignQuery(itr.next()));
     // }
     // }
-
-    /**
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 11. 26.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param data
-     * @param partitionSize
-     * @return
-     *
-     * @since 2021. 11. 26.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     */
-    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<E> data, int partitionSize) {
-
-        logger.debug("query.header={}, query.value={}, data.size={}", QUERY_FOR_PARTITION_HEADER, QUERY_FOR_PARTITION_VALUE, data.size());
-
-        return createConnectionCallbackBrokers(data, SQLTripleFunction.setParameters(), partitionSize //
-                , QUERY_FOR_PARTITION_HEADER //
-                , QUERY_FOR_PARTITION_VALUE //
-                , QUERY_FOR_PARTITION_CONCAT_VQ //
-                , QUERY_FOR_PARTITION_TAIL);
-    }
 
     /**
      * 정렬을 위한 Order By 구분을 생성하여 제공합니다. <br>
@@ -2379,5 +2381,62 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     protected static Object[] array(Object... any) {
         return any != null ? any : new Object[0];
+    }
+
+    /**
+     * 주어진 JDBC Variable Binding 정보에 확인하려는 {@link WhereCompare}이 없는지 여부를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param binders
+     *            JDBC Variable Biding 정보
+     * @param compares
+     *            확인하려는 Where Clause Compare 목록
+     * @return
+     *         <ul>
+     *         <li>true: 없음
+     *         <li>false: 있음
+     *         </ul>
+     *
+     * @since 2021. 12. 15.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected static boolean hasNoWhereCompares(Collection<JdbcVariableBinder> binders, @NotNull WhereCompare... compares) {
+        return !hasWhereCompares(binders, compares);
+    }
+
+    /**
+     * 주어진 JDBC Variable Binding 정보에 확인하려는 {@link WhereCompare}이 있는지 여부를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param binders
+     *            JDBC Variable Biding 정보
+     * @param compares
+     *            확인하려는 Where Clause Compare 목록
+     * @return
+     *         <ul>
+     *         <li>true: 있음
+     *         <li>false: 없음
+     *         </ul>
+     *
+     * @since 2021. 12. 15.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected static boolean hasWhereCompares(Collection<JdbcVariableBinder> binders, @NotNull WhereCompare... compares) {
+        List<WhereCompare> list = Arrays.asList(compares);
+        return binders.stream().filter(c -> list.contains(c.operator())).findAny().isPresent();
     }
 }
