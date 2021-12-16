@@ -1,3 +1,7 @@
+[2021/12/16]
+- Add
+  + open.commons.spring.jdbc.repository.oracle.AbstractOracleSingleDataSourceRepoistory&lt;T&gt;
+
 [2021/12/15]
 - Modify
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;

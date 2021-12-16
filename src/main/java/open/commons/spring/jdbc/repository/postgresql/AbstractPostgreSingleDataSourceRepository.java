@@ -162,6 +162,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      */
     @Override
     protected String queryForPartitionHeader() {
+        
         List<String> columns = getColumnNames();
 
         return new StringBuffer() //

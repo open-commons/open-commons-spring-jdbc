@@ -545,41 +545,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 , QUERY_FOR_PARTITION_TAIL);
     }
 
-    // /**
-    // * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
-    // * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
-    // *
-    // * <pre>
-    // * [개정이력]
-    // * 날짜 | 작성자 | 내용
-    // * ------------------------------------------
-    // * 2021. 12. 1. 박준홍 최초 작성
-    // * </pre>
-    // *
-    // * @param buf
-    // * 쿼리 버퍼
-    // * @param concat
-    // * 컬럼 설정쿼리 연결 문자열
-    // * @param columns
-    // * 컬럼 정보
-    // * @since 2021. 12. 13.
-    // * @version 0.3.0
-    // * @author parkjunhong77@gmail.com
-    // */
-    // protected void createColumnAssignQueries(StringBuffer buf, String concat, List<JdbcVariableBinder> columns) {
-    //
-    // // variable binding
-    // Iterator<JdbcVariableBinder> itr = columns.iterator();
-    // buf.append(getAssignQuery(itr.next()));
-    //
-    // while (itr.hasNext()) {
-    // buf.append(" ");
-    // buf.append(concat);
-    // buf.append(" ");
-    // buf.append(getAssignQuery(itr.next()));
-    // }
-    // }
-
     /**
      * 정렬을 위한 Order By 구분을 생성하여 제공합니다. <br>
      * 패턴: <code>ORDER BY {column} {direction}(, {column} {direction})*</code>
