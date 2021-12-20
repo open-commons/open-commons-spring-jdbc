@@ -1145,7 +1145,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected abstract int getPartitionSize();
+    protected int getPartitionSize() {
+        return 100;
+    }
 
     /**
      *
