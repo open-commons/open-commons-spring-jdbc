@@ -536,7 +536,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<E> data, int partitionSize) {
 
-        logger.debug("query.header={}, query.value={}, data.size={}", QUERY_FOR_PARTITION_HEADER, QUERY_FOR_PARTITION_VALUE, data.size());
+        logger.debug("query.header={}, query.value={}, query.tail={}, data.size={}", QUERY_FOR_PARTITION_HEADER, QUERY_FOR_PARTITION_VALUE, QUERY_FOR_PARTITION_TAIL, data.size());
 
         return createConnectionCallbackBrokers(data, SQLTripleFunction.setParameters(), partitionSize //
                 , QUERY_FOR_PARTITION_HEADER //
