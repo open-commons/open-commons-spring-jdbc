@@ -224,7 +224,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected void addOffsetClause(StringBuffer queryBuf, @Min(0) int offset, @Min(1) int limit) {
@@ -252,7 +252,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected void addOrderByClause(StringBuffer queryBuf, String... orderByArgs) {
@@ -349,7 +349,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected String attachOffsetClause(String queryHeader, @Min(0) int offset, @Min(1) int limit) {
@@ -382,7 +382,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected String attachOrderByClause(String queryHeader, String... orderByArgs) {
@@ -564,7 +564,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected String createOrderByClause(String... orderByArgs) {
@@ -610,7 +610,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected String createQueryForSelectForPagination(@NotEmpty String selectQuery, @NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
@@ -649,7 +649,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected String createQueryForSelectOrderBy(String selectQuery, @NotNull Method method, Object[] whereArgs, String... orderByArgs) {
@@ -817,6 +817,40 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<Integer> deleteBy(Object... whereArgs) {
         return deleteBy(getCurrentMethod(1, whereArgs), whereArgs);
+    }
+
+    /**
+     *
+     * @since 2021. 12. 24.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
+     *      open.commons.function.SQLTripleFunction, int, java.lang.String)
+     * 
+     * @deprecated Use {@link AbstractGenericRepository#insert(List, int)}
+     */
+    @Override
+    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            @NotNull String valueQuery) {
+        throw new UnsupportedOperationException("#insert(List<T>, int) 를 사용하세요.");
+    }
+
+    /**
+     *
+     * @since 2021. 12. 24.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
+     *      open.commons.function.SQLTripleFunction, int, java.lang.String, java.lang.String)
+     * 
+     * @deprecated Use {@link AbstractGenericRepository#insert(List, int)}
+     */
+    @Override
+    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            @NotNull String headerQuery, @NotNull String valueQuery) {
+        throw new UnsupportedOperationException("#insert(List<T>, int) 를 사용하세요.");
     }
 
     /**
@@ -1119,7 +1153,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     /**
      *
      * @since 2021. 12. 6.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#getEntityType()
@@ -1368,7 +1402,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2021. 12. 14.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     protected Stream<Parameter> getVariableBindingParametersAsStream(@NotNull Method method) {
@@ -1711,7 +1745,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     /**
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(int, int, java.lang.String[])
@@ -1733,7 +1767,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     /**
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(java.lang.String[])

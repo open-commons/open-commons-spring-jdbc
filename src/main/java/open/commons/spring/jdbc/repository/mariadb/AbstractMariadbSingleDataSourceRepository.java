@@ -18,58 +18,61 @@
  *
  * This file is generated under this project, "open-commons-spring-jdbc".
  *
- * Date  : 2021. 11. 26. 오후 5:02:26
+ * Date  : 2021. 12. 24. 오후 1:10:57
  *
  * Author: parkjunhong77@gmail.com
  * 
  */
 
-package open.commons.spring.jdbc.repository.postgresql;
+package open.commons.spring.jdbc.repository.mariadb;
 
 import java.util.List;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
 /**
- * PostgreSQL 연동을 위한 클래스.
+ * Mariadb 연동을 위한 클래스.
  * 
- * @since 2021. 11. 26.
+ * @since 2021. 12. 24.
  * @version 0.3.0
  * @author parkjunhong77@gmail.com
  */
-public abstract class AbstractPostgreSingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
+public abstract class AbstractMariadbSingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
 
-    protected final String QUERY_FOR_OFFSET = "OFFSET ? LIMIT ?";
+    protected final String QUERY_FOR_OFFSET = "LIMIT ?, ?";
 
     /**
+     * <br>
+     * 
      * <pre>
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 6.		박준홍			최초 작성
+     * 2021. 12. 24.		박준홍			최초 작성
      * </pre>
      *
      * @param entityType
      *            DBMS Table에 연결된 데이터 타입.
      *
-     * @since 2021. 12. 6.
+     * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
-     * 
-     * @see #AbstractPostgreSingleDataSourceRepository(Class, boolean)
      */
-    public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType) {
-        this(entityType, true);
+    public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType) {
+        super(entityType);
     }
 
     /**
+     * <br>
+     * 
      * <pre>
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 11. 26.		박준홍			최초 작성
+     * 2021. 12. 24.		박준홍			최초 작성
      * </pre>
      *
      * @param entityType
@@ -77,30 +80,30 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @param forceToPrimitive
      *            Wrapper Class인 경우 Primitive 타입으로 강제로 변환할지 여부.
      *
-     * @since 2021. 11. 26.
+     * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+    public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         super(entityType, forceToPrimitive);
     }
 
     /**
      *
-     * @since 2021. 11. 26.
+     * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForOffset(int, int)
      */
     @Override
-    protected String queryForOffset(int offset, int limit) {
+    protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {
         return QUERY_FOR_OFFSET;
     }
 
     /**
      *
-     * @since 2021. 11. 26.
+     * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
@@ -113,7 +116,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
 
     /**
      *
-     * @since 2021. 11. 26.
+     * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
@@ -121,7 +124,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      */
     @Override
     protected String queryForPartitionHeader() {
-
         List<String> columns = getColumnNames();
 
         return new StringBuffer() //
@@ -137,7 +139,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
 
     /**
      *
-     * @since 2021. 11. 26.
+     * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
@@ -150,7 +152,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
 
     /**
      *
-     * @since 2021. 11. 26.
+     * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *

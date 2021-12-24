@@ -1,3 +1,11 @@
+[2021/12/24]
+- Add
+  + open.commons.spring.jdbc.repository.mariadb.AbstractMariadbSingleDataSourceRepository&lt;T&gt;
+- Delete
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository&lt;T&gt;
+    + getList(String, Object[], int, int, Class&lt;E&gt;, String...)
+    + wrapQueryForPartition(String)
+
 [2021/12/16]
 - Add
   + open.commons.spring.jdbc.repository.oracle.AbstractOracleSingleDataSourceRepoistory&lt;T&gt;

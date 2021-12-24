@@ -46,6 +46,8 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  */
 public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends AbstractSingleDataSourceRepository<T> {
 
+    protected final String QUERY_FOR_OFFSET = "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+
     /**
      * <br>
      * 
@@ -114,7 +116,7 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {
-        return "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+        return QUERY_FOR_OFFSET;
     }
 
     /**
