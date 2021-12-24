@@ -1,5 +1,5 @@
 /*
- * Copyright 2020 Park Jun-Hong_(parkjunhong77@gmail.com)
+ * Copyright 2021 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@
  *
  * This file is generated under this project, "open-commons-spring-jdbc".
  *
- * Date  : 2020. 4. 15. 오후 12:42:20
+ * Date  : 2021. 11. 30. 오후 3:36:43
  *
- * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
+ * Author: parkjunhong77@gmail.com
  * 
  */
 
-package open.commons.spring.jdbc.dao;
+package open.commons.spring.jdbc.repository;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -37,16 +37,19 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import open.commons.function.SQLFunction;
+import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
 import open.commons.utils.AssertUtils;
 
 /**
  * 단일 DBMS와 연동하는 기능을 지원한다.
  * 
- * @since 2020. 4. 15.
- * @version
- * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+ * @since 2021. 11. 30.
+ * @version 0.3.0
+ * @author parkjunhong77@gmail.com
+ * 
+ * @see AbstractSingleDataSourceDao
  */
-public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
+public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGenericRepository<T> {
 
     protected DataSource dataSource;
     protected JdbcTemplate jdbcTemplate;
@@ -58,16 +61,51 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 4. 15.		박준홍			최초 작성
+     * 2021. 12. 6.		박준홍			최초 작성
      * </pre>
      *
-     * @since 2020. 4. 15.
-     * @version
+     * @param entityType
+     *            DBMS Table에 연결된 데이터 타입.
+     *
+     * @since 2021. 12. 6.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see #AbstractSingleDataSourceRepository(Class, boolean)
      */
-    public AbstractSingleDataSourceDao() {
+    public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType) {
+        this(entityType, true);
     }
 
     /**
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param entityType
+     *            DBMS Table에 연결된 데이터 타입.
+     * @param forceToPrimitive
+     *            Wrapper Class인 경우 Primitive 타입으로 강제로 변환할지 여부.
+     *
+     * @since 2021. 11. 30.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+        super(entityType, forceToPrimitive);
+    }
+
+    /**
+     *
+     * @since 2021. 11. 30.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     *
      * @see open.commons.spring.jdbc.dao.AbstractGenericDao#afterPropertiesSet()
      */
     @Override
@@ -86,6 +124,7 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      * 2019. 3. 28.     박준홍     최초 작성
      * 2019. 6. 5.      박준홍     작업용 Connection 객체 생성 로직 수직
      * 2020. 4. 15.     박준홍     클래스를 분리하여 이동.
+     * 2021. 11. 30.    박준홍     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
      * </pre>
      *
      * @param act
@@ -154,7 +193,8 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
      * 2019. 3. 28.     박준홍         최초 작성
-     * 2020. 4. 15.		박준홍        클래스 분리로 메소드 이동
+     * 2020. 4. 15.     박준홍        클래스 분리로 메소드 이동
+     * 2021. 11. 30.    박준홍     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
      * </pre>
      *
      * @return
@@ -175,7 +215,8 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
      * 2019. 3. 28.     박준홍         최초 작성
-     * 2020. 4. 15.		박준홍        클래스 분리로 메소드 이동
+     * 2020. 4. 15.     박준홍        클래스 분리로 메소드 이동
+     * 2021. 11. 30.    박준홍     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
      * </pre>
      *
      * @return
@@ -201,6 +242,7 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      * ------------------------------------------
      * 2019. 3. 28.     박준홍         최초 작성
      * 2020. 4. 15.     박준홍        클래스 분리로 메소드 이동
+     * 2021. 11. 30.    박준홍     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
      * </pre>
      *
      * @param dataSource
@@ -210,4 +252,5 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public abstract void setDataSource(@NotNull DataSource dataSource);
+
 }

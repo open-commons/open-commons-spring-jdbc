@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  *
  * Date  : 2019. 3. 28. 오후 3:42:37
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -56,7 +56,6 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.ConnectionProxy;
 import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.validation.annotation.Validated;
 
 import open.commons.Result;
 import open.commons.annotation.ColumnDef;
@@ -71,6 +70,7 @@ import open.commons.function.SQLFunction;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.dto.CountDTO;
 import open.commons.test.StopWatch;
+import open.commons.utils.NumberUtils;
 import open.commons.utils.SQLUtils;
 
 /**
@@ -113,11 +113,11 @@ import open.commons.utils.SQLUtils;
  * 
  *     // select
  *     query = "SELECT ...";
- *     Result&lt;List&lt;QueryObj>> getList = dao.getList(query, setter, QueryObj.class);
+ *     Result&lt;List&lt;EntityType>> getList = dao.getList(query, setter, EntityType.class);
  * 
  *     // select
  *     query = "SELECT ...";
- *     Result&lt;QueryObj> getObject = dao.getObject(query, setter, QueryObj.class);
+ *     Result&lt;EntityType> getObject = dao.getObject(query, setter, EntityType.class);
  * }
  * </pre>
  * 
@@ -134,9 +134,9 @@ import open.commons.utils.SQLUtils;
  * 
  * @since 2019. 3. 28.
  * @version 0.1.0
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
-@Validated
+@SuppressWarnings("deprecation")
 public abstract class AbstractGenericDao implements IGenericDao {
 
     /** {@link Map} 형태로 DB 조회결과를 제공하는 DTO 타입 */
@@ -144,7 +144,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     protected static final Class<Map<String, Object>> ENTITY_DTO_MAP = (Class<Map<String, Object>>) (Class) FIFOMap.class;
 
     /**
-     * 데이터와 {@link PreparedStatement}를 연결하는 Setter를 제공한다.
+     * 데이터와 {@link PreparedStatement}를 연결하는 Setter를 제공합니다.
      * 
      * @params 파라미터 배열. NotNull
      * 
@@ -200,7 +200,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 기존 쿼리에 IN Clause(<code>"IN ( ?, ?, ...)")를 추가한다. <br>
+     * 기존 쿼리에 IN Clause(<code>"IN ( ?, ?, ...)")를 추가합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -216,7 +216,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 6. 12.
      * @version
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected void addQueryForInClause(StringBuffer sqlBuffer, int inParamCount) {
 
@@ -234,7 +234,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 기존 쿼리 WHERE Clause에 IN Clause (<code>"IN ( ?, ?, ...)")를 추가한다.. <br>
+     * 기존 쿼리 WHERE Clause에 IN Clause (<code>"IN ( ?, ?, ...)")를 추가합니다.. <br>
      * <br>
      * 
      * <pre>
@@ -255,7 +255,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 6. 12.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected void addQueryForInClause(StringBuffer sqlBuffer, String concatenator, String columnName, int inParamCount) {
 
@@ -277,8 +277,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        // AssertUtils.assertNull("DataSource MUST NOT BE null", this.dataSource);
-        // AssertUtils.assertNull("QuerySource Source MUST NOT BE null", this.querySource);
     }
 
     private <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBroker(@NotNull @NotEmpty List<E> data,
@@ -306,7 +304,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 하나의 {@link Connection}에서 실행되는 다중 실행 정보를 생성한다. <br>
+     * 하나의 {@link Connection}에서 실행되는 다중 실행 정보를 생성합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -333,7 +331,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(@NotNull List<E> data,
             @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize, @NotNull String headerQuery, @NotNull String valueQuery,
@@ -366,7 +364,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다중 데이터를 추가하는 실행정보를 제공한다. <br>
+     * 다중 데이터를 추가하는 실행정보를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -395,7 +393,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 21.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(@NotNull List<E> data,
             @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, @NotNull String headerQuery, @NotNull String valueQuery,
@@ -408,9 +406,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
                     i = dataSetter.apply(stmt, i, param);
                 }
 
-                // begin - PATCH [2020. 8. 12.]: 데이터 바인딩 직후 Collection 해제 | Park_Jun_Hong_(fafanmama_at_naver_com)
+                // begin - PATCH [2020. 8. 12.]: 데이터 바인딩 직후 Collection 해제 | Park_Jun_Hong_(parkjunhong77@gmail.com)
                 params.clear();
-                // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 8. 12.
+                // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 8. 12.
             };
 
             return con;
@@ -439,7 +437,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 쿼리 요청을 처리하고 결과를 제공한다. <br>
+     * 쿼리 요청을 처리하고 결과를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -455,12 +453,12 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected abstract <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException;
 
     /**
-     * 요청쿼리를 실행하고 결과를 제공한다. <br>
+     * 요청쿼리를 실행하고 결과를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -485,7 +483,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * 
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @see {@link ColumnDef}
      */
     private <E> List<E> executeQuery(@NotNull ConnectionCallbackBroker broker, @NotNull Class<E> entity, String... columns) throws SQLException {
@@ -504,17 +502,27 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 ResultSet rs = pstmt.executeQuery();
 
-                return createObject(rs, entity, columns);
+                String label = "execute-query";
+                watch.record(label);
+                logger.trace("Elapsed.execute-query={}", watch.getAsPretty(label));
+
+                try {
+                    return createObject(rs, entity, columns);
+                } finally {
+                    label = "create-objects";
+                    watch.record(label);
+                    logger.trace("Elapsed.create-objects={}", watch.getAsPretty(label));
+                }
             });
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
         }
     }
 
     /**
-     * 요청쿼리를 실행하고 결과를 제공한다. <br>
+     * 요청쿼리를 실행하고 결과를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -538,9 +546,37 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, @NotNull Class<E> entity, String... columns) throws SQLException {
+        return executeQuery(broker, rs -> createObject(rs, entity, columns));
+    }
+
+    /**
+     * 요청쿼리를 실행하고 결과를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 4. 23.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <S>
+     * @param <E>
+     *            요청받을 데이터 타입
+     * @param broker
+     *            쿼리와 쿼리 파라미터를 처리하는 객체
+     * @param creator
+     *            데이터를 생성하는 객체
+     * @return
+     * @throws SQLException
+     *
+     * @since 2021. 4. 23.
+     * @version 0.3.0
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     */
+    private <S, E> List<E> executeQuery(@NotNull ConnectionCallbackBroker2<S> broker, SQLFunction<ResultSet, List<E>> creator) throws SQLException {
         List<E> data = null;
         StopWatch watch = new StopWatch();
         watch.start();
@@ -551,17 +587,27 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 ResultSet rs = pstmt.executeQuery();
 
-                return createObject(rs, entity, columns);
+                String label = "execute-query";
+                watch.record(label);
+                logger.trace("Elapsed.execute-query={}, next='create-objects'", watch.getAsPretty(label));
+
+                try {
+                    return creator.apply(rs);
+                } finally {
+                    label = "create-objects";
+                    watch.record(label);
+                    logger.trace("Elapsed.create-objects={}", watch.getAsPretty(label));
+                }
             });
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? data.size() : 0, watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
         }
     }
 
     /**
-     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리한다.<br>
+     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -576,14 +622,16 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
      */
     public Result<Integer> executeUpdate(ConnectionCallbackBroker... brokers) {
         return executeUpdate(Arrays.asList(brokers));
     }
 
     /**
-     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리한다.<br>
+     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -601,7 +649,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
     public <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) {
@@ -651,7 +699,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다중 (Insert/Update/Delete) 쿼리 요청을 처리한다.<br>
+     * 다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -666,7 +714,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
      */
     public Result<Integer> executeUpdate(@NotNull List<ConnectionCallbackBroker> brokers) {
 
@@ -728,8 +778,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
-     * @deprecated Use {@link #executeUpdate(List, Function, int, String, String, String, String)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @deprecated Not use any more.
      */
     @SuppressWarnings("unused")
     private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
@@ -766,7 +817,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 6. 15.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @deprecated Not use any more.
      */
     private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
             @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
@@ -783,7 +836,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 다수 개의 데이터를 설정된 크기로 나누어 데이터를 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -794,6 +847,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @param <E>
      * @param data
+     *            추가할 데이터
      * @param dataSetter
      *            다수 개의 객체형 파라미터를 {@link PreparedStatement}에 설정하는 기능.<br>
      *            참조: {@link SQLTripleFunction#setParameters(String...)}
@@ -805,7 +859,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 17.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
@@ -816,7 +870,41 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 여러 개의 데이터를 나누어서 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param dataSetter
+     *            다수 개의 객체형 파라미터를 {@link PreparedStatement}에 설정하는 기능.<br>
+     *            참조: {@link SQLTripleFunction#setParameters(String...)}
+     * @param partitionSize
+     *            데이터 분할 크기
+     * @param headerQuery
+     *            데이터 추가 헤더 쿼리. (테이블 및 컬럼 정보가 기재됨)
+     * @param valueQuery
+     *            데이터 바인딩 쿼리
+     * @return
+     *
+     * @since 2021. 11. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            @NotNull String headerQuery, @NotNull String valueQuery) {
+        // !!! 세부 기능을 구현해야 합니다. !!!
+        throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
+    }
+
+    /**
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <br>
      * 
@@ -846,7 +934,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
@@ -856,7 +944,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 여러 개의 데이터를 나누어서 추가한다. <br>
+     * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <br>
      * 
@@ -888,7 +976,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 6. 15.
      * @version 0.2.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
@@ -900,7 +988,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 단일 요청쿼리를 처리한다.<br>
+     * 단일 요청쿼리를 처리합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -917,14 +1005,16 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @deprecated Not support any more.
      */
     public Result<Integer> executeUpdate(@NotNull String query, IConnectionCallbackSetter setter) {
         return executeUpdate(new ConnectionCallbackBroker(query, setter));
     }
 
     /**
-     * 단일 요청쿼리를 처리한다. <br>
+     * 단일 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -941,15 +1031,19 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 29.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    @SuppressWarnings("unchecked")
     public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter) {
-        return executeUpdate(new DefaultConCallbackBroker2(query, setter));
+        return executeUpdate(query, setter, false);
+    }
+
+    @SuppressWarnings("unchecked")
+    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) {
+        return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
 
     /**
-     * 데이타 타입에 맞는 객체 생성자를 제공한다. <br>
+     * 데이타 타입에 맞는 객체 생성자를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -971,7 +1065,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     private <R> SQLBiFunction<ResultSet, Integer, R> findCreator(@NotNull Class<R> entity, String... columns) {
@@ -980,7 +1074,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
         SQLBiFunction<ResultSet, Integer, R> creator = (SQLBiFunction<ResultSet, Integer, R>) CREATORS.get(key);
 
         if (creator == null) {
-            // begin - PATCH [2020. 6. 12.]: 조회 결과를 java.util.Map 형태로 받는 경우 지원.| Park_Jun_Hong_(fafanmama_at_naver_com)
+            // begin - PATCH [2020. 6. 12.]: 조회 결과를 java.util.Map 형태로 받는 경우 지원.| Park_Jun_Hong_(parkjunhong77@gmail.com)
             if (Map.class.isAssignableFrom(entity)) {
                 // DAO Entity가 Map.class 인 경우는 Map.class 가 여러 가지의 데이터 타입을 대신하는 것이기 때문에,
                 // Entity 생성 함수를 별도로 저장하지 않는다.
@@ -996,7 +1090,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
                         throw new SQLException(String.format("%s 객체 생성시 에러가 발생하였습니다. 원인=%s", entity, e.getMessage()), e);
                     }
                 };
-                // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 6. 12.
+                // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 6. 12.
             } else {
                 creator = (rs, rowNum) -> SQLUtils.newInstance(entity, rs, columns);
                 CREATORS.put(entity.getName(), creator);
@@ -1007,8 +1101,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 작업용 Connection 객체를 제공한다.<br>
-     * Springframework 5.x 부터 4.x에 존재하던 아래 메소드를 제거함에 따라 호환성 제공을 목적으로 한다.
+     * 작업용 Connection 객체를 제공합니다.<br>
+     * Springframework 5.x 부터 4.x에 존재하던 아래 메소드를 제거함에 따라 호환성 제공을 목적으로 합니다.
      * 
      * <pre>
      * public NativeJdbcExtractor getNativeJdbcExtractor() {
@@ -1034,7 +1128,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 6. 5.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final Connection getConnection(@NotNull Connection con, @NotNull JdbcTemplate jdbcTemplate) throws SQLException {
         try {
@@ -1052,7 +1146,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 전달된 쿼리에 대한 조회 결과 데이터 개수를 제공한다. <br>
+     * 전달된 쿼리에 대한 조회 결과 데이터 개수를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1069,7 +1163,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Integer> getCount(@NotNull String selectQuery, Object... params) {
         String query = wrapQueryForCount(selectQuery);
@@ -1085,7 +1179,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1108,14 +1202,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, @NotNull Class<E> entity, String... columns) {
         return getList(query, (IConnectionCallbackSetter) null, entity, columns);
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1143,7 +1237,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, @NotNull IConnectionCallbackSetter setter, @NotNull Class<E> entity, String... columns) {
 
@@ -1160,7 +1254,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1188,7 +1282,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         </ul>
      *
      * @since 2020. 7. 22.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, int size, @NotNull IConnectionCallbackSetter setter, @NotNull Class<E> entity, String... columns) {
 
@@ -1205,7 +1299,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1230,7 +1324,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<E> entity, String... columns) {
 
@@ -1247,7 +1341,86 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 4. 23.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            데이터 조회 요청쿼리
+     * @param setter
+     *            요청쿼리 파라미터 설정 객체 <br>
+     * @param creator
+     *            데이터 생성 함수
+     * 
+     * @return 쿼리 처리결과
+     *         <ul>
+     *         <li>&lt;T&gt; 요청받을 데이타 타입
+     *         </ul>
+     *
+     * @since 2032. 4. 23.
+     * @version 0.3.0
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     */
+    public <E> Result<List<E>> getList(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull SQLFunction<ResultSet, List<E>> creator) {
+
+        Result<List<E>> result = new Result<>();
+
+        try {
+            List<E> list = executeQuery(new DefaultConCallbackBroker2(query, setter), creator);
+            result.andTrue().setData(list);
+        } catch (SQLException e) {
+            result.setMessage(e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 4. 23.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param query
+     *            데이터 조회 요청쿼리
+     * @param creator
+     *            데이터 생성 함수
+     * @return 쿼리 처리결과
+     *         <ul>
+     *         <li>&lt;T&gt; 요청받을 데이타 타입
+     *         </ul>
+     *
+     * @since 2021. 4. 23.
+     * @version 0.3.0
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     */
+    public <E> Result<List<E>> getList(@NotNull String query, @NotNull SQLFunction<ResultSet, List<E>> creator) {
+
+        Result<List<E>> result = new Result<>();
+
+        try {
+            List<E> list = executeQuery(new DefaultConCallbackBroker2(query, null), creator);
+            result.andTrue().setData(list);
+        } catch (SQLException e) {
+            result.setMessage(e.getMessage());
+        }
+
+        return result;
+    }
+
+    /**
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1271,7 +1444,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         </ul>
      *
      * @since 2020. 7. 22.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
     public Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, String... columns) {
@@ -1280,7 +1453,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 조회 요청쿼리를 처리한다. <br>
+     * 데이터 조회 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1302,14 +1475,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         </ul>
      *
      * @since 2020. 6. 12.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<List<Map<String, Object>>> getListAsMap(@NotNull String query, String... columns) {
         return getListAsMap(query, null, columns);
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1335,14 +1508,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, boolean required, String... columns) {
         return getObject(query, null, entity, required, columns);
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1365,14 +1538,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, String... columns) {
         return getObject(query, null, entity, false, columns);
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1399,7 +1572,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, boolean required, String... columns) {
         Result<T> result = new Result<>();
@@ -1415,7 +1588,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
                     result.andTrue();
                     break;
                 case 1:
-                    // (start) [BUG-FIX]: Result#result 설정 누락 수정 / Park_Jun_Hong_(fafanmama_at_naver_com): 2019. 6. 12.
+                    // (start) [BUG-FIX]: Result#result 설정 누락 수정 / Park_Jun_Hong_(parkjunhong77@gmail.com): 2019. 6. 12.
                     // 오후 4:15:28
                     result.andTrue().setData(list.get(0));
                     // (end): 2019. 6. 12. 오후 4:15:28
@@ -1431,7 +1604,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 데이터 1개 요청쿼리를 처리한다. <br>
+     * 데이터 1개 요청쿼리를 처리합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1456,14 +1629,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, String... columns) {
         return getObject(query, setter, entity, false, columns);
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1481,14 +1654,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, boolean required, String... columns) {
         return getObjectAsMap(query, null, required, columns);
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1507,14 +1680,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String... columns) {
         return getObject(query, setter, ENTITY_DTO_MAP, required, columns);
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1532,14 +1705,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, String... columns) {
         return getObjectAsMap(query, setter, false, columns);
     }
 
     /**
-     * 데이터 1개를 제공한다. <br>
+     * 데이터 1개를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1555,7 +1728,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, String... columns) {
         return getObjectAsMap(query, null, false, columns);
@@ -1618,7 +1791,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
     public <T> Result<T> getValue(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String column) {
@@ -1630,17 +1803,17 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
         Map<String, Object> mapData = mapResult.getData();
         // begin - PATCH [2020. 8. 13.]: required == false 인 경우 Map<> 데이터 검증 추가. |
-        // Park_Jun_Hong_(fafanmama_at_naver_com)
+        // Park_Jun_Hong_(parkjunhong77@gmail.com)
         if (mapData == null && !required) {
             return new Result<T>(null, true);
         }
-        // end - Park_Jun_Hong_(fafanmama_at_naver_com), 2020. 8. 13.
+        // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 8. 13.
 
         return new Result<T>((T) mapData.get(column), true);
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1657,14 +1830,14 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column) {
         return getValue(query, null, false, column);
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1684,20 +1857,21 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column, boolean required) {
         return getValue(query, null, required, column);
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 11. 21.    박준홍			내부 버그 수정. getListAsMap(String, SQLConsumer<PreparedStatement>, String...)에 SQLConsumer<PreparedStatement> 전달 누락 수정
      * </pre>
      *
      * @param <T>
@@ -1710,11 +1884,11 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
     public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotNull @NotEmpty String column) {
-        Result<List<Map<String, Object>>> mapResult = getListAsMap(query, column);
+        Result<List<Map<String, Object>>> mapResult = getListAsMap(query, setter, column);
 
         if (!mapResult.getResult()) {
             return new Result<List<T>>().setMessage(mapResult.getMessage());
@@ -1730,7 +1904,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 특정컬럼 데이터를 조회한다. <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1747,14 +1921,36 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2020. 7. 30.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column) {
         return getValues(query, null, column);
     }
 
     /**
-     * 쿼리 정보 객체를 설정한다. <br>
+     * 쿼리 파라미터를 배열로 반환합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 11. 30.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param parameters
+     *            쿼리 파라미터.
+     * @return
+     *
+     * @since 2021. 11. 30.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    protected final Object[] objectArray(Object... parameters) {
+        return parameters == null ? new Object[0] : parameters;
+    }
+
+    /**
+     * 쿼리 정보 객체를 설정합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1767,12 +1963,12 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public abstract void setQuerySource(@NotNull ReloadableResourceBundleMessageSource querySource);
 
     /**
-     * 특정 쿼리에 대한 개수를 제공하는 쿼리를 제공한다. <br>
+     * 특정 쿼리에 대한 개수를 제공하는 쿼리를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -1786,7 +1982,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public String wrapQueryForCount(@NotNull String query) {
         StringBuffer queryBuffer = new StringBuffer("SELECT count(*) AS count FROM ( ");

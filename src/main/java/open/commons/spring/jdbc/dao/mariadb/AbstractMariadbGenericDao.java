@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
+ * Copyright 2021 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,13 @@
  *
  * This file is generated under this project, "open-commons-spring-jdbc".
  *
- * Date  : 2020. 1. 17. 오전 12:59:31
+ * Date  : 2021. 11. 11. 오후 5:05:39
  *
- * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
+ * Author: parkjunhong77@gmail.com
  * 
  */
 
-package open.commons.spring.jdbc.dao.oracle;
+package open.commons.spring.jdbc.dao.mariadb;
 
 import java.sql.PreparedStatement;
 import java.util.List;
@@ -37,13 +37,13 @@ import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
 
 /**
- * Oracle DBMS 연동 기능이 추가된 클래스.
+ * 하나의 Mariadb DBMS와 연동하는 객체.
  * 
- * @since 2020. 1. 17.
- * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
- * @version 0.0.6
+ * @since 2021. 11. 11.
+ * @version 0.3.0
+ * @author parkjunhong77@gmail.com
  */
-public abstract class AbstractOracleGenericDao extends AbstractSingleDataSourceDao {
+public abstract class AbstractMariadbGenericDao extends AbstractSingleDataSourceDao {
 
     /**
      * <br>
@@ -52,24 +52,29 @@ public abstract class AbstractOracleGenericDao extends AbstractSingleDataSourceD
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 17.		박준홍			최초 작성
+     * 2021. 11. 11.		박준홍			최초 작성
      * </pre>
      *
-     * @since 2020. 1. 17.
-     * @version 0.0.6
+     *
+     * @since 2021. 11. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
      */
-    public AbstractOracleGenericDao() {
+    public AbstractMariadbGenericDao() {
     }
 
     /**
      *
-     * @see SQLTripleFunction#setParameters(String...)
+     * @since 2021. 11. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     *
      * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
-     *      open.commons.function.SQLTripleFunction, int, java.lang.String)
+     *      open.commons.function.SQLTripleFunction, int, java.lang.String, java.lang.String)
      */
     @Override
     public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String valueQuery) {
-        return super.executeUpdate(data, dataSetter, partitionSize, "INSERT ALL ", valueQuery, " SELECT 1 FROM DUAL");
+            @NotNull String headerQuery, @NotNull String valueQuery) {
+        return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, ",", "");
     }
 }

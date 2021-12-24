@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  *
  * Date  : 2019. 3. 28. 오후 4:25:43
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -40,7 +40,7 @@ import open.commons.database.ConnectionCallbackBroker2;
  * DBMS 연결 후 쿼리를 수행하는 객체.
  * 
  * @since 2019. 3. 28.
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  * @version 0.1.0
  */
 public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer> {
@@ -72,11 +72,11 @@ public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer
      */
     @Override
     public Integer doInConnection(Connection con) throws SQLException, DataAccessException {
-        
+
         int count = 0;
         PreparedStatement stmt = null;
-        try {            
-            stmt = con.prepareStatement(broker.getQuery());
+        try {
+            stmt = this.broker.getStatement(con);
 
             broker.set(stmt);
 
@@ -107,7 +107,7 @@ public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     public ConnectionCallbackBroker2<T> getBroker() {

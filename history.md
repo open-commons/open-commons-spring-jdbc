@@ -1,3 +1,189 @@
+[2021/12/16]
+- Add
+  + open.commons.spring.jdbc.repository.oracle.AbstractOracleSingleDataSourceRepoistory&lt;T&gt;
+
+[2021/12/15]
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + addWhereClause(StringBuffer, Method, Object...): Variable Binding 컬럼 개수와  파리미터 개수 검증 기능 개선 
+    + attachWhereClause(String, Method, Object...): Variable Binding 컬럼 개수와  파리미터 개수 검증 기능 개선
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + hasNoWhereCompares(Collection&lt;JdbcVariableBinder&gt;, WhereCompare...)
+    + hasWhereCompares(Collection&ltJdbcVariableBinder&gt;, WhereCompare...)
+
+[2021/12/14]
+- Modify
+  + open.commons.spring.jdbc.repository.annotation
+    - ColumnVariableBinder -> JdbcVariableBinder
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    - 그외 다수의 메소드 변경 및 추가
+- Delete
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    - getVariableBindingColumn(Method)
+    - getVariableBindingParameter(Method)  
+- Add
+  + open.commons.spring.jdbc.repository.exceptions.UnsupportedVariableBindingException
+
+[2021/12/13]
+- Add
+  + open.commons.spring.jdbc.repository.annotation.ColumnVariableBinder
+  
+[2021/12/08]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + addOffsetClause(StringBuffer, int, int)
+    + addOrderByClause(StringBuffer, String...)
+    + createOrderByClause(String...)
+    + createQueryForSelectForPagination(String, Method, int, int, Object...)
+    + createQueryForSelectOrderBy(String, Method, Object[], String...)
+    + selectAll(int, int, String...)
+    + selectAll(String...)
+    + selectMultiOrderBy(Method, Object[], String...)
+    + selectMultiOrderBy(Method, Object[], String[], String...)
+    + selectMultiOrderBy(Object[], String...)
+    + selectMultiOrderBy(Object[], String[], String...)
+    + selectMultiOrderByForPagination(Method, int, int, Object[], String...)
+    + selectMultiOrderByForPagination(Method, int, int, Object[], String[], String...)
+
+[2021/12/08]
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + Add
+      + selectSingleBy(boolean, Method, Object...)
+      + selectSingleBy(boolean, Method, Object[], String...)  
+    + Delete
+      + selectSingleBy(Method, boolean, Object...)
+      + selectSingleBy(Method, boolean, Object[], String...)  
+  
+[2021/12/07]
+- Add
+  + open.commons.spring.jdbc.repository.IGenericRepository
+    + getTableName()
+    
+[2021/12/06]
+- Add
+  + open.commons.spring.jdbc.repository.IGenericRepository
+    + getEntityType()
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + getEntityType()
+  
+[2021/12/03]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + AbstractGenericRepository(Class&lt;T&gt;, boolean)
+  + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
+    + AbstractSingleDataSourceRepository(Class&lt;T&gt;, boolean)
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository
+    + AbstractPostgreSingleDataSourceRepository(Class&lt;T&gt;, boolean)
+
+[2021/12/03]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + containsNull(Object...)
+    + deleteBy(Object...)
+    + getCurrentMethod(boolean, Object...)
+    + getCurrentMethod(Class&lt;?&gt;...)
+    + getCurrentMethod(int, boolean, Object...)
+    + getCurrentMethod(int, Class&lt;?&gt;...)
+    + getCurrentMethod(int, Object...)
+    + getCurrentMethod(Object...)
+    + selectMultiBy(Object...)
+    + selectMultiBy(Object[], String...)
+    + selectSingleBy(boolean, Object...)
+    + selectSingleBy(boolean, Object[], String...)
+    + updateBy(T, Object...)
+
+[2021/12/01]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + getColumnValues()
+    + getColumnValuesOfParameters(Method)
+    + getUpdateParameters(T): 객체에서 변경에 사용할 정보 제공
+    + getUpdateParameters(T)
+    + createColumnAssignQueries(StringBuffer, String, List&lt;ColumnValue&gt;)
+    + getAssignQuery(ColumnValue)
+    
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository.updateBy(T, Method, Object...): 버그 수정
+
+[2021/11/30]
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository.getColumnNamesOfParameters(Method): 'Where' 절에 사용되는 컬럼이름 검증.
+- New
+  + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
+- Rename
+  + open.commons.spring.jdbc.repository.<strike>AbstractSingleDataSourceRepository</strike>AbstractGenericRepository
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+  + <strike>open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository</strike>
+    + selectMultiBy(Method, Object[], String...)
+    + selectSingleBy(Method, boolean, Object[], String...)  
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao.objectArray(Object...)
+
+[2021/11/29]
+- Add
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository
+    + getColumnNameOfParameter(Method): 메소드 파라미터에 설정된 컬럼명을 제공.
+  
+[2021/11/26]
+- New
+  + open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository
+  + open.commons.spring.jdbc.repository.IGenericRepository  
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository
+
+[2021/11/19]
+- Depencencies Vulnerabilities
+  + commons-io:commons-io
+    - [CVE-2021-29425](https://github.com/advisories/GHSA-gwrp-pvrq-jmwv) __moderate severity__
+    - Vulnerable versions: < 2.7
+    - Patched version: 2.7
+    - In Apache Commons IO before 2.7, When invoking the method FileNameUtils.normalize with an improper input string,\
+      like "//../foo", or "\..\foo", the result would be the same value, thus possibly providing access to files in the parent directory,\
+      but not further above (thus "limited" path traversal), if the calling code would use the result to construct a path value.
+
+[2021/11/11]
+- New
+  + open.commons.spring.jdbc.dao.mariadb.AbstractMariadbGenericDao: 단일 Mariadb 연동 객체
+- Add
+  + open.commons.spring.jdbc.dao.mariadb.AbstractGenericDao
+    + executeUpdate(List&lt;E&gt;, SQLTripleFunction&lt;PreparedStatement, Integer, E, Integer&gt;, int, String, String)
+
+[2021/04/23]
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - getList(String, SQLFunction&lt;ResultSet, List&lt;E&gt;&gt;)
+- Modify
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - executeQuery(ConnectionCallbackBroker, Class&lt;E&gt;, String...): 소요시간 로그 추가
+    - executeQuery(ConnectionCallbackBroker2&lt;S&gt;, Class&lt;E&gt;, String...): 소요시간 로그 추가
+
+[2020/12/03]
+- New
+  + open.commons.spring.jdbc.config
+    - ConfigUtils: Configuration용 함수 제공
+    - MultipleDataSourceConfig: 다중 DBMS 연결을 위한 설정 지원
+- dependencies
+  + spring-boot-starter-parent 적용
+
+
+
+[2020/11/21]
+- Bugfix
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - getValues(String, SQLConsumer&lt;PreparedStatement&gt;, String):  getListAsMap(String, SQLConsumer&lt;PreparedStatement&gt;, String...)에 SQLConsumer&lt;PreparedStatement&gt; 전달 누락 수정
+
+[2020/10/29]
+- Snapshot: 0.3.0-SNAPSHOT
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - executeUpdate(String, SQLConsumer&lt;PreparedStatement&gt;, boolean)
+- Update
+  + open.commons.spring.jdbc.dao.DefaultConnectionCallback2
+    - doInConnection(Connection):  PreparedStatement 를 ConnectionCallbackBroker2에서 제공받도록 수정. 이를 통해서 PreparedStatement와 CallableStatement 를 구분해서 제공한다.
+    
+
 [2020/10/29]
 - Release: 0.2.0
 - Resolve vulnerability

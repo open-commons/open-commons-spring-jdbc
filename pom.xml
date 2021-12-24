@@ -1,9 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.5.2</version>
+	</parent>
 	<groupId>open.commons</groupId>
 	<artifactId>open-commons-spring-jdbc</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.0-SNAPSHOT</version>
 	<name>Open Commons for Spring JDBC</name>
 
 	<licenses>
@@ -15,6 +20,9 @@
 	</licenses>
 
 	<properties>
+		<!-- >>> begin: plugin dependencies -->
+		<build.finalName>open-commons-spring-jdbc-${project.version}</build.finalName>
+		
 		<encoding>UTF-8</encoding>
 		<java-version>1.8</java-version>
 
@@ -22,26 +30,17 @@
 		<compile.source-version>1.8</compile.source-version>
 		<compile.target-version>1.8</compile.target-version>
 
-		<!-- >>> begin: dependencies -->
-		<slf4j-api.version>1.7.26</slf4j-api.version>
-		<org.springframework-version>5.1.13.RELEASE</org.springframework-version>
-		<org.apache.logging.log4j-version>2.1</org.apache.logging.log4j-version>
-		<jackson-databind.version>[2.9.10.5,)</jackson-databind.version>
-		<commons-io.version>2.5</commons-io.version>
-
-		<open-commons-core.version>1.7.0</open-commons-core.version>
-		<!-- <<< end: dependencies -->
-
-		<!-- >>> begin: plugin dependencies -->
-		<build.finalName>open-commons-spring-jdbc</build.finalName>
-
-		<maven-eclipse-plugin.version>2.9</maven-eclipse-plugin.version>
 		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<maven-resources-plugin.version>3.0.1</maven-resources-plugin.version>
 		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
-		<maven-assembly-plugin.version>3.0.0</maven-assembly-plugin.version>
 		<!-- >>> end: plugin dependencies -->
+
+		<!-- >>> begin: dependencies -->
+		<slf4j-api.version>1.7.32</slf4j-api.version>
+		<commons-io.version>[2.7,)</commons-io.version>
+
+		<open-commons-core.version>1.8.0-SNAPSHOT</open-commons-core.version>
+		<!-- <<< end: dependencies -->
 	</properties>
 
 	<distributionManagement>
@@ -89,25 +88,35 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>${org.springframework-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-webmvc</artifactId>
-			<version>${org.springframework-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
-			<version>${org.springframework-version}</version>
 		</dependency>
 		<!-- <<< end: Spring -->
+
+		<!-- ********************** -->
+		<!-- begin: jdbc -->
+		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-jdbc</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.zaxxer</groupId>
+			<artifactId>HikariCP</artifactId>
+		</dependency>
+		<!-- end: jdbc -->
+		<!-- ********************** -->
 
 		<!-- begin: Validation -->
 		<dependency>
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
-			<version>2.0.1.Final</version>
 		</dependency>
 		<!-- end : Validation -->
 
@@ -117,7 +126,6 @@
 		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j-api.version}</version>
 		</dependency>
 		<!-- end: slf4j -->
 		<!-- ********************** -->
@@ -132,14 +140,6 @@
 		</dependency>
 		<!-- end: reflections -->
 		<!-- ********************** -->
-
-		<!-- >>> begin: Jackson for JSON -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>com.fasterxml.jackson.core</groupId> -->
-<!-- 			<artifactId>jackson-databind</artifactId> -->
-<!-- 			<version>${jackson-databind.version}</version> -->
-<!-- 		</dependency> -->
-		<!-- <<< end: Jackson for JSON -->
 
 		<!-- >>> begin: Apache Commons -->
 		<dependency>
@@ -169,7 +169,6 @@
 		<dependency>
 			<groupId>org.hamcrest</groupId>
 			<artifactId>hamcrest-core</artifactId>
-			<version>2.1</version>
 			<scope>test</scope>
 		</dependency>
 		<!-- <<< end: junit -->
@@ -200,7 +199,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>${maven-compiler-plugin.version}</version>
+				<!-- <version>${maven-compiler-plugin.version}</version> -->
 				<configuration>
 					<encoding>${compile.encoding-version}</encoding>
 					<source>${compile.source-version}</source>
@@ -212,7 +211,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>${maven-source-plugin.version}</version>
+				<!-- <version>${maven-source-plugin.version}</version> -->
 				<configuration>
 					<encoding>UTF-8</encoding>
 				</configuration>
@@ -230,7 +229,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>${maven-javadoc-plugin.version}</version>
+				<!-- <version>${maven-javadoc-plugin.version}</version> -->
 				<configuration>
 					<goal>deploy</goal>
 					<show>private</show>

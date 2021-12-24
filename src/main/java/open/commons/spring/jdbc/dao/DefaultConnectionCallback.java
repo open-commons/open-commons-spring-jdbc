@@ -1,5 +1,5 @@
 /*
- * Copyright 2019 Park Jun-Hong_(parkjunhong77/google/com)
+ * Copyright 2019 Park Jun-Hong_(parkjunhong77@gmail.com)
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
  *
  * Date  : 2019. 3. 28. 오후 4:25:43
  *
- * Author: Park_Jun_Hong_(fafanmama_at_naver_com)
+ * Author: Park_Jun_Hong_(parkjunhong77@gmail.com)
  * 
  */
 
@@ -41,9 +41,10 @@ import open.commons.database.IConnectionCallbackSetter;
  * DBMS 연결 후 쿼리를 수행하는 객체.
  * 
  * @since 2019. 3. 28.
- * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+ * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  * @version 0.1.0
  */
+@SuppressWarnings("deprecation")
 public class DefaultConnectionCallback implements ConnectionCallback<Integer> {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
@@ -111,7 +112,7 @@ public class DefaultConnectionCallback implements ConnectionCallback<Integer> {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(fafanmama_at_naver_com)
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     public ConnectionCallbackBroker getBroker() {
