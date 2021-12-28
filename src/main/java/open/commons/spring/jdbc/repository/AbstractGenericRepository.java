@@ -1927,7 +1927,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         logger.debug("Query: {}", query);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
     }
 
     /**
@@ -1963,7 +1963,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType, columnNames);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
     }
 
     /**
@@ -2143,7 +2143,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
     }
 
     /**
@@ -2187,7 +2187,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.add(whereArgs, offset, limit)), this.entityType, columnNames);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
     }
 
     /**
@@ -2348,7 +2348,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected Result<Integer> updateBy(T data, @NotNull Method method, Object... whereArgs) {
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
         String query = attachWhereClause(querySet, method, whereArgs);
-        Object[] params = ArrayUtils.add(getUpdateParameters(data), whereArgs);
+        Object[] params = ArrayUtils.objectArray(getUpdateParameters(data), whereArgs);
         return executeUpdate(query, SQLConsumer.setParameters(params));
     }
 
@@ -2377,7 +2377,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<Integer> updateBy(T data, Object... whereArgs) {
-        return updateBy(data, getCurrentMethod(1, ArrayUtils.prepend(whereArgs, data)), whereArgs);
+        return updateBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
     }
 
     protected static Object[] array(Object... any) {
