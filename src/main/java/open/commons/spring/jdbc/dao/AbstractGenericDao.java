@@ -279,40 +279,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
     public void afterPropertiesSet() throws Exception {
     }
 
-    /**
-     * 조회된 데이터 개수를 제공합니다. <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2021. 12. 28.		박준홍			최초 작성
-     * </pre>
-     *
-     * @param selectQuery
-     *            조회 쿼리.
-     * @param params
-     *            조회 파라미터.
-     * @return
-     *
-     * @since 2021. 12. 28.
-     * @version 0.3.0
-     * @author parkjunhong77@gmail.com
-     * 
-     * @see CountDTO
-     */
-    protected Result<Integer> countOf(@NotNull String selectQuery, Object... params) {
-        Result<CountDTO> result = getObject(selectQuery, SQLConsumer.setParameters(params), CountDTO.class);
-
-        if (!result.getResult()) {
-            return new Result<Integer>().setMessage(result.getMessage());
-        } else if (result.getData() == null) {
-            return new Result<Integer>().setMessage("count is null !!!");
-        } else {
-            return new Result<Integer>(result.getData().getCount(), true);
-        }
-    }
-
     private <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBroker(@NotNull @NotEmpty List<E> data,
             @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ,
             String tailQuery) {
@@ -490,6 +456,40 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected abstract <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException;
+
+    /**
+     * 조회된 데이터 개수를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param selectQuery
+     *            조회 쿼리.
+     * @param params
+     *            조회 파라미터.
+     * @return
+     *
+     * @since 2021. 12. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see CountDTO
+     */
+    protected Result<Integer> executeCountOf(@NotNull String selectQuery, Object... params) {
+        Result<CountDTO> result = getObject(selectQuery, SQLConsumer.setParameters(params), CountDTO.class);
+
+        if (!result.getResult()) {
+            return new Result<Integer>().setMessage(result.getMessage());
+        } else if (result.getData() == null) {
+            return new Result<Integer>().setMessage("count is null !!!");
+        } else {
+            return new Result<Integer>(result.getData().getCount(), true);
+        }
+    }
 
     /**
      * 요청쿼리를 실행하고 결과를 제공합니다. <br>
@@ -1201,7 +1201,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      */
     public Result<Integer> getCount(@NotNull String selectQuery, Object... params) {
         String query = wrapQueryForCount(selectQuery);
-        return countOf(query, params);
+        return executeCountOf(query, params);
     }
 
     /**

@@ -500,7 +500,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     @Override
     public Result<Integer> countAll() {
-        return countOf(QUERY_FOR_COUNT);
+        return executeCountOf(QUERY_FOR_COUNT);
     }
 
     /**
@@ -523,13 +523,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> countOf(@NotNull Method method, Object... whereArgs) {
+    protected Result<Integer> countBy(@NotNull Method method, Object... whereArgs) {
 
         String query = createQueryForCountOf(QUERY_FOR_COUNT, method, whereArgs);
 
         logger.debug("Query: {}", query);
 
-        return countOf(query, whereArgs);
+        return executeCountOf(query, whereArgs);
     }
 
     /**
@@ -550,8 +550,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> countOf(Object... whereArgs) {
-        return countOf(getCurrentMethod(1, whereArgs), whereArgs);
+    protected Result<Integer> countBy(Object... whereArgs) {
+        return countBy(getCurrentMethod(1, whereArgs), whereArgs);
     }
 
     /**

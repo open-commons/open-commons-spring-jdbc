@@ -2,8 +2,8 @@
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
     + countAll()
-    + countOf(Method, Object...)
-    + countOf(Object...)
+    + <strike>countOf(Method, Object...)</strike>countBy(Method, Object...)
+    + <strike>countOf(Object...)</strike>countBy(Object...)
   
 [2021/12/24]
 - Add
