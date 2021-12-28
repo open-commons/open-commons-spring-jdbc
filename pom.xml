@@ -22,7 +22,7 @@
 	<properties>
 		<!-- >>> begin: plugin dependencies -->
 		<build.finalName>open-commons-spring-jdbc-${project.version}</build.finalName>
-		
+
 		<encoding>UTF-8</encoding>
 		<java-version>1.8</java-version>
 

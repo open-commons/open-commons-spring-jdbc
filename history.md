@@ -1,3 +1,10 @@
+[2021/12/28]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + countAll()
+    + countOf(Method, Object...)
+    + countOf(Object...)
+  
 [2021/12/24]
 - Add
   + open.commons.spring.jdbc.repository.mariadb.AbstractMariadbSingleDataSourceRepository&lt;T&gt;

@@ -43,6 +43,41 @@ import open.commons.annotation.ColumnValue;
  */
 public interface IGenericRepository<T> {
 
+    /**
+     * 전체 데이터 개수를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 12. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<Integer> countAll();
+
+    /**
+     * DB Table Entity 타입을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2021. 11. 26.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+
     public Class<T> getEntityType();
 
     /**

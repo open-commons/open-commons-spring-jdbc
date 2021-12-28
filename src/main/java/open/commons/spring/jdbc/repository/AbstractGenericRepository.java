@@ -152,6 +152,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected final boolean forceToPrimitive;
 
     /**
+     * 데이터 개수를 제공하는 쿼리.<br>
+     * 패턴: <code>SEELCT count(*) AS count FROM {table-name}</code>
+     */
+    protected final String QUERY_FOR_COUNT;
+
+    /**
      * <pre>
      * [개정이력]
      *      날짜    	| 작성자	|	내용
@@ -203,6 +209,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         this.QUERY_FOR_UPDATE_HEADER = queryForUpdateHeader();
 
         this.forceToPrimitive = forceToPrimitive;
+
+        this.QUERY_FOR_COUNT = String.join(" ", "SELECT count(*) AS count FROM", getTableName());
     }
 
     /**
@@ -483,6 +491,70 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     *
+     * @since 2021. 12. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#countAll()
+     */
+    @Override
+    public Result<Integer> countAll() {
+        return countOf(QUERY_FOR_COUNT);
+    }
+
+    /**
+     * 주어진 조건에 해당하는 데이터 개수를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2021. 12. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> countOf(@NotNull Method method, Object... whereArgs) {
+
+        String query = createQueryForCountOf(QUERY_FOR_COUNT, method, whereArgs);
+
+        logger.debug("Query: {}", query);
+
+        return countOf(query, whereArgs);
+    }
+
+    /**
+     * 주어진 조건에 해당하는 데이터 개수를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2021. 12. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> countOf(Object... whereArgs) {
+        return countOf(getCurrentMethod(1, whereArgs), whereArgs);
+    }
+
+    /**
      * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
      * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
      * 
@@ -587,6 +659,38 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 주어진 조건에 해당하는 데이터 개수를 제공합니다.
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2021. 12. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param selectQuery
+     *            데이터 조회 쿼리.
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2021. 12. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createQueryForCountOf(@NotEmpty String selectQuery, @NotNull Method method, Object... whereArgs) {
+
+        StringBuffer queryBuf = new StringBuffer();
+        queryBuf.append(selectQuery);
+
+        addWhereClause(queryBuf, method, whereArgs);
+
+        return queryBuf.toString();
+    }
+
+    /**
      * 여러 개의 데이터를 제공하는 쿼리를 제공합니다. <br>
      * 
      * <pre>
@@ -652,7 +756,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected String createQueryForSelectOrderBy(String selectQuery, @NotNull Method method, Object[] whereArgs, String... orderByArgs) {
+    protected String createQueryForSelectOrderBy(@NotEmpty String selectQuery, @NotNull Method method, Object[] whereArgs, String... orderByArgs) {
 
         StringBuffer queryBuf = new StringBuffer();
         queryBuf.append(selectQuery);
