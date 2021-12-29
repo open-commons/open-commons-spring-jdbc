@@ -527,7 +527,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         String query = createQueryForCountOf(QUERY_FOR_COUNT, method, whereArgs);
 
-        logger.debug("Query: {}", query);
+        logger.debug("Query: {}, where.columns={}", query, Arrays.toString(whereArgs));
 
         return executeCountOf(query, whereArgs);
     }
