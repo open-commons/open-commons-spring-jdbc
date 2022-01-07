@@ -1,4 +1,9 @@
 [2021/12/28]
+- Update
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + getColumnMethods(): 컬럼 정렬 관련 구현 변경
+
+[2021/12/28]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
     + countAll()

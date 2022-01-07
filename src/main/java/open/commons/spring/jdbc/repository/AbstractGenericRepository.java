@@ -32,7 +32,6 @@ import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -1087,7 +1086,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         AssertUtils.assertTrue("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", methods.size() < 1, UnsupportedOperationException.class);
 
-        methods.sort(Comparator.comparing(m -> m.getAnnotation(ColumnValue.class).order()));
+        // DB Entity 객체의 컬럼 정렬 여부 적용 - 2022. 1. 7. 오전 11:44:06 / Park_Jun_Hong (parkjunhong77@gmail.com)
+        SQLUtils.sortColumns(this.entityType, methods);
 
         return methods;
     }
