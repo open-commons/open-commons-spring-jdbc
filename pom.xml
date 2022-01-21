@@ -37,7 +37,7 @@
 
 		<!-- >>> begin: dependencies -->
 		<slf4j-api.version>1.7.32</slf4j-api.version>
-		<commons-io.version>[2.7,)</commons-io.version>
+		<commons-io.version>2.11.0</commons-io.version>
 
 		<open-commons-core.version>1.8.0-SNAPSHOT</open-commons-core.version>
 		<!-- <<< end: dependencies -->

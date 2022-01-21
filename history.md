@@ -1,3 +1,7 @@
+[2022/01/21]
+- Dependencies
+  + Update: commons-io:commons-io:2.11.0
+
 [2021/12/28]
 - Update
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
