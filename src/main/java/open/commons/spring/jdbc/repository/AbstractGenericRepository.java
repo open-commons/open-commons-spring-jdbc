@@ -1551,6 +1551,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     @Override
     public Result<Integer> insert(T data) {
+
+        logger.debug("query={}, data={}", QUERY_FOR_INSERT, data);
+
         return executeUpdate(QUERY_FOR_INSERT, SQLConsumer.setParameters(data));
     }
 
