@@ -1,3 +1,11 @@
+[2022/02/10]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + createQueryForOrderByForPagination(Object[], int, int, String...)
+    + selectMultiOrderByForPagination(Object[], int, int, String...)
+    + selectMultiOrderByForPagination(Object[], int, int, String[], String...)
+
+
 [2022/01/21]
 - Dependencies
   + Update: commons-io:commons-io:2.11.0

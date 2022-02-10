@@ -690,6 +690,54 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 데이터 정렬과 Pagination을 지원하는 쿼리를 제공합니다.<br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * <li>2 (int.class) : 데이터 시작 위치.
+     * <li>3 (int.class) : 데이터 개수
+     * <li>4 (String[].class) : 정렬 정보
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 2. 10.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     *
+     * @return
+     *
+     * @since 2022. 2. 10.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    @SuppressWarnings("unchecked")
+    protected String createQueryForOrderByForPagination(Object[] whereArgs, int offset, int limit, String... orderByArgs) {
+
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), int.class, int.class, String[].class);
+
+        Method method = getCurrentMethod(1, parameterTypes);
+
+        return attachOffsetClause( //
+                createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
+                , offset, limit);
+    }
+
+    /**
      * 여러 개의 데이터를 제공하는 쿼리를 제공합니다. <br>
      * 
      * <pre>
@@ -2291,6 +2339,98 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         String query = attachOffsetClause( //
                 createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
                 , offset, limit);
+
+        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * <li>2 (int.class) : 데이터 시작 위치.
+     * <li>3 (int.class) : 데이터 개수
+     * <li>4 (String[].class) : 정렬 정보
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 2. 10.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     *
+     * @return
+     *
+     * @since 2022. 2. 10.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
+
+        String query = createQueryForOrderByForPagination(whereArgs, offset, limit, orderByArgs);
+
+        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * <li>2 (int.class) : 데이터 시작 위치.
+     * <li>3 (int.class) : 데이터 개수
+     * <li>4 (String[].class) : 정렬 정보
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 2. 10.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     *
+     * @return
+     *
+     * @since 2022. 2. 10.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String[] orderByArgs, String... columnNames) {
+
+        String query = createQueryForOrderByForPagination(whereArgs, offset, limit, orderByArgs);
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
