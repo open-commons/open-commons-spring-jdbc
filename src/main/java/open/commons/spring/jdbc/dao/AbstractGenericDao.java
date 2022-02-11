@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -2014,7 +2015,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
         StringBuffer queryBuffer = new StringBuffer("SELECT count(*) AS count FROM ( ");
         queryBuffer.append(' ');
         queryBuffer.append(query);
-        queryBuffer.append(" )");
+        queryBuffer.append(" ) tbl");
+        queryBuffer.append(UUID.randomUUID().toString().hashCode());
 
         return queryBuffer.toString();
     }
