@@ -467,8 +467,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * 2021. 12. 28.		박준홍			최초 작성
      * </pre>
      *
-     * @param selectQuery
-     *            조회 쿼리.
+     * @param countQuery
+     *            데이터 개수 제공 쿼리.
      * @param params
      *            조회 파라미터.
      * @return
@@ -479,8 +479,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * 
      * @see CountDTO
      */
-    protected Result<Integer> executeCountOf(@NotNull String selectQuery, Object... params) {
-        Result<CountDTO> result = getObject(selectQuery, SQLConsumer.setParameters(params), CountDTO.class);
+    protected Result<Integer> executeCountOf(@NotNull String countQuery, Object... params) {
+        Result<CountDTO> result = getObject(countQuery, SQLConsumer.setParameters(params), CountDTO.class);
 
         if (!result.getResult()) {
             return new Result<Integer>().setMessage(result.getMessage());

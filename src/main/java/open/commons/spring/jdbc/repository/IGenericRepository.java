@@ -27,8 +27,10 @@
 package open.commons.spring.jdbc.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
 import open.commons.Result;
 import open.commons.annotation.ColumnValue;
@@ -60,6 +62,26 @@ public interface IGenericRepository<T> {
      * @author parkjunhong77@gmail.com
      */
     public Result<Integer> countAll();
+
+    /**
+     * 주어진 검색조건에 맞는 데이터 개수를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 2. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmnParams
+     *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
+     * @return
+     *
+     * @since 2022. 2. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<Integer> countBy(@NotNull Map<String, Object> clmnParams);
 
     /**
      * DB Table Entity 타입을 제공합니다. <br>
@@ -223,7 +245,7 @@ public interface IGenericRepository<T> {
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit, String... orderByArgs);
@@ -246,9 +268,63 @@ public interface IGenericRepository<T> {
      * @return
      *
      * @since 2021. 12. 9.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAll(String... orderByArgs);
+
+    /**
+     * 주어진 조건에 맞는 데이터를 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 2. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmnParams
+     *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2022. 2. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs);
+
+    /**
+     * 주어진 조건에 맞는 데이터를 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 2. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmnParams
+     *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2022. 2. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs);
 
 }

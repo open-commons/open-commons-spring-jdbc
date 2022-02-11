@@ -1,3 +1,14 @@
+[2022/02/11]
+- Add
+  + open.commons.spring.jdbc.repository.IGenericRepository&lt;T&gt;
+    + countBy(Map&lt;String, Object&gt;)
+    + selectBy(Map&lt;String, Object&gt;, int, int, String...)
+    + selectBy(Map&lt;String, Object&gt;, String...)
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + countBy(Map&lt;String, Object&gt;)
+    + selectBy(Map&lt;String, Object&gt;, int, int, String...)
+    + selectBy(Map&lt;String, Object&gt;, String...)
+
 [2022/02/10]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;

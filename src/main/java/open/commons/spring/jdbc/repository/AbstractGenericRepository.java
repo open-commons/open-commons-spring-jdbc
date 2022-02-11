@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -503,6 +504,25 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     *
+     * @since 2022. 2. 11.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#countBy(java.util.Map)
+     */
+    @Override
+    public Result<Integer> countBy(@NotNull Map<String, Object> clmnParams) {
+
+        StringBuffer queryBuf = createQueryForSelectBy(clmnParams);
+        Object[] params = createParametersForSelectBy(clmnParams);
+
+        logger.debug("Query={}, params={}", queryBuf.toString(), Arrays.toString(params));
+
+        return getCount(queryBuf.toString(), params);
+    }
+
+    /**
      * 주어진 조건에 해당하는 데이터 개수를 제공합니다. <br>
      * 
      * <pre>
@@ -657,6 +677,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         return sqlBuf.toString();
     }
 
+    private Object[] createParametersForSelectBy(Map<String, Object> clmnParams, Object... added) {
+        return clmnParams.size() > 0 //
+                ? ArrayUtils.add(clmnParams.values().toArray(new Object[0]), added) //
+                : added;
+    }
+
     /**
      * 주어진 조건에 해당하는 데이터 개수를 제공합니다.
      * 
@@ -735,6 +761,43 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         return attachOffsetClause( //
                 createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
                 , offset, limit);
+    }
+
+    /**
+     * 주어진 컬럼/데이터 정보를 이용하여 조회쿼리를 생성합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 2. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmnParams
+     *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
+     * @return
+     *
+     * @since 2022. 2. 11.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     */
+    private StringBuffer createQueryForSelectBy(Map<String, Object> clmnParams) {
+        StringBuffer queryBuf = new StringBuffer(queryForSelect());
+
+        if (clmnParams.size() > 0) {
+            // 컬럼
+            Iterator<String> clmns = clmnParams.keySet().iterator();
+            queryBuf.append(" WHERE ");
+            queryBuf.append(clmns.next());
+            queryBuf.append(" = ? ");
+            while (clmns.hasNext()) {
+                queryBuf.append(" AND ");
+                queryBuf.append(clmns.next());
+                queryBuf.append(" = ? ");
+            }
+        }
+
+        return queryBuf;
     }
 
     /**
@@ -1937,6 +2000,51 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         logger.debug("Query: {}", queryBuf.toString());
 
         return getList(queryBuf.toString(), SQLConsumer.setParameters(), this.entityType);
+    }
+
+    /**
+     *
+     * @since 2022. 2. 11.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, int, int, java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
+
+        StringBuffer queryBuf = createQueryForSelectBy(clmnParams);
+
+        addOffsetClause(queryBuf, offset, limit);
+        addOrderByClause(queryBuf, orderByArgs);
+
+        Object[] params = createParametersForSelectBy(clmnParams, offset, limit);
+
+        logger.debug("Query={}, params={}", queryBuf.toString(), Arrays.toString(params));
+
+        return getList(queryBuf.toString(), SQLConsumer.setParameters(params), getEntityType());
+    }
+
+    /**
+     *
+     * @since 2022. 2. 11.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs) {
+
+        StringBuffer queryBuf = createQueryForSelectBy(clmnParams);
+
+        addOrderByClause(queryBuf, orderByArgs);
+
+        Object[] params = createParametersForSelectBy(clmnParams);
+
+        logger.debug("Query={}, params={}", queryBuf.toString(), Arrays.toString(params));
+
+        return getList(queryBuf.toString(), SQLConsumer.setParameters(params), getEntityType());
     }
 
     /**
