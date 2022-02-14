@@ -335,7 +335,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         }
 
         queryBuf.append(" ");
-        queryBuf.append(createWhereClause(columns, "AND", whereArgs.length));
+        queryBuf.append(createWhereClause(columns, "AND", whereArgs));
     }
 
     /**
@@ -466,7 +466,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
             logger.info("쿼리에 사용될 컬럼 개수({})와 파라미터 개수({})가 일치하지 않습니다.", columns.size(), whereArgs.length);
         }
 
-        return String.join(" ", queryHeader, createWhereClause(columns, "AND", whereArgs.length));
+        return String.join(" ", queryHeader, createWhereClause(columns, "AND", whereArgs));
     }
 
     /**
@@ -926,7 +926,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param columns
      * @param concatenator
      *            Where 구문 컬럼 접속자
-     * @param parameterCount
+     * @param whereArgs
      *            파라미터 개수
      * @return
      *
@@ -934,7 +934,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected String createWhereClause(@NotNull List<JdbcVariableBinder> columns, String concatenator, int parameterCount) {
+    protected String createWhereClause(@NotNull List<JdbcVariableBinder> columns, String concatenator, Object... whereArgs) {
 
         if (columns.size() < 1) {
             return "";
@@ -947,12 +947,16 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         Iterator<JdbcVariableBinder> itr = columns.iterator();
 
+        int paramCount = whereArgs.length;
+        int posParam = 0;
+
         JdbcVariableBinder vbNow = itr.next();
-        buf.append(getAssignQuery(vbNow));
-        parameterCount--;
+        buf.append(getAssignQuery(vbNow, posParam, whereArgs));
+        paramCount--;
 
         boolean hasNext = true;
         while (hasNext) {
+            posParam++;
             JdbcVariableBinder vbLatest = vbNow;
             switch (vbLatest.operator()) {
                 case IN:
@@ -961,7 +965,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                         throw new UnsupportedVariableBindingException(
                                 String.format("'IN' 구문 이후에 다른 연산자가 오는 경우는 지원하지 않습니다. 연산자=%s", columns.stream().map(c -> c.operator().get()).collect(Collectors.toList())));
                     }
-                    for (int i = 0; i < parameterCount; i++) {
+                    for (int i = 0; i < paramCount; i++) {
                         buf.append(", ");
                         buf.append(" ?");
                     }
@@ -978,8 +982,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                     buf.append(" ");
                     buf.append(concatenator);
                     buf.append(" ");
-                    buf.append(getAssignQuery(vbNow));
-                    parameterCount--;
+                    buf.append(getAssignQuery(vbNow, posParam, whereArgs));
+                    paramCount--;
                     break;
             }
         }
@@ -1101,15 +1105,19 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * ------------------------------------------
      * 2021. 12. 1.		박준홍			최초 작성
      * </pre>
-     *
-     * @param cv
+     * 
+     * @param vb
+     * @param posParam
+     *            현재 파라미터 위치
+     * @param whereArgs
+     *            전체 파라미터
      * @return
      *
      * @since 2021. 12. 13.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected final String getAssignQuery(JdbcVariableBinder vb) {
+    protected final String getAssignQuery(JdbcVariableBinder vb, int posParam, Object... whereArgs) {
 
         StringBuffer buf = new StringBuffer();
 
@@ -1135,37 +1143,38 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 break;
             case LIKE:
                 buf.append(vb.operator().get());
-                buf.append(" %");
                 buf.append(vb.variableBinding());
-                buf.append(" %");
+                whereArgs[posParam] = String.join((String) whereArgs[posParam], "%", "%");
                 break;
             case LIKE_PRE:
                 buf.append(vb.operator().get());
-                buf.append(" %");
+                buf.append(" ");
                 buf.append(vb.variableBinding());
+                whereArgs[posParam] = String.join((String) whereArgs[posParam], "%", "");
                 break;
             case LIKE_POST:
                 buf.append(vb.operator().get());
                 buf.append(" ");
                 buf.append(vb.variableBinding());
-                buf.append(" %");
+                whereArgs[posParam] = String.join((String) whereArgs[posParam], "", "%");
                 break;
             case NOT_LIKE:
                 buf.append(vb.operator().get());
-                buf.append(" %");
+                buf.append(" ");
                 buf.append(vb.variableBinding());
-                buf.append(" %");
+                whereArgs[posParam] = String.join((String) whereArgs[posParam], "%", "%");
                 break;
             case NOT_LIKE_PRE:
                 buf.append(vb.operator().get());
-                buf.append(" %");
+                buf.append(" ");
                 buf.append(vb.variableBinding());
+                whereArgs[posParam] = String.join((String) whereArgs[posParam], "%", "");
                 break;
             case NOT_LIKE_POST:
                 buf.append(vb.operator().get());
                 buf.append(" ");
                 buf.append(vb.variableBinding());
-                buf.append(" %");
+                whereArgs[posParam] = String.join((String) whereArgs[posParam], "", "%");
                 break;
             case IS_NOT_NULL:
                 buf.append(vb.operator().get());
