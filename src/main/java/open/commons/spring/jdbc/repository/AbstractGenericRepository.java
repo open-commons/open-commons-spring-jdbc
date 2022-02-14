@@ -506,7 +506,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     /**
      *
      * @since 2022. 2. 11.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#countBy(java.util.Map)
@@ -733,6 +733,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * 2022. 2. 10.		박준홍			최초 작성
      * </pre>
      * 
+     * @param distance
+     *            TODO
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param offset
@@ -744,7 +746,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <b>데이터 정의</b><br>
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
-     *
+     * 
      * @return
      *
      * @since 2022. 2. 10.
@@ -752,11 +754,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     @SuppressWarnings("unchecked")
-    protected String createQueryForOrderByForPagination(Object[] whereArgs, int offset, int limit, String... orderByArgs) {
+    protected String createQueryForOrderByForPagination(int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
 
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), int.class, int.class, String[].class);
 
-        Method method = getCurrentMethod(1, parameterTypes);
+        Method method = getCurrentMethod(distance + 1, parameterTypes);
 
         return attachOffsetClause( //
                 createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
@@ -778,7 +780,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @return
      *
      * @since 2022. 2. 11.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
     private StringBuffer createQueryForSelectBy(Map<String, Object> clmnParams) {
@@ -2005,7 +2007,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     /**
      *
      * @since 2022. 2. 11.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, int, int, java.lang.String[])
@@ -2028,7 +2030,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     /**
      *
      * @since 2022. 2. 11.
-     * @version _._._
+     * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, java.lang.String[])
@@ -2491,7 +2493,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
 
-        String query = createQueryForOrderByForPagination(whereArgs, offset, limit, orderByArgs);
+        String query = createQueryForOrderByForPagination(1, whereArgs, offset, limit, orderByArgs);
 
         logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
 
@@ -2538,7 +2540,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String[] orderByArgs, String... columnNames) {
 
-        String query = createQueryForOrderByForPagination(whereArgs, offset, limit, orderByArgs);
+        String query = createQueryForOrderByForPagination(1, whereArgs, offset, limit, orderByArgs);
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
