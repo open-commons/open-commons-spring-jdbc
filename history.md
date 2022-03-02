@@ -1,3 +1,12 @@
+[2022/03/02]
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    - getValue(String, SQLConsumer<PreparedStatement>, boolean, String, Function<Object, T>)
+    - getValue(String, String, boolean, Function<Object, T>)
+    - getValue(String, String, Function<Object, T>)
+    - getValues(String, SQLConsumer<PreparedStatement>, String, Function<Object, T>)
+    - getValues(String, String, Function<Object, T>)  
+  
 [2022/02/11]
 - Add
   + open.commons.spring.jdbc.repository.IGenericRepository&lt;T&gt;

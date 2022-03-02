@@ -1796,7 +1796,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
-     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
+     * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
+     * {@link #getValue(String, SQLConsumer, boolean, String, Function)}을 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1820,8 +1821,39 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2020. 7. 30.
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    @SuppressWarnings("unchecked")
     public <T> Result<T> getValue(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String column) {
+        return getValue(query, setter, required, column, null);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회 쿼리
+     * @param setter
+     *            쿼리 파라미터 설정 객체
+     * @param required
+     *            데이터 필수 반환 여부
+     * @param column
+     *            컬럼명
+     * @param converter
+     *            컬럼에 해당하는 데이터를 받고자 하는 데이터 타입으로 변환하는 함수
+     * @return
+     *
+     * @since 2022. 3. 2.
+     * @version 1.8.0
+     * @author parkjunhong77@gmail.com
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Result<T> getValue(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String column, Function<Object, T> converter) {
         Result<Map<String, Object>> mapResult = getObjectAsMap(query, setter, required, column);
 
         if (!mapResult.getResult()) {
@@ -1836,12 +1868,16 @@ public abstract class AbstractGenericDao implements IGenericDao {
         }
         // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 8. 13.
 
-        return new Result<T>((T) mapData.get(column), true);
+        return new Result<T>(converter != null //
+                ? converter.apply(mapData.get(column))//
+                : (T) mapData.get(column) //
+                , true);
     }
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
-     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
+     * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
+     * {@link #getValue(String, String, Function)}을 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1866,7 +1902,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
-     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
+     * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
+     * {@link #getValue(String, String, boolean, Function)}을 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1894,7 +1931,65 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
-     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     *            데이터 타입
+     * @param query
+     *            조회 쿼리
+     * @param column
+     *            조회할 컬럼명
+     * @param required
+     *            데이터 필수 여부
+     * @param converter
+     *            컬럼에 해당하는 데이터를 받고자 하는 데이터 타입으로 변환하는 함수
+     * @return
+     *
+     * @since 2022. 3. 2.
+     * @version 1.8.0
+     * @author parkjunhong77@gmail.com
+     */
+    public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column, boolean required, Function<Object, T> converter) {
+        return getValue(query, null, required, column, converter);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회쿼리
+     * @param column
+     *            조회할 컬럼명
+     * @param converter
+     *            컬럼에 해당하는 데이터를 받고자 하는 데이터 타입으로 변환하는 함수
+     * @return
+     *
+     * @since 2022. 3. 2.
+     * @version 1.8.0
+     * @author parkjunhong77@gmail.com
+     */
+    public <T> Result<T> getValue(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column, Function<Object, T> converter) {
+        return getValue(query, null, false, column, converter);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회합니다. <br>
+     * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
+     * {@link #getValues(String, SQLConsumer, String, Function)} 를 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1916,8 +2011,37 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @since 2020. 7. 30.
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    @SuppressWarnings("unchecked")
     public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotNull @NotEmpty String column) {
+        return getValues(query, setter, column, null);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회쿼리
+     * @param setter
+     *            쿼리 파라미터 설정 객체
+     * @param column
+     *            컬럼명
+     * @param converter
+     *            컬럼에 해당하는 데이터를 받고자 하는 데이터 타입으로 변환하는 함수
+     * @return
+     *
+     * @since 2022. 3. 2.
+     * @version 1.8.0
+     * @author parkjunhong77@gmail.com
+     */
+    @SuppressWarnings("unchecked")
+    public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotNull @NotEmpty String column, Function<Object, T> converter) {
         Result<List<Map<String, Object>>> mapResult = getListAsMap(query, setter, column);
 
         if (!mapResult.getResult()) {
@@ -1927,7 +2051,9 @@ public abstract class AbstractGenericDao implements IGenericDao {
         List<Map<String, Object>> mapData = mapResult.getData();
 
         List<T> data = mapData.stream() //
-                .map(m -> (T) m.get(column)) //
+                .map(m -> converter != null //
+                        ? converter.apply(m.get(column)) //
+                        : (T) m.get(column)) //
                 .collect(Collectors.toList());
 
         return new Result<>(data, true);
@@ -1935,7 +2061,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
-     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
+     * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
+     * {@link #getValues(String, String, Function)}을 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1959,6 +2086,33 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
+     * 특정컬럼 데이터를 조회합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회쿼리
+     * @param column
+     *            컬럼명
+     * @param converter
+     *            컬럼에 해당하는 데이터를 받고자 하는 데이터 타입으로 변환하는 함수
+     * @return
+     *
+     * @since 2022. 3. 2.
+     * @version 1.8.0
+     * @author parkjunhong77@gmail.com
+     */
+    public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, @NotNull @NotEmpty String column, @NotNull Function<Object, T> converter) {
+        return getValues(query, null, column, converter);
+    }
+
+    /**
      * 쿼리 파라미터를 배열로 반환합니다. <br>
      * 
      * <pre>
@@ -1973,7 +2127,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @return
      *
      * @since 2021. 11. 30.
-     * @version _._._
+     * @version 1.8.0
      * @author parkjunhong77@gmail.com
      */
     protected final Object[] objectArray(Object... parameters) {
