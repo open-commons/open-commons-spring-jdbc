@@ -1795,8 +1795,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
     }
 
     /**
-     * 
-     * <br>
+     * 특정컬럼 데이터를 조회합니다. <br>
+     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
      * 
      * <pre>
      * [개정이력]
@@ -1841,6 +1841,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
+     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
      * 
      * <pre>
      * [개정이력]
@@ -1865,6 +1866,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
+     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
      * 
      * <pre>
      * [개정이력]
@@ -1892,6 +1894,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
+     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
      * 
      * <pre>
      * [개정이력]
@@ -1932,6 +1935,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
+     * DB 조회 결과 데이터 타입과 반환데이터 타입에 대한 확인이 없으므로 반드시 두 데이터 타입이 동일한지 검증을 해야 한다.
      * 
      * <pre>
      * [개정이력]
