@@ -1013,7 +1013,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected Result<Integer> deleteBy(@NotNull Method method, Object... whereArgs) {
-        return executeUpdate(attachWhereClause(QUERY_FOR_DELETE_HEADER, method, whereArgs), SQLConsumer.setParameters(whereArgs));
+        String query = attachWhereClause(QUERY_FOR_DELETE_HEADER, method, whereArgs);
+
+        logger.debug("Query: {}, data={}", query, Arrays.toString(whereArgs));
+
+        return executeUpdate(query, SQLConsumer.setParameters(whereArgs));
     }
 
     /**
@@ -2715,6 +2719,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
         String query = attachWhereClause(querySet, method, whereArgs);
         Object[] params = ArrayUtils.objectArray(getUpdateParameters(data), whereArgs);
+
+        logger.debug("Query: {}, data={}", query, Arrays.toString(params));
+
         return executeUpdate(query, SQLConsumer.setParameters(params));
     }
 
