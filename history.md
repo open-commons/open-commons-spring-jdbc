@@ -1,3 +1,8 @@
+[2022/03/10]
+- Bugfix
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    - selectAll(String...)
+
 [2022/03/02]
 - Add
   + open.commons.spring.jdbc.dao.AbstractGenericDao

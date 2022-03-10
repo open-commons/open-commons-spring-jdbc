@@ -2030,8 +2030,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         StringBuffer queryBuf = createQueryForSelectBy(clmnParams);
 
-        addOffsetClause(queryBuf, offset, limit);
         addOrderByClause(queryBuf, orderByArgs);
+        addOffsetClause(queryBuf, offset, limit);
 
         Object[] params = createParametersForSelectBy(clmnParams, offset, limit);
 
