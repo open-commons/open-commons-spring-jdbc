@@ -622,16 +622,16 @@ public abstract class AbstractGenericDao implements IGenericDao {
 
                 ResultSet rs = pstmt.executeQuery();
 
-                String label = "execute-query";
+                final String label = "execute-query";
+                final String nextlabel = "create-objects";
                 watch.record(label);
-                logger.trace("Elapsed.execute-query={}, next='create-objects'", watch.getAsPretty(label));
+                logger.trace("Elapsed.{}={}, next='{}'", label, watch.getAsPretty(label), nextlabel);
 
                 try {
                     return creator.apply(rs);
                 } finally {
-                    label = "create-objects";
-                    watch.record(label);
-                    logger.trace("Elapsed.create-objects={}", watch.getAsPretty(label));
+                    watch.record(nextlabel);
+                    logger.trace("Elapsed.{}={}", nextlabel, watch.getAsPretty(nextlabel));
                 }
             });
             return data;
