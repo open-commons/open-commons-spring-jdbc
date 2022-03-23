@@ -1212,7 +1212,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         // start - 데이터 제공 메소드 미정의 허용 : 2022. 3. 23. 오후 2:54:34
         if (methods.size() < 1) {
-            logger.warn("DBMS Table에 연결된 Entity에서 데이터 제공 함수를 발견하지 못하였습니다.");
+            logger.warn("DBMS Table에 연결된 Entity에서 데이터 제공 함수를 발견하지 못하였습니다. entity={}", this.entityType);
             return methods;
         }
         // end - 데이터 제공 메소드 미정의 허용 : 2022. 3. 23. 오후 2:54:34
