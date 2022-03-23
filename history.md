@@ -1,3 +1,8 @@
+[2022/03/23]
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + getColumnMethods(): 데이터 제공 메소드 미정의 허용
+
 [2022/03/10]
 - Bugfix
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
