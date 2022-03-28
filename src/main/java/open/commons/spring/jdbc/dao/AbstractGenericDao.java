@@ -71,6 +71,7 @@ import open.commons.function.SQLFunction;
 import open.commons.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.dto.CountDTO;
 import open.commons.test.StopWatch;
+import open.commons.text.NamedTemplate;
 import open.commons.utils.NumberUtils;
 import open.commons.utils.SQLUtils;
 
@@ -198,6 +199,40 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @version 0.1.0
      */
     public AbstractGenericDao() {
+    }
+
+    /**
+     * 쿼리 템플릿에 에 IN Clause(<code>"IN ( ?, ?, ...)")를 추가합니다. <br>
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryTpl
+     *            쿼리 템플릿
+     * 
+     * @param inClauseName
+     *            'IN' 항목 이름
+     * @param inParamCount
+     *            'IN' 파라미터 개수
+     * @return
+     *
+     * @since 2022. 3. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected void addQueryForInClause(NamedTemplate queryTpl, String inClauseName, int inParamCount) {
+
+        // #1. 파라미터 개수만큼 (?, ?, ...) 생성
+        StringBuffer tapIdIn = new StringBuffer();
+        addQueryForInClause(tapIdIn, inParamCount);
+
+        // #2. 쿼리 템플릿에 반영
+        queryTpl.addValue(inClauseName, tapIdIn.toString());
     }
 
     /**
@@ -428,6 +463,76 @@ public abstract class AbstractGenericDao implements IGenericDao {
             l.add(creator.apply(rs, i++));
         }
         return l;
+    }
+
+    /**
+     * 주어진 이름에 해당하는 쿼리에 'IN' 구문을 추가하여 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 3. 28.     박준홍         최초 작성
+     * </pre>
+     *
+     * @param queryName
+     *            쿼리 이름
+     * @param inParamCount
+     *            'IN' 파라미터 개수
+     * @return
+     *
+     * @since 2022. 3. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createQueryForInClause(String queryName, int inParamCount) {
+
+        // #1. 쿼리 버퍼
+        StringBuffer queryBuffer = new StringBuffer(getQuery(queryName));
+
+        // #2. 파라미터 개수만큼 (?, ?, ...) 생성
+        addQueryForInClause(queryBuffer, inParamCount);
+
+        // #3. 최종 쿼리 생성.
+        return queryBuffer.toString();
+    }
+
+    /**
+     * 주어진 이름에 해당하는 쿼리에 'IN' 구문을 추가하여 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryName
+     *            쿼리 이름
+     * @param inClauseName
+     *            'IN' 항목 이름
+     * @param inParamCount
+     *            'IN' 파라미터 개수
+     * @return
+     *
+     * @since 2022. 3. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createQueryForInClause(String queryName, String inClauseName, int inParamCount) {
+
+        // #1. 쿼리 템플릿
+        NamedTemplate queryTpl = new NamedTemplate(getQuery(queryName));
+
+        // #2. 파라미터 개수만큼 (?, ?, ...) 생성
+        StringBuffer tapIdIn = new StringBuffer();
+        addQueryForInClause(tapIdIn, inParamCount);
+
+        // #3. 쿼리 템플릿에 반영
+        queryTpl.addValue(inClauseName, tapIdIn.toString());
+
+        // #4. 최종 쿼리 생성.
+        return queryTpl.format();
     }
 
     /**
@@ -1872,6 +1977,35 @@ public abstract class AbstractGenericDao implements IGenericDao {
                 ? converter.apply(mapData.get(column))//
                 : (T) mapData.get(column) //
                 , true);
+    }
+
+    /**
+     * 특정컬럼 데이터를 조회합니다. <br>
+     * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
+     * {@link #getValue(String, String, Function)}을 사용하기 바랍니다.</b></font>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 3. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <T>
+     * @param query
+     *            조회 쿼리
+     * @param setter
+     *            쿼리 파라미터 설정 객체
+     * @param column
+     *            컬럼명
+     * @return
+     *
+     * @since 2022. 3. 28.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
+    public <T> Result<T> getValue(@NotNull String query, SQLConsumer<PreparedStatement> setter, String column) {
+        return getValue(query, setter, false, column, null);
     }
 
     /**

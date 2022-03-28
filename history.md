@@ -1,3 +1,11 @@
+[2022/03/28]
+- Add
+  + open.commons.spring.jdbc.dao.AbstractGenericDao
+    + addQueryForInClause(NamedTemplate, String, int)
+    + createQueryForInClause(String, int)
+    + createQueryForInClause(String, String, int)
+    + getValue(String, SQLConsumer&lt;PreparedStatement&gt;, String)
+
 [2022/03/23]
 - Modify
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
