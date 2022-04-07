@@ -32,8 +32,8 @@ import java.util.Map;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import open.commons.Result;
-import open.commons.annotation.ColumnValue;
+import open.commons.core.Result;
+import open.commons.core.annotation.ColumnValue;
 
 /**
  * DBMS Table 모델에 기반하여 단순한 CRUD 수준의 기능을 정의.

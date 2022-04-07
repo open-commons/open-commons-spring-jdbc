@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>open.commons</groupId>
 	<artifactId>open-commons-spring-jdbc</artifactId>
-	<version>0.3.0</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<name>Open Commons for Spring JDBC</name>
 
 	<licenses>
@@ -39,7 +39,7 @@
 		<slf4j-api.version>1.7.32</slf4j-api.version>
 		<commons-io.version>2.11.0</commons-io.version>
 
-		<open-commons-core.version>1.8.0-SNAPSHOT</open-commons-core.version>
+		<open-commons-core.version>2.0.0-SNAPSHOT</open-commons-core.version>
 		<!-- <<< end: dependencies -->
 	</properties>
 

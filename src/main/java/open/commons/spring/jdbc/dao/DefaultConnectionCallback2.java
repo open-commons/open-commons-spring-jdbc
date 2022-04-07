@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 
-import open.commons.database.ConnectionCallbackBroker2;
+import open.commons.core.database.ConnectionCallbackBroker2;
 
 /**
  * DBMS 연결 후 쿼리를 수행하는 객체.

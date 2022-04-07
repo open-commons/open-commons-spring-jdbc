@@ -32,11 +32,11 @@ import java.util.function.Supplier;
 
 import javax.validation.constraints.NotNull;
 
-import open.commons.Result;
-import open.commons.function.SQLConsumer;
+import open.commons.core.Result;
+import open.commons.core.function.SQLConsumer;
+import open.commons.core.test.StopWatch;
+import open.commons.core.utils.ArrayUtils;
 import open.commons.spring.jdbc.dao.IAsyncSupportable;
-import open.commons.test.StopWatch;
-import open.commons.utils.ArrayUtils;
 
 /**
  * 

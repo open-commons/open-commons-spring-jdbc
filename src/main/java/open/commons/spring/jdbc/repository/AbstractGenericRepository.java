@@ -45,24 +45,24 @@ import javax.validation.constraints.NotNull;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
-import open.commons.Result;
-import open.commons.annotation.ColumnDef;
-import open.commons.annotation.ColumnValue;
-import open.commons.database.ConnectionCallbackBroker2;
-import open.commons.database.annotation.TableDef;
-import open.commons.function.SQLConsumer;
-import open.commons.function.SQLTripleFunction;
+import open.commons.core.Result;
+import open.commons.core.annotation.ColumnDef;
+import open.commons.core.annotation.ColumnValue;
+import open.commons.core.database.ConnectionCallbackBroker2;
+import open.commons.core.database.annotation.TableDef;
+import open.commons.core.function.SQLConsumer;
+import open.commons.core.function.SQLTripleFunction;
+import open.commons.core.util.ArrayItr;
+import open.commons.core.utils.AnnotationUtils;
+import open.commons.core.utils.ArrayUtils;
+import open.commons.core.utils.AssertUtils;
+import open.commons.core.utils.ObjectUtils;
+import open.commons.core.utils.SQLUtils;
+import open.commons.core.utils.ThreadUtils;
 import open.commons.spring.jdbc.dao.AbstractGenericDao;
 import open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder;
 import open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder.WhereCompare;
 import open.commons.spring.jdbc.repository.exceptions.UnsupportedVariableBindingException;
-import open.commons.util.ArrayItr;
-import open.commons.utils.AnnotationUtils;
-import open.commons.utils.ArrayUtils;
-import open.commons.utils.AssertUtils;
-import open.commons.utils.ObjectUtils;
-import open.commons.utils.SQLUtils;
-import open.commons.utils.ThreadUtils;
 
 /**
  * DBMS Table Entity에 기반하여 공통 기능을 제공하는 클래스.

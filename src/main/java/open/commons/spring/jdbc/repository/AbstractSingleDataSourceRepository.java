@@ -36,9 +36,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
-import open.commons.function.SQLFunction;
+import open.commons.core.function.SQLFunction;
+import open.commons.core.utils.AssertUtils;
 import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
-import open.commons.utils.AssertUtils;
 
 /**
  * 단일 DBMS와 연동하는 기능을 지원한다.

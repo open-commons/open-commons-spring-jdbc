@@ -26,8 +26,8 @@
 
 package open.commons.spring.jdbc.dao.dto;
 
-import open.commons.annotation.ColumnDef;
-import open.commons.annotation.ColumnDef.ColumnNameType;
+import open.commons.core.annotation.ColumnDef;
+import open.commons.core.annotation.ColumnDef.ColumnNameType;
 
 /**
  * 조회결과 개수를 전달받는 클래스.

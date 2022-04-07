@@ -40,9 +40,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 import org.springframework.validation.annotation.Validated;
 
-import open.commons.TwoValueObject;
-import open.commons.function.SQLFunction;
-import open.commons.utils.AssertUtils;
+import open.commons.core.TwoValueObject;
+import open.commons.core.function.SQLFunction;
+import open.commons.core.utils.AssertUtils;
 
 /**
  * 여러 개의 DBMS에 동일한 작업(SQL)를 수행하는 기능을 지원.

@@ -28,10 +28,10 @@ package open.commons.spring.jdbc.dao.postgresql;
 
 import java.util.List;
 
-import open.commons.Result;
-import open.commons.function.SQLConsumer;
+import open.commons.core.Result;
+import open.commons.core.function.SQLConsumer;
+import open.commons.core.utils.ArrayUtils;
 import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
-import open.commons.utils.ArrayUtils;
 
 /**
  * PostgreSQL 연동 DAO 상위 클래스.

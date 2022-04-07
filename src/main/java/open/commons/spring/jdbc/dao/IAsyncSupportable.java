@@ -44,8 +44,8 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
-import open.commons.Result;
-import open.commons.function.HexaFunction;
+import open.commons.core.Result;
+import open.commons.core.function.HexaFunction;
 
 /**
  * {@link ThreadPoolTaskExecutor}를 기반으로

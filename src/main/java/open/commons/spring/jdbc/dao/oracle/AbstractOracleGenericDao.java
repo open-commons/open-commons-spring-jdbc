@@ -32,8 +32,8 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import open.commons.Result;
-import open.commons.function.SQLTripleFunction;
+import open.commons.core.Result;
+import open.commons.core.function.SQLTripleFunction;
 import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
 
 /**

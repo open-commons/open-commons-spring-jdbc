@@ -58,22 +58,22 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.ConnectionProxy;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
-import open.commons.Result;
-import open.commons.annotation.ColumnDef;
-import open.commons.collection.FIFOMap;
-import open.commons.database.ConnectionCallbackBroker;
-import open.commons.database.ConnectionCallbackBroker2;
-import open.commons.database.DefaultConCallbackBroker2;
-import open.commons.database.IConnectionCallbackSetter;
-import open.commons.function.SQLBiFunction;
-import open.commons.function.SQLConsumer;
-import open.commons.function.SQLFunction;
-import open.commons.function.SQLTripleFunction;
+import open.commons.core.Result;
+import open.commons.core.annotation.ColumnDef;
+import open.commons.core.collection.FIFOMap;
+import open.commons.core.database.ConnectionCallbackBroker;
+import open.commons.core.database.ConnectionCallbackBroker2;
+import open.commons.core.database.DefaultConCallbackBroker2;
+import open.commons.core.database.IConnectionCallbackSetter;
+import open.commons.core.function.SQLBiFunction;
+import open.commons.core.function.SQLConsumer;
+import open.commons.core.function.SQLFunction;
+import open.commons.core.function.SQLTripleFunction;
+import open.commons.core.test.StopWatch;
+import open.commons.core.text.NamedTemplate;
+import open.commons.core.utils.NumberUtils;
+import open.commons.core.utils.SQLUtils;
 import open.commons.spring.jdbc.dao.dto.CountDTO;
-import open.commons.test.StopWatch;
-import open.commons.text.NamedTemplate;
-import open.commons.utils.NumberUtils;
-import open.commons.utils.SQLUtils;
 
 /**
  * DAO 공통 기능 제공 클래스.<br>

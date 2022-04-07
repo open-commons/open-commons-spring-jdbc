@@ -33,7 +33,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-import open.commons.annotation.ColumnValue;
+import open.commons.core.annotation.ColumnValue;
 
 /**
  * Where 구문에 적용되는 Variable Binding 에 사용되는 기능 정의.

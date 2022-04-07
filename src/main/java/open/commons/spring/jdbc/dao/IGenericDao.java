@@ -60,7 +60,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
-//    JdbcTemplate getJdbcTemplate();
+    // JdbcTemplate getJdbcTemplate();
 
     /**
      * 이름에 해당하는 쿼리를 제공한다. <br>
