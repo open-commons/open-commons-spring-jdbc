@@ -8,7 +8,7 @@
 	</parent>
 	<groupId>open.commons</groupId>
 	<artifactId>open-commons-spring-jdbc</artifactId>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.3.0</version>
 	<name>Open Commons for Spring JDBC</name>
 
 	<licenses>

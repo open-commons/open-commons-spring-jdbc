@@ -1,3 +1,6 @@
+[2022/04/07]
+- Release: 0.3.0
+
 [2022/03/28]
 - Add
   + open.commons.spring.jdbc.dao.AbstractGenericDao
