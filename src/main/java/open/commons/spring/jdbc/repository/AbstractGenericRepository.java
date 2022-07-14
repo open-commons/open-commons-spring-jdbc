@@ -582,6 +582,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 12. 1.		박준홍			최초 작성
+     * 2022. 7. 14.     박준홍         반환 데이터 추가.
      * </pre>
      *
      * @param buf
@@ -590,11 +591,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            컬럼 설정쿼리 연결 문자열
      * @param columns
      *            컬럼 정보
+     * 
+     * @return 전달받은 쿼리 버퍼
      * @since 2021. 12. 1.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected void createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
+    protected StringBuffer createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
 
         // variable binding
         Iterator<ColumnValue> itr = columns.iterator();
@@ -606,6 +609,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
             buf.append(" ");
             buf.append(getAssignQuery(itr.next()));
         }
+
+        return buf;
     }
 
     /**
@@ -1242,9 +1247,134 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected final List<String> getColumnNames() {
-        return getColumnMethods().stream() //
+        return getColumnsAsStream() //
                 .map(m -> SQLUtils.getColumnName(m)) //
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 컬럼 데이터를 제공하는 {@link Method} 목록을 제공합니다.<br>
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 7. 14.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2022. 7. 14.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final List<Method> getColumns() {
+        return getColumnsAsStream() //
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * 컬럼 데이터를 제공하는 {@link Method} 목록을 {@link Stream}으로 제공합니다.<br>
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 7. 14.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2022. 7. 14.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final Stream<Method> getColumnsAsStream() {
+        return getColumnMethods().stream();
+    }
+
+    /**
+     * 컬럼에 해당하는 데이터를 제공합니다. 파라미터로 컬럼이 없는 경우 전체 컬럼 데이터를 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 7. 14.     박준홍         최초 작성
+     * </pre>
+     *
+     * @param data
+     *            데이터
+     * @param clmns
+     *            컬럼명.
+     * @return
+     *
+     * @since 2022. 7. 14.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see SQLUtils#sortColumns(Class, List)
+     * @see SQLUtils#isSortedColumns(Class)
+     */
+    protected Object[] getColumnValues(T data, List<String> clmns) {
+        // 설정된 컬럼이 없는 경우
+        if (clmns == null || clmns.isEmpty()) {
+            return getColumnsAsStream() //
+                    .map(m -> {
+                        try {
+                            return m.invoke(data);
+                        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                            String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s", data.getClass(), e.getMessage());
+                            logger.error(errMsg, e);
+                            throw new UnsupportedOperationException(errMsg, e);
+                        }
+                    }).toArray();
+        } else {
+            Map<String, Method> clmnMethods = getColumnsAsStream() //
+                    .collect(Collectors.toMap(m -> m.getAnnotation(ColumnValue.class).name(), m -> m));
+
+            return clmns.stream() //
+                    .filter(clmn -> clmnMethods.containsKey(clmn)) //
+                    .map(clmn -> {
+                        try {
+                            return clmnMethods.get(clmn).invoke(data);
+                        } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+                            String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s", data.getClass(), e.getMessage());
+                            logger.error(errMsg, e);
+                            throw new UnsupportedOperationException(errMsg, e);
+                        }
+                    }) //
+                    .toArray();
+        }
+    }
+
+    /**
+     * 컬럼에 해당하는 데이터를 제공합니다. 파라미터로 컬럼이 없는 경우 전체 컬럼 데이터를 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 7. 14.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param data
+     *            데이터
+     * @param clmns
+     *            컬럼명.
+     * @return
+     *
+     * @since 2022. 7. 14.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see SQLUtils#sortColumns(Class, List)
+     * @see SQLUtils#isSortedColumns(Class)
+     */
+    protected Object[] getColumnValues(T data, String... clmns) {
+        return getColumnValues(data, clmns != null ? Arrays.asList(clmns) : null);
     }
 
     /**
@@ -1686,6 +1816,49 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         logger.debug("query={}, data={}", QUERY_FOR_INSERT, data);
 
         return executeUpdate(QUERY_FOR_INSERT, SQLConsumer.setParameters(data));
+    }
+
+    /**
+     * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 7. 13.     박준홍         최초 작성
+     * </pre>
+     *
+     * @param data
+     * @return
+     *
+     * @since 2022. 7. 13.
+     * @version 2.0.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
+        throw new UnsupportedOperationException(getClass().getSimpleName() + "는 아직 이 기능을 지원하지 않습니다.");
+    }
+
+    /**
+     * 파라미터로 전달받은 값이 동일한 데이터에 대해서 데이터를 변경합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 7. 14.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param data
+     * @param whereArgs
+     * @return
+     *
+     * @since 2022. 7. 14.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> insertOrUpdateBy(T data, Object... whereArgs) {
+        return insertOrUpdateBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
     }
 
     /**

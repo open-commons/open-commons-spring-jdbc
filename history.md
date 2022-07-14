@@ -1,3 +1,17 @@
+[2022/07/14]
+- Add
+ + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+   + getColumns()
+   + getColumnsAsStream()
+   + getColumnValues(T, List&ltString&gt;)
+   + getColumnValues(T, String...)
+   + insertOrUpdateBy(T, Method, Object...)
+   + insertOrUpdateBy(T, Object...)
+ + open.commons.spring.jdbc.repository.mariadb.AbstractMariadbSingleDataSourceRepository&lt;T&gt;
+   + insertOrUpdateBy(T, Method, Object...)
+ + open.commons.spring.jdbc.repository.oracle.AbstractOracleSingleDataSourceRepoistory&lt;T&gt;
+   + insertOrUpdateBy(T, Method, Object...)
+
 [2022/04/07]
 - Release: 0.4.0-SNAPSHOT
 - Tag: 0.3.0
@@ -301,14 +315,14 @@
 [2020/07/02]
 - Bugfix
   + open.commons.spring.jdbc.dao.AbstractGenericDao
-    + getListAsMap(String, Class<T>, String...): resolve a compile incompliant.
+    + getListAsMap(String, Class&lt;T&gt;, String...): resolve a compile incompliant.
 
 [2020/06/15]
 - Add
   + open.commons.spring.jdbc.dao.AbstractGenericDao
     + executeUpdate(List<E>, Function<List<E>, SQLConsumer<PreparedStatement>>, int, String, String, String, String)
     + executeUpdate(List<E>, SQLTripleFunction<PreparedStatement, Integer, E, Integer>, int, String, String, String, String)
-    + getListAsMap(String, Class<T>, String...)
+    + getListAsMap(String, Class&lt;T&gt;, String...)
 - Modify
   + open.commons.spring.jdbc.dao.AbstractGenericDao
     + findCreator(Class<R>, String...):  DAO Entity 타입으로 Map.class 지원 및 Entity Generator 식별값 생성규칙 변경
@@ -391,7 +405,7 @@
 - Release: 0.0.3.1
 - BugFix
   + [open.commons.spring.jdbc.dao.AbstractGenericDao](https://github.com/parkjunhong/open-commons-spring-jdbc/blob/master/src/main/java/open/commons/spring/jdbc/dao/AbstractGenericDao.java).
-    - getObject(String, SQLConsumer<PreparedStatement>, Class<T>, boolean, String...) 반환상태 설정누락 버그 수정
+    - getObject(String, SQLConsumer<PreparedStatement>, Class&lt;T&gt;, boolean, String...) 반환상태 설정누락 버그 수정
 
 [2019/06/12]
 - Release: 0.0.3

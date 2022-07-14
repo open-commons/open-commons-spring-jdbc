@@ -26,11 +26,15 @@
 
 package open.commons.spring.jdbc.repository.mariadb;
 
+import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
+import open.commons.core.Result;
+import open.commons.core.function.SQLConsumer;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
 /**
@@ -86,6 +90,39 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      */
     public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         super(entityType, forceToPrimitive);
+    }
+
+    /**
+     *
+     * @since 2022. 7. 14.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrUpdateBy(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
+     */
+    @Override
+    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
+        // #1. 데이터 변경 쿼리 생성
+        String updatePart = String.join(",", //
+                getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
+                        .map(clmn -> String.format("{} = VALUES({})", clmn)) // 컬럼별 갱신 쿼리
+                        .collect(Collectors.toList()) //
+        );
+
+        StringBuilder queryBuf = new StringBuilder();
+        queryBuf.append(QUERY_FOR_INSERT);
+
+        if (!updatePart.isEmpty()) {
+            queryBuf.append(" ");
+            queryBuf.append("ON DUPLICATE KEY UPDATE");
+            queryBuf.append(" ");
+            queryBuf.append(updatePart);
+        }
+
+        logger.debug("query={}, data={}", queryBuf.toString(), data);
+
+        return executeUpdate(queryBuf.toString(), SQLConsumer.setParameters(data));
     }
 
     /**

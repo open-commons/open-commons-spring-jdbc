@@ -26,10 +26,12 @@
 
 package open.commons.spring.jdbc.repository.postgresql;
 
+import java.lang.reflect.Method;
 import java.util.List;
 
 import javax.validation.constraints.NotNull;
 
+import open.commons.core.Result;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
 /**
@@ -83,6 +85,21 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      */
     public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         super(entityType, forceToPrimitive);
+    }
+
+    /**
+     * TODO: 개발해야 함.
+     * 
+     * @since 2022. 7. 14.
+     * @version _._._
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrUpdateBy(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
+     */
+    @Override
+    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
+        return super.insertOrUpdateBy(data, method, whereArgs);
     }
 
     /**

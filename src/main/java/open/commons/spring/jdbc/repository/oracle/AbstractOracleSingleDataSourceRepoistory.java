@@ -26,14 +26,18 @@
 
 package open.commons.spring.jdbc.repository.oracle;
 
+import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import open.commons.core.Result;
+import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.SQLTripleFunction;
+import open.commons.core.text.NamedTemplate;
 import open.commons.spring.jdbc.repository.AbstractGenericRepository;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
@@ -46,7 +50,34 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  */
 public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends AbstractSingleDataSourceRepository<T> {
 
-    protected final String QUERY_FOR_OFFSET = "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
+    protected static final String TN_TABLE_NAME = "TABLE_NAME";
+    protected static final String TN_USING_DUAL_ON = "USING_DUAL_ON_CLAUSE";
+    protected static final String TN_UPDATE_SET = "UPDATE_SET_CLAUSE";
+    protected static final String TN_INSERT = "INSERT_CLAUSE";
+    protected static final String QUERY_TPL_INSERT_OR_UPDATE = new StringBuilder() //
+            .append("MERGE INTO") //
+            .append(" {").append(TN_TABLE_NAME).append("} ") //
+            .append("USING DUAL ON") //
+            .append(" ") //
+            // TODO: 'USING DUAL ON' 구문 작성
+            .append(" {").append(TN_USING_DUAL_ON).append("} ") //
+            .append(" ") //
+            .append("WHEN MATCHED THEN") //
+            .append(" ") //
+            .append("UPDATE SET") //
+            .append(" ") //
+            // TODO: 'UPDATE SET' 구문 작성
+            .append(" {").append(TN_UPDATE_SET).append("} ") //
+            .append(" ") //
+            .append("WHEN NOT MATCHED THEN") //
+            .append(" ") //
+            .append("INSERT") //
+            .append(" ") //
+            // TODO: 'INSERT' 구문 작성
+            .append(" {").append(TN_INSERT).append("} ") //
+            .toString();
+
+    protected static final String QUERY_FOR_OFFSET = "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
     /**
      * <br>
@@ -104,6 +135,70 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
     public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             @NotNull String valueQuery) {
         throw new UnsupportedOperationException("#insert(List<T>, int) 를 사용하세요.");
+    }
+
+    /**
+     *
+     * @since 2022. 7. 14.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrUpdateBy(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
+     */
+    @Override
+    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
+
+        if (whereArgs == null || whereArgs.length < 1 || getVariableBindingColumnNames(method).isEmpty()) {
+            return insert(data);
+        }
+
+        // #0. 쿼리 구문 선언
+        NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_UPDATE);
+
+        // #1. 'USING DUAL ON' 쿼리
+        List<String> pkClmns = getVariableBindingColumnNames(method);
+        String clauseUsingDualOn = String.join(" AND " //
+                , pkClmns.stream() //
+                        .map(clmn -> clmn + " = ?") //
+                        .collect(Collectors.toList()) //
+        );
+        // #1-1. 'USING DUAL ON' 파라미터
+        Object[] paramsUsingDualOn = getColumnValues(data, pkClmns);
+
+        // #2. 'UPDATE SET' 쿼리
+        String clauseUpdateSet = createColumnAssignQueries(new StringBuffer(), ",", getUpdatableColumnValues()).toString();
+        // #2-1. 'UPDATE SET' 파라미터
+        List<String> updatableClmns = getUpdatableColumnNames();
+        Object[] paramsUpdateSet = getColumnValues(data, updatableClmns);
+
+        // #3. 'INSERT' 쿼리
+        String clauseInsert = new StringBuffer() //
+                .append(" (")//
+                .append(queryForColumnNames()) //
+                .append(") ") //
+                .append("VALUES") //
+                .append(" (")//
+                .append(queryForVariableBinding()) //
+                .append(") ") //
+                .toString();
+        // #3-1. 'INSERT' 파라미터
+        Object[] paramsInsert = getColumnValues(data, getColumnNames());
+
+        // #4. 쿼리 & 파라미터 병합
+        queryTpl.addValue(TN_TABLE_NAME, getTableName());
+        queryTpl.addValue(TN_USING_DUAL_ON, clauseUsingDualOn);
+        queryTpl.addValue(TN_UPDATE_SET, clauseUpdateSet);
+        queryTpl.addValue(TN_INSERT, clauseInsert);
+
+        Object[] params = new Object[paramsUsingDualOn.length + paramsUpdateSet.length + paramsInsert.length];
+        System.arraycopy(paramsUsingDualOn, 0, params, 0, paramsUsingDualOn.length);
+        System.arraycopy(paramsUpdateSet, 0, params, paramsUsingDualOn.length, paramsUpdateSet.length);
+        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length + paramsUpdateSet.length, paramsInsert.length);
+
+        logger.debug("query={}, data={}", queryTpl.format(), params);
+
+        return executeUpdate(queryTpl.format(), SQLConsumer.setParameters(params));
     }
 
     /**
