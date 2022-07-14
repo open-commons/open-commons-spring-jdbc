@@ -106,7 +106,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
         // #1. 데이터 변경 쿼리 생성
         String updatePart = String.join(",", //
                 getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
-                        .map(clmn -> String.format("{} = VALUES({})", clmn)) // 컬럼별 갱신 쿼리
+                        .map(clmn -> String.format("{} = VALUES({})", clmn, clmn)) // 컬럼별 갱신 쿼리
                         .collect(Collectors.toList()) //
         );
 
