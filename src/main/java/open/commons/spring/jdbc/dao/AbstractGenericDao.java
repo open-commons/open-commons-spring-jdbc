@@ -39,7 +39,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.function.BiFunction;
 import java.util.function.Function;
@@ -2294,6 +2293,7 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2020. 1. 22.		박준홍			최초 작성
+     * 2022. 8. 2.      박준홍     테이블 동적 alias 제거
      * </pre>
      *
      * @param query
@@ -2308,7 +2308,6 @@ public abstract class AbstractGenericDao implements IGenericDao {
         queryBuffer.append(' ');
         queryBuffer.append(query);
         queryBuffer.append(" ) tbl");
-        queryBuffer.append(UUID.randomUUID().toString().hashCode());
 
         return queryBuffer.toString();
     }
