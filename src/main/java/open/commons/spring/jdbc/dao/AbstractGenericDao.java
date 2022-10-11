@@ -2305,12 +2305,12 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public String wrapQueryForCount(@NotNull String query) {
-        StringBuffer queryBuffer = new StringBuffer("SELECT count(*) AS count FROM ( ");
+        StringBuffer queryBuffer = new StringBuffer("SELECT count(*) AS count FROM (");
         queryBuffer.append(' ');
         queryBuffer.append(query);
-        queryBuffer.append(" ) `tbl");
-        queryBuffer.append(UUID.randomUUID().toString().hashCode());
-        queryBuffer.append("`");
+        queryBuffer.append(" ) tbl");
+        queryBuffer.append(UUID.randomUUID().toString().replace("-", ""));
+        queryBuffer.append("");
 
         return queryBuffer.toString();
     }

@@ -1,3 +1,8 @@
+[2022/10/11]
+- Bugfix
+  + open.commons.spring.jdbc.dao.AbstractGenericDao.wrapQueryForCount(String)
+    + '임시 테이블 생성을 위한 hashCode() 함수 결과에 '-' 포함 처리를 위해서 ` 사용시 Oracle 에서 ORA-00911 에러 발생' 처리
+
 [2022/07/14]
 - Add
  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
