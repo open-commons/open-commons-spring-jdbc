@@ -28,10 +28,15 @@ package open.commons.spring.jdbc.repository.postgresql;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
 import open.commons.core.Result;
+import open.commons.core.annotation.ColumnValue;
+import open.commons.core.function.SQLConsumer;
+import open.commons.core.utils.AnnotationUtils;
+import open.commons.core.utils.SQLUtils;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
 /**
@@ -88,10 +93,9 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
     }
 
     /**
-     * TODO: 개발해야 함.
      * 
      * @since 2022. 7. 14.
-     * @version _._._
+     * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrUpdateBy(java.lang.Object,
@@ -99,7 +103,39 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      */
     @Override
     protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
-        return super.insertOrUpdateBy(data, method, whereArgs);
+
+        // #1. 데이터 변경 쿼리 생성
+        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
+                .collect(Collectors.toList()) //
+        ;
+
+        StringBuilder queryBuf = new StringBuilder();
+        queryBuf.append(QUERY_FOR_INSERT);
+
+        if (!updateClmns.isEmpty()) {
+            // 'CONFLICT' 여부 확인
+            List<String> primaryKeys = AnnotationUtils.getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
+                    .filter(m -> m.getAnnotation(ColumnValue.class).primaryKey()) //
+                    .map(m -> SQLUtils.getColumnName(m)) //
+                    .collect(Collectors.toList()) //
+            ;
+
+            if (!primaryKeys.isEmpty()) {
+                queryBuf.append(" ");
+                queryBuf.append("ON CONFLICT (");
+                queryBuf.append(String.join(",", primaryKeys));
+                queryBuf.append(") ");
+                queryBuf.append("DO UPDATE SET (");
+                queryBuf.append(String.join(",", updateClmns));
+                queryBuf.append(") = ROW(");
+                queryBuf.append(String.join(",", updateClmns.stream().map(clmn -> String.join(".", "excluded", clmn)).collect(Collectors.toList())));
+                queryBuf.append(")");
+            }
+        }
+
+        logger.debug("query={}, data={}", queryBuf.toString(), data);
+
+        return executeUpdate(queryBuf.toString(), SQLConsumer.setParameters(data));
     }
 
     /**

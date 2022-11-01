@@ -59,21 +59,21 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
             .append(" {").append(TN_TABLE_NAME).append("} ") //
             .append("USING DUAL ON") //
             .append(" ") //
-            // TODO: 'USING DUAL ON' 구문 작성
+            // 'USING DUAL ON' 구문 작성
             .append(" {").append(TN_USING_DUAL_ON).append("} ") //
             .append(" ") //
             .append("WHEN MATCHED THEN") //
             .append(" ") //
             .append("UPDATE SET") //
             .append(" ") //
-            // TODO: 'UPDATE SET' 구문 작성
+            // 'UPDATE SET' 구문 작성
             .append(" {").append(TN_UPDATE_SET).append("} ") //
             .append(" ") //
             .append("WHEN NOT MATCHED THEN") //
             .append(" ") //
             .append("INSERT") //
             .append(" ") //
-            // TODO: 'INSERT' 구문 작성
+            // 'INSERT' 구문 작성
             .append(" {").append(TN_INSERT).append("} ") //
             .toString();
 

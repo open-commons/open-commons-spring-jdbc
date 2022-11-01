@@ -53,7 +53,6 @@ import open.commons.core.database.annotation.TableDef;
 import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.util.ArrayItr;
-import open.commons.core.utils.AnnotationUtils;
 import open.commons.core.utils.ArrayUtils;
 import open.commons.core.utils.AssertUtils;
 import open.commons.core.utils.ObjectUtils;
@@ -1213,12 +1212,21 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     private final List<Method> getColumnMethods() {
 
-        List<Method> methods = AnnotationUtils.getAnnotatedMethodsAll(this.entityType, ColumnValue.class);
+        List<Method> methods = Arrays.stream(this.entityType.getMethods()) // create methods stream
+                .filter(m -> {
+                    ColumnValue annoCv = m.getAnnotation(ColumnValue.class);
+                    // start - 컬럼 생성시 정의된 'default' 속성에 따라서 생성되는 컬럼을 제외 : 2022. 11. 1. 오후 2:28:00
+                    return annoCv != null && !annoCv.defaultColumn();
+                    // end - 컬럼 생성시 정의된 'default' 속성에 따라서 생성되는 컬럼을 제외 : 2022. 11. 1. 오후 2:28:00
+
+                }) // check annotation
+                .collect(Collectors.toList());
 
         // start - 데이터 제공 메소드 미정의 허용 : 2022. 3. 23. 오후 2:54:34
         if (methods.size() < 1) {
             logger.warn("DBMS Table에 연결된 Entity에서 데이터 제공 함수를 발견하지 못하였습니다. entity={}", this.entityType);
             return methods;
+        } else {
         }
         // end - 데이터 제공 메소드 미정의 허용 : 2022. 3. 23. 오후 2:54:34
 

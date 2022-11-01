@@ -1,3 +1,8 @@
+[2011/11/01]
+- Add
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository&lt;T&gt;
+    + insertOrUpdateBy(T, Method, Object...): 내부 구현
+
 [2022/10/11]
 - Bugfix
   + open.commons.spring.jdbc.dao.AbstractGenericDao.wrapQueryForCount(String)
