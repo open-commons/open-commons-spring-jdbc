@@ -1,3 +1,15 @@
+[2011/11/02]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + insertOrNothingBy(T, Method, Object...)
+    + insertOrNothingBy(T, Object...)  
+  + open.commons.spring.jdbc.repository.mariadb.AbstractMariadbSingleDataSourceRepository&lt;&gt;
+    + insertOrNothingBy(T, Method, Object...)    
+  + open.commons.spring.jdbc.repository.oracle.AbstractOracleSingleDataSourceRepoistory&lt;&gt;
+    + insertOrNothingBy(T, Method, Object...)    
+  + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository&lt;&gt;
+    + insertOrNothingBy(T, Method, Object...)    
+
 [2011/11/01]
 - Add
   + open.commons.spring.jdbc.repository.postgresql.AbstractPostgreSingleDataSourceRepository&lt;T&gt;

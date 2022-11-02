@@ -49,6 +49,14 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
     protected final String QUERY_FOR_OFFSET = "LIMIT ?, ?";
 
     /**
+     * 'INSERT IGNORE' 기본 쿼리
+     * 
+     * @version 0.4.0
+     * @since 2022. 11. 2.
+     */
+    protected final String QUERY_FOR_INSERT_IGNORE;
+
+    /**
      * <br>
      * 
      * <pre>
@@ -66,7 +74,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType) {
-        super(entityType);
+        this(entityType, true);
     }
 
     /**
@@ -76,7 +84,8 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 24.		박준홍			최초 작성
+     * 2021. 12. 24.    박준홍     최초 작성
+     * 2022. 11. 2.     박준홍     'INSERT IGNORE' 추가.
      * </pre>
      *
      * @param entityType
@@ -90,10 +99,65 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      */
     public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         super(entityType, forceToPrimitive);
+
+        this.QUERY_FOR_INSERT_IGNORE = new StringBuffer() //
+                .append("INSERT IGNORE INTO") //
+                .append(" ") //
+                .append(this.tableName) //
+                .append(" (")//
+                .append(queryForColumnNames()) //
+                .append(") ") //
+                .append("VALUES") //
+                .append(" (")//
+                .append(queryForVariableBinding()) //
+                .append(") ") //
+                .toString();
     }
 
     /**
      *
+     * @since 2022. 11. 2.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrNothingBy(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
+     */
+    @Override
+    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
+
+        logger.debug("query={}, data={}", this.QUERY_FOR_INSERT_IGNORE, data);
+
+        return executeUpdate(this.QUERY_FOR_INSERT_IGNORE, SQLConsumer.setParameters(data));
+    }
+
+    /**
+     * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
+     * 
+     * <pre>
+     * INSERT [LOW_PRIORITY | HIGH_PRIORITY] [IGNORE]
+     *     [INTO] tbl_name [PARTITION (partition_list)] [(col,...)]
+     *     SELECT ...
+     *     [ ON DUPLICATE KEY UPDATE
+     *       col=expr
+     *         [, col=expr] ... ]
+     * </pre>
+     * 
+     * <pre>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 7. 14.     박준홍         최초 작성
+     * </pre>
+     * 
+     * @param data
+     * @param method
+     *            실제 사용되지 않음.
+     * @param whereArgs
+     *            실제 사용되지 않음.
+     * 
      * @since 2022. 7. 14.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com

@@ -1827,7 +1827,56 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
+     * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param data
+     * @param method
+     * @param whereArgs
+     * @return
+     *
+     * @since 2022. 11. 2.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
+        throw new UnsupportedOperationException(getClass().getSimpleName() + "는 아직 이 기능을 지원하지 않습니다.");
+    }
+
+    /**
+     * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
+     * 
+     * 파라미터 중에 2번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지 않을 수도 있습니다.
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param data
+     * @param whereArgs
+     * @return
+     *
+     * @since 2022. 11. 2.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<Integer> insertOrNothingBy(T data, Object... whereArgs) {
+        return insertOrNothingBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
+    }
+
+    /**
+     * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
+     * 
+     * 파라미터 중에 2번째({@link Method}), 3번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지 않을 수도 있습니다.
      * 
      * <pre>
      * [개정이력]
@@ -1837,6 +1886,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param data
+     * @param method
+     * @param whereArgs
      * @return
      *
      * @since 2022. 7. 13.
@@ -1848,7 +1899,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * 파라미터로 전달받은 값이 동일한 데이터에 대해서 데이터를 변경합니다. <br>
+     * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
+     * 
+     * 파라미터 중에 2번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지 않을 수도 있습니다.
      * 
      * <pre>
      * [개정이력]

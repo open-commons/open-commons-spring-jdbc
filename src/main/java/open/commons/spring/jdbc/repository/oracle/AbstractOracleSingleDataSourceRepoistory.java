@@ -76,6 +76,27 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
             // 'INSERT' 구문 작성
             .append(" {").append(TN_INSERT).append("} ") //
             .toString();
+    /**
+     * 'INSERT or Nothing'
+     * 
+     * @version 0.4.0
+     * @since 2022. 11. 2.
+     */
+    protected static final String QUERY_TPL_INSERT_OR_NOTHING = new StringBuilder() //
+            .append("MERGE INTO") //
+            .append(" {").append(TN_TABLE_NAME).append("} ") //
+            .append("USING DUAL ON") //
+            .append(" ") //
+            // 'USING DUAL ON' 구문 작성
+            .append(" {").append(TN_USING_DUAL_ON).append("} ") //
+            .append(" ") //
+            .append("WHEN NOT MATCHED THEN") //
+            .append(" ") //
+            .append("INSERT") //
+            .append(" ") //
+            // 'INSERT' 구문 작성
+            .append(" {").append(TN_INSERT).append("} ") //
+            .toString();
 
     protected static final String QUERY_FOR_OFFSET = "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
@@ -138,6 +159,75 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
     }
 
     /**
+     *
+     * @since 2022. 11. 2.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrNothingBy(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
+     */
+    @Override
+    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
+        if (whereArgs == null || whereArgs.length < 1 || getVariableBindingColumnNames(method).isEmpty()) {
+            return insert(data);
+        }
+
+        // #0. 쿼리 구문 선언
+        NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_NOTHING);
+
+        // #1. 'USING DUAL ON' 쿼리
+        List<String> pkClmns = getVariableBindingColumnNames(method);
+        String clauseUsingDualOn = String.join(" AND " //
+                , pkClmns.stream() //
+                        .map(clmn -> clmn + " = ?") //
+                        .collect(Collectors.toList()) //
+        );
+        // #1-1. 'USING DUAL ON' 파라미터
+        Object[] paramsUsingDualOn = getColumnValues(data, pkClmns);
+
+        // #2. 'INSERT' 쿼리
+        String clauseInsert = new StringBuffer() //
+                .append(" (")//
+                .append(queryForColumnNames()) //
+                .append(") ") //
+                .append("VALUES") //
+                .append(" (")//
+                .append(queryForVariableBinding()) //
+                .append(") ") //
+                .toString();
+        // #2-1. 'INSERT' 파라미터
+        Object[] paramsInsert = getColumnValues(data, getColumnNames());
+
+        // #3. 쿼리 & 파라미터 병합
+        queryTpl.addValue(TN_TABLE_NAME, getTableName());
+        queryTpl.addValue(TN_USING_DUAL_ON, clauseUsingDualOn);
+        queryTpl.addValue(TN_INSERT, clauseInsert);
+
+        Object[] params = new Object[paramsUsingDualOn.length + paramsInsert.length];
+        System.arraycopy(paramsUsingDualOn, 0, params, 0, paramsUsingDualOn.length);
+        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length, paramsInsert.length);
+
+        logger.debug("query={}, data={}", queryTpl.format(), params);
+
+        return executeUpdate(queryTpl.format(), SQLConsumer.setParameters(params));
+    }
+
+    /**
+     * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
+     * 
+     * 파라미터 중에 2번째({@link Method}), 3번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지 않을 수도 있습니다.
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 7. 14.     박준홍         최초 작성
+     * </pre>
+     *
+     * @param data
+     * @param method
+     * @param whereArgs
      *
      * @since 2022. 7. 14.
      * @version 0.4.0

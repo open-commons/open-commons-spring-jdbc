@@ -91,8 +91,90 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
     public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         super(entityType, forceToPrimitive);
     }
+    
+    /**
+     *
+     * @since 2022. 11. 2.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrNothingBy(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
+     */
+    @Override
+    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
+        // #1. 데이터 변경 쿼리 생성
+        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
+                .collect(Collectors.toList()) //
+        ;
+
+        StringBuilder queryBuf = new StringBuilder();
+        queryBuf.append(QUERY_FOR_INSERT);
+
+        if (!updateClmns.isEmpty()) {
+            // 'CONFLICT' 여부 확인
+            List<String> primaryKeys = AnnotationUtils.getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
+                    .filter(m -> m.getAnnotation(ColumnValue.class).primaryKey()) //
+                    .map(m -> SQLUtils.getColumnName(m)) //
+                    .collect(Collectors.toList()) //
+            ;
+
+            if (!primaryKeys.isEmpty()) {
+                queryBuf.append(" ");
+                queryBuf.append("ON CONFLICT (");
+                queryBuf.append(String.join(",", primaryKeys));
+                queryBuf.append(") ");
+                queryBuf.append("DO NOTHING");
+            }
+        }
+
+        logger.debug("query={}, data={}", queryBuf.toString(), data);
+
+        return executeUpdate(queryBuf.toString(), SQLConsumer.setParameters(data));
+    }
 
     /**
+     * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
+     * 
+     * 참고: https://www.postgresql.org/docs/&lt;versoin&gt;/sql-insert.html<br>
+     * Supported Versions: 15 / 14 / 13 / 12 / 11 / 10
+     * <pre>
+     * [ WITH [ RECURSIVE ] with_query [, ...] ]
+     * INSERT INTO table_name [ AS alias ] [ ( column_name [, ...] ) ]
+     *     [ OVERRIDING { SYSTEM | USER } VALUE ]
+     *     { DEFAULT VALUES | VALUES ( { expression | DEFAULT } [, ...] ) [, ...] | query }
+     *     [ ON CONFLICT [ conflict_target ] conflict_action ]
+     *     [ RETURNING * | output_expression [ [ AS ] output_name ] [, ...] ]
+     * </pre>
+     * 
+     * where conflict_target can be one of:
+     * 
+     * <pre>
+     *     ( { index_column_name | ( index_expression ) } [ COLLATE collation ] [ opclass ] [, ...] ) [ WHERE index_predicate ]
+     *     ON CONSTRAINT constraint_name
+     * </pre>
+     * 
+     * and conflict_action is one of:
+     * 
+     * <pre>
+     *     DO NOTHING
+     *     DO UPDATE SET { column_name = { expression | DEFAULT } |
+     *                     ( column_name [, ...] ) = [ ROW ] ( { expression | DEFAULT } [, ...] ) |
+     *                     ( column_name [, ...] ) = ( sub-SELECT )
+     *                   } [, ...]
+     *               [ WHERE condition ]
+     * </pre>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 7. 14.     박준홍         최초 작성
+     * 2022. 11. 1.     박준홍         실제 구현
+     * </pre>
+     * 
+     * @param data
+     * @param method
+     * @param whereArgs
      * 
      * @since 2022. 7. 14.
      * @version 0.4.0
