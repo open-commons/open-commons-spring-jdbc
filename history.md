@@ -1,3 +1,8 @@
+[2022/11/03]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + getColumnMethods(): open.commons.core.annotation.ColumnValue.defaultColumn() 처리 적용
+
 [2011/11/02]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
