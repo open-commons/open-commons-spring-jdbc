@@ -93,7 +93,50 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
     }
     
     /**
+     * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
+     * 
+     * 참고: https://www.postgresql.org/docs/&lt;versoin&gt;/sql-insert.html<br>
+     * Supported Versions: 15 / 14 / 13 / 12 / 11 / 10
+     * <pre>
+     * [ WITH [ RECURSIVE ] with_query [, ...] ]
+     * INSERT INTO table_name [ AS alias ] [ ( column_name [, ...] ) ]
+     *     [ OVERRIDING { SYSTEM | USER } VALUE ]
+     *     { DEFAULT VALUES | VALUES ( { expression | DEFAULT } [, ...] ) [, ...] | query }
+     *     [ ON CONFLICT [ conflict_target ] conflict_action ]
+     *     [ RETURNING * | output_expression [ [ AS ] output_name ] [, ...] ]
+     * </pre>
+     * 
+     * where conflict_target can be one of:
+     * 
+     * <pre>
+     *     ( { index_column_name | ( index_expression ) } [ COLLATE collation ] [ opclass ] [, ...] ) [ WHERE index_predicate ]
+     *     ON CONSTRAINT constraint_name
+     * </pre>
+     * 
+     * and conflict_action is one of:
+     * 
+     * <pre>
+     *     DO NOTHING
+     *     DO UPDATE SET { column_name = { expression | DEFAULT } |
+     *                     ( column_name [, ...] ) = [ ROW ] ( { expression | DEFAULT } [, ...] ) |
+     *                     ( column_name [, ...] ) = ( sub-SELECT )
+     *                   } [, ...]
+     *               [ WHERE condition ]
+     * </pre>
+     *  
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 11. 2.     박준홍         최초 작성
+     * </pre>
      *
+     * @param data
+     * @param method
+     * @param whereArgs
+     * 
+     * @return
+     * 
      * @since 2022. 11. 2.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
