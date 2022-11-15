@@ -738,7 +738,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      * 
      * @param distance
-     *            TODO
+     *            <code>DAO</code> 구현 클래스의 메소드로부터 호출 거리.
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param offset
@@ -757,15 +757,59 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    @SuppressWarnings("unchecked")
     protected String createQueryForOrderByForPagination(int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
+        return createQueryForOrderByQueryForPagination(QUERY_FOR_SELECT, distance, whereArgs, offset, limit, orderByArgs);
+    }
+
+    /**
+     * 데이터 정렬과 Pagination을 지원하는 쿼리를 제공합니다.<br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * <li>2 (int.class) : 데이터 시작 위치.
+     * <li>3 (int.class) : 데이터 개수
+     * <li>4 (String[].class) : 정렬 정보
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param queryForSelect
+     *            데이터 조회 쿼리.
+     * @param distance
+     *            <code>DAO</code> 구현 클래스의 메소드로부터 호출 거리.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     *
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    @SuppressWarnings("unchecked")
+    protected String createQueryForOrderByQueryForPagination(String queryForSelect, int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
 
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), int.class, int.class, String[].class);
 
         Method method = getCurrentMethod(distance + 1, parameterTypes);
 
         return attachOffsetClause( //
-                createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
+                createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs) //
                 , offset, limit);
     }
 
@@ -1977,7 +2021,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 29.		박준홍			최초 작성
-     * 2022. 11. 15.        박준홍     내부 구현을 {@link #queryForDeleteHeader(String)}를 이용.
      * </pre>
      *
      * @return
@@ -2028,7 +2071,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 29.		박준홍			최초 작성
-     * 2022. 11. 15.        박준홍     내부 구현을 {@link #queryForInsert(String)}를 이용
      * </pre>
      *
      * @return
@@ -2179,7 +2221,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 26.		박준홍			최초 작성
-     * 2022. 11. 15.        박준홍     내부 구현을 {@link #queryForSelect(String)}를 이용
      * </pre>
      *
      * @return
@@ -2386,9 +2427,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String, int, int)
      */
     @Override
-    public Result<List<T>> selectAllByQuery(@NotEmpty String query, @Min(0) int offset, @Min(1) int limit) {
+    public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect, @Min(0) int offset, @Min(1) int limit) {
 
-        String addedQuery = attachOffsetClause(query, offset, limit);
+        String addedQuery = attachOffsetClause(queryForSelect, offset, limit);
 
         logger.debug("Query: {}, offset={}, limit={}", addedQuery, offset, limit);
 
@@ -2405,11 +2446,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectAllByQuery(String query, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
+    public Result<List<T>> selectAllByQuery(String queryForSelect, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
 
         StringBuffer queryBuf = new StringBuffer();
 
-        queryBuf.append(query);
+        queryBuf.append(queryForSelect);
         addOrderByClause(queryBuf, orderByArgs);
         addOffsetClause(queryBuf, offset, limit);
 
@@ -2428,10 +2469,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectAllByQuery(String query, String... orderByArgs) {
+    public Result<List<T>> selectAllByQuery(String queryForSelect, String... orderByArgs) {
 
         StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append(query);
+        queryBuf.append(queryForSelect);
         addOrderByClause(queryBuf, orderByArgs);
 
         logger.debug("Query: {}", queryBuf.toString());
@@ -2475,9 +2516,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      int, java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
+    public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
 
-        StringBuffer queryBuf = createQueryForSelectBy(query, clmnParams);
+        StringBuffer queryBuf = createQueryForSelectBy(queryForSelect, clmnParams);
 
         addOrderByClause(queryBuf, orderByArgs);
         addOffsetClause(queryBuf, offset, limit);
@@ -2499,9 +2540,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, String... orderByArgs) {
+    public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams, String... orderByArgs) {
 
-        StringBuffer queryBuf = createQueryForSelectBy(query, clmnParams);
+        StringBuffer queryBuf = createQueryForSelectBy(queryForSelect, clmnParams);
 
         addOrderByClause(queryBuf, orderByArgs);
 
@@ -2532,14 +2573,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      * @see ColumnValue
+     * 
+     * @see #selectMultiByQuery(String, Method, Object...)
      */
     protected Result<List<T>> selectMultiBy(@NotNull Method method, Object... whereArgs) {
+        return selectMultiByQuery(QUERY_FOR_SELECT, method, whereArgs);
 
-        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
-
-        logger.debug("Query: {}, where.columns={}", query, Arrays.toString(whereArgs));
-
-        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
     }
 
     /**
@@ -2555,7 +2594,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param method
      *            사용자 정의 메소드
      * @param whereArgs
-     *            'WHERE' 절에 사용될 파라미터.@param method
+     *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
      *            컬럼 목록
      * @return
@@ -2565,14 +2604,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      * 
      * @see ColumnValue
+     * @see #selectMultiByQuery(String, Method, Object[], String...)
      */
     protected Result<List<T>> selectMultiBy(@NotNull Method method, Object[] whereArgs, String... columnNames) {
-
-        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
-
-        logger.debug("Query: {}, where.columns={}", query, Arrays.toString(whereArgs));
-
-        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType, columnNames);
+        return selectMultiByQuery(QUERY_FOR_SELECT, method, whereArgs, columnNames);
     }
 
     /**
@@ -2609,7 +2644,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param whereArgs
-     *            'WHERE' 절에 사용될 파라미터.@param method
+     *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
      *            컬럼 목록
      * @return
@@ -2650,12 +2685,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
-
-        String query = createQueryForSelectForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs);
-
-        logger.debug("Query: {}", query);
-
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+        return selectMultiByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs);
     }
 
     /**
@@ -2686,8 +2716,195 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... columnNames) {
+        return selectMultiByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs, columnNames);
 
-        String query = createQueryForSelectForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     *
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiByQuery(@NotEmpty String queryForSelect, @NotNull Method method, Object... whereArgs) {
+
+        String query = attachWhereClause(queryForSelect, method, whereArgs);
+
+        logger.debug("Query: {}, where.columns={}", query, Arrays.toString(whereArgs));
+
+        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터
+     * @param columnNames
+     *            컬럼 목록
+     *
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     * 
+     * @see ColumnValue
+     */
+    protected Result<List<T>> selectMultiByQuery(@NotEmpty String queryForSelect, @NotNull Method method, Object[] whereArgs, String... columnNames) {
+
+        String query = attachWhereClause(queryForSelect, method, whereArgs);
+
+        logger.debug("Query: {}, where.columns={}", query, Arrays.toString(whereArgs));
+
+        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiByQuery(@NotEmpty String queryForSelect, @NotNull Object... whereArgs) {
+        return selectMultiByQuery(queryForSelect, getCurrentMethod(1, whereArgs), whereArgs);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiByQuery(@NotEmpty String queryForSelect, @NotNull Object[] whereArgs, String... columnNames) {
+        return selectMultiBy(queryForSelect, getCurrentMethod(1, whereArgs), whereArgs, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiByQueryForPagination(@NotEmpty String queryForSelect, @NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
+
+        String query = createQueryForSelectForPagination(queryForSelect, method, offset, limit, whereArgs);
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiByQueryForPagination(@NotEmpty String queryForSelect, @NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs,
+            String... columnNames) {
+
+        String query = createQueryForSelectForPagination(queryForSelect, method, offset, limit, whereArgs);
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
@@ -2720,14 +2937,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      * @see ColumnValue
+     * 
+     * @see #selectMultiOrderByQuery(String, Method, Object[], String...)
      */
     protected Result<List<T>> selectMultiOrderBy(@NotNull Method method, Object[] whereArgs, String... orderByArgs) {
-
-        String query = createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs);
-
-        logger.debug("Query: {}", query);
-
-        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
+        return selectMultiOrderByQuery(QUERY_FOR_SELECT, method, whereArgs, orderByArgs);
     }
 
     /**
@@ -2743,7 +2957,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param method
      *            사용자 정의 메소드
      * @param whereArgs
-     *            'WHERE' 절에 사용될 파라미터.@param method
+     *            'WHERE' 절에 사용될 파라미터
      * @param orderByArgs
      *            정렬 기준.<br>
      *            <b>데이터 정의</b><br>
@@ -2760,12 +2974,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiOrderBy(@NotNull Method method, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
-
-        String query = createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs);
-
-        logger.debug("Query: {}", query);
-
-        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType, columnNames);
+        return selectMultiOrderByQuery(QUERY_FOR_SELECT, method, whereArgs, orderByArgs, columnNames);
     }
 
     /**
@@ -2810,7 +3019,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param whereArgs
-     *            'WHERE' 절에 사용될 파라미터.@param method
+     *            'WHERE' 절에 사용될 파라미터
      * @param orderByArgs
      *            정렬 기준.<br>
      *            <b>데이터 정의</b><br>
@@ -2864,14 +3073,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiOrderByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... orderByArgs) {
-
-        String query = attachOffsetClause( //
-                createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
-                , offset, limit);
-
-        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
-
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+        return selectMultiOrderByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs, orderByArgs);
     }
 
     /**
@@ -2905,17 +3107,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      * @see ColumnValue
+     * 
+     * @see #selectMultiOrderByQueryForPagination(String, Method, int, int, Object[], String[], String...)
      */
     protected Result<List<T>> selectMultiOrderByForPagination(@NotNull Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String[] orderByArgs,
             String... columnNames) {
-
-        String query = attachOffsetClause( //
-                createQueryForSelectOrderBy(QUERY_FOR_SELECT, method, whereArgs, orderByArgs) //
-                , offset, limit);
-
-        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
-
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+        return selectMultiOrderByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs, orderByArgs, columnNames);
     }
 
     /**
@@ -3011,6 +3208,330 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQuery(@NotEmpty String queryForSelect, @NotNull Method method, Object[] whereArgs, String... orderByArgs) {
+
+        String query = createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs);
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQuery(@NotEmpty String queryForSelect, @NotNull Method method, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+
+        String query = createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs);
+
+        logger.debug("Query: {}", query);
+
+        return getList(query, SQLConsumer.setParameters(whereArgs), this.entityType, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQuery(@NotEmpty String queryForSelect, @NotNull Object[] whereArgs, String... orderByArgs) {
+
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+
+        return selectMultiOrderByQuery(queryForSelect, getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQuery(@NotEmpty String queryForSelect, @NotNull Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+
+        return selectMultiOrderByQuery(queryForSelect, getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotEmpty String queryForSelect, @NotNull Method method, @Min(0) int offset, @Min(1) int limit,
+            Object[] whereArgs, String... orderByArgs) {
+
+        String query = attachOffsetClause( //
+                createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs) //
+                , offset, limit);
+
+        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리.
+     * @param method
+     *            사용자 정의 메소드
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotEmpty String queryForSelect, @NotNull Method method, @Min(0) int offset, @Min(1) int limit,
+            Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+
+        String query = attachOffsetClause( //
+                createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs) //
+                , offset, limit);
+
+        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * <li>2 (int.class) : 데이터 시작 위치.
+     * <li>3 (int.class) : 데이터 개수
+     * <li>4 (String[].class) : 정렬 정보
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotEmpty String queryForSelect, Object[] whereArgs, @Min(0) int offset, @Min(1) int limit,
+            String... orderByArgs) {
+
+        String query = createQueryForOrderByQueryForPagination(queryForSelect, 1, whereArgs, offset, limit, orderByArgs);
+
+        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+    }
+
+    /**
+     * 주어진 조건에 맞는 여러 개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * <li>2 (int.class) : 데이터 시작 위치.
+     * <li>3 (int.class) : 데이터 개수
+     * <li>4 (String[].class) : 정렬 정보
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @param columnNames
+     *            컬럼 목록
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotEmpty String queryForSelect, Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String[] orderByArgs,
+            String... columnNames) {
+
+        String query = createQueryForOrderByQueryForPagination(queryForSelect, 1, whereArgs, offset, limit, orderByArgs);
+
+        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
+
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+    }
+
+    /**
      * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
      * 
      * <pre>
@@ -3028,6 +3549,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            'WHERE' 절에 사용될 파라미터.
      *
      * @return
+     * 
      * @throws EmptyResultDataAccessException
      *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
      * @throws IncorrectResultSizeDataAccessException
@@ -3039,8 +3561,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<T> selectSingleBy(boolean required, @NotNull Method method, Object... whereArgs) {
-        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
-        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
+        return selectSingleByQuery(QUERY_FOR_SELECT, required, method, whereArgs);
     }
 
     /**
@@ -3074,12 +3595,16 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see ColumnValue
      */
     protected Result<T> selectSingleBy(boolean required, @NotNull Method method, Object[] whereArgs, String... columnNames) {
-        String query = attachWhereClause(QUERY_FOR_SELECT, method, whereArgs);
-        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required, columnNames);
+        return selectSingleByQuery(QUERY_FOR_SELECT, required, method, whereArgs, columnNames);
     }
 
     /**
      * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * </ul>
      * 
      * <pre>
      * [개정이력]
@@ -3110,6 +3635,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * </ul>
      * 
      * <pre>
      * [개정이력]
@@ -3138,6 +3668,148 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected Result<T> selectSingleBy(boolean required, Object[] whereArgs, String... columnNames) {
         return selectSingleBy(required, getCurrentMethod(1, whereArgs), whereArgs, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리.
+     * @param required
+     *            필수 존재 여부.
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @return
+     * 
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<T> selectSingleByQuery(@NotEmpty String queryForSelect, boolean required, @NotNull Method method, Object... whereArgs) {
+        String query = attachWhereClause(queryForSelect, method, whereArgs);
+        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @param required
+     *            필수 존재 여부.
+     * @param method
+     *            사용자 정의 메소드
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param columnNames
+     *
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<T> selectSingleByQuery(@NotEmpty String queryForSelect, boolean required, @NotNull Method method, Object[] whereArgs, String... columnNames) {
+        String query = attachWhereClause(queryForSelect, method, whereArgs);
+        return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required, columnNames);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리.
+     * @param required
+     *            필수 존재 여부.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     *
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<T> selectSingleByQuery(@NotEmpty String queryForSelect, boolean required, Object... whereArgs) {
+        return selectSingleByQuery(queryForSelect, required, getCurrentMethod(1, whereArgs), whereArgs);
+    }
+
+    /**
+     * 주어진 조건에 맞는 1개의 데이터를 제공합니다. <br>
+     * 이 메소드를 호출하는 <code>DAO</code> 구현 클래스의 메소드의 파라미터는 다음과 같아야 합니다.
+     * 
+     * <ul>
+     * <li>1 (*) : 쿼리 파라미터
+     * </ul>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리.
+     * @param required
+     *            필수 존재 여부.
+     * @param whereArgs
+     *            'WHERE' 절에 사용될 파라미터.
+     * @param columnNames
+     *
+     * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Result<T> selectSingleByQuery(@NotEmpty String queryForSelect, boolean required, Object[] whereArgs, String... columnNames) {
+        return selectSingleByQuery(queryForSelect, required, getCurrentMethod(1, whereArgs), whereArgs, columnNames);
     }
 
     /**

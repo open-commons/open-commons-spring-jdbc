@@ -310,7 +310,7 @@ public interface IGenericRepository<T> {
      * 2022. 11. 15.		박준홍			최초 작성
      * </pre>
      *
-     * @param query
+     * @param queryForSelect
      *            데이터 조회 쿼리
      * @param offset
      *            데이터 시작 위치. ( '0'부터 시작)
@@ -322,7 +322,7 @@ public interface IGenericRepository<T> {
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    public Result<List<T>> selectAllByQuery(@NotEmpty String query, @Min(0) int offset, @Min(1) int limit);
+    public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect, @Min(0) int offset, @Min(1) int limit);
 
     /**
      * 주어진 쿼리와, 조건에 따라 정렬된 모든 데이터를 제공합니다. <br>
@@ -337,7 +337,7 @@ public interface IGenericRepository<T> {
      * 2022. 11. 15.		박준홍			최초 작성
      * </pre>
      * 
-     * @param query
+     * @param queryForSelect
      *            데이터 조회 쿼리
      * @param offset
      *            데이터 시작 위치. ( '0'부터 시작)
@@ -355,7 +355,7 @@ public interface IGenericRepository<T> {
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    public Result<List<T>> selectAllByQuery(String query, @Min(0) int offset, @Min(1) int limit, String... orderByArgs);
+    public Result<List<T>> selectAllByQuery(String queryForSelect, @Min(0) int offset, @Min(1) int limit, String... orderByArgs);
 
     /**
      * 주어진 조건에 따라 정렬된 모든 데이터를 제공합니다. <br>
@@ -370,7 +370,7 @@ public interface IGenericRepository<T> {
      * 2022. 11. 15.		박준홍			최초 작성
      * </pre>
      * 
-     * @param query
+     * @param queryForSelect
      *            데이터 조회 쿼리
      * @param orderByArgs
      *            정렬 기준.<br>
@@ -384,7 +384,7 @@ public interface IGenericRepository<T> {
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    public Result<List<T>> selectAllByQuery(String query, String... orderByArgs);
+    public Result<List<T>> selectAllByQuery(String queryForSelect, String... orderByArgs);
 
     /**
      * 주어진 조건에 맞는 데이터를 제공합니다.<br>
@@ -453,7 +453,7 @@ public interface IGenericRepository<T> {
      * 2022. 11. 15.		박준홍			최초 작성
      * </pre>
      *
-     * @param query
+     * @param queryForSelect
      *            데이터 조회 쿼리
      * @param clmnParams
      *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
@@ -472,7 +472,7 @@ public interface IGenericRepository<T> {
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs);
+    public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs);
 
     /**
      * 주어진 쿼리와 조건에 맞는 데이터를 제공합니다.<br>
@@ -487,7 +487,7 @@ public interface IGenericRepository<T> {
      * 2022. 11. 15.		박준홍			최초 작성
      * </pre>
      * 
-     * @param query
+     * @param queryForSelect
      *            데이터 조회 쿼리
      * @param clmnParams
      *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
@@ -503,6 +503,6 @@ public interface IGenericRepository<T> {
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, String... orderByArgs);
+    public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams, String... orderByArgs);
 
 }
