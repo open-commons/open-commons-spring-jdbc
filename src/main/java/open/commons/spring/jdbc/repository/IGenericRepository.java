@@ -30,6 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
 import open.commons.core.Result;
@@ -274,6 +275,118 @@ public interface IGenericRepository<T> {
     public Result<List<T>> selectAll(String... orderByArgs);
 
     /**
+     * 주어진 쿼리를 이용하여 모든 데이터를 제공합니다. <br>
+     * 
+     * 사용 예)<br>
+     * 1) 특정 TABLE에 대해서 VIEW를 생성하여 사용할 때, Entity는 동일하지만 TABLE/VIEW 이름이 다른 경우
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param queryForSelect
+     *            데이터 조회 쿼리
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect);
+
+    /**
+     * 주어진 쿼리를 이용하여 여러 개의 데이터를 제공합니다. <br>
+     * 
+     * 사용 예)<br>
+     * 1) 특정 TABLE에 대해서 VIEW를 생성하여 사용할 때, Entity는 동일하지만 TABLE/VIEW 이름이 다른 경우
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            데이터 조회 쿼리
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectAllByQuery(@NotEmpty String query, @Min(0) int offset, @Min(1) int limit);
+
+    /**
+     * 주어진 쿼리와, 조건에 따라 정렬된 모든 데이터를 제공합니다. <br>
+     * 
+     * 사용 예)<br>
+     * 1) 특정 TABLE에 대해서 VIEW를 생성하여 사용할 때, Entity는 동일하지만 TABLE/VIEW 이름이 다른 경우
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param query
+     *            데이터 조회 쿼리
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     *
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectAllByQuery(String query, @Min(0) int offset, @Min(1) int limit, String... orderByArgs);
+
+    /**
+     * 주어진 조건에 따라 정렬된 모든 데이터를 제공합니다. <br>
+     * 
+     * 사용 예)<br>
+     * 1) 특정 TABLE에 대해서 VIEW를 생성하여 사용할 때, Entity는 동일하지만 TABLE/VIEW 이름이 다른 경우
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param query
+     *            데이터 조회 쿼리
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     *
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectAllByQuery(String query, String... orderByArgs);
+
+    /**
      * 주어진 조건에 맞는 데이터를 제공합니다.<br>
      * 
      * <pre>
@@ -326,5 +439,70 @@ public interface IGenericRepository<T> {
      * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs);
+
+    /**
+     * 주어진 쿼리와 조건에 맞는 데이터를 제공합니다.<br>
+     * 
+     * 사용 예)<br>
+     * 1) 특정 TABLE에 대해서 VIEW를 생성하여 사용할 때, Entity는 동일하지만 TABLE/VIEW 이름이 다른 경우
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     *            데이터 조회 쿼리
+     * @param clmnParams
+     *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
+     * @param offset
+     *            데이터 시작 위치. ( '0'부터 시작)
+     * @param limit
+     *            데이터 개수.
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs);
+
+    /**
+     * 주어진 쿼리와 조건에 맞는 데이터를 제공합니다.<br>
+     * 
+     * 사용 예)<br>
+     * 1) 특정 TABLE에 대해서 VIEW를 생성하여 사용할 때, Entity는 동일하지만 TABLE/VIEW 이름이 다른 경우
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     * 
+     * @param query
+     *            데이터 조회 쿼리
+     * @param clmnParams
+     *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
+     * @param orderByArgs
+     *            정렬 기준.<br>
+     *            <b>데이터 정의</b><br>
+     *            <li>포맷: {column} {direction}<br>
+     *            <li>예: name asc
+     *
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, String... orderByArgs);
 
 }

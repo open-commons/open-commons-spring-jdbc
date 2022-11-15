@@ -1,3 +1,20 @@
+[2022/11/15]
+- Add
+  + open.commons.spring.jdbc.repository.IGenericRepository&lt;T&gt;
+    + selectAllByQuery(String)
+    + selectAllByQuery(String, int, int)
+    + selectAllByQuery(String, int, int, String...)
+    + selectAllByQuery(String, String...)
+    + selectByQuery(String, Map&lt;String, Object&gt;, int, int, String...)
+    + selectByQuery(String, Map&lt;String, Object&gt;, String...)
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + selectAllByQuery(String)
+    + selectAllByQuery(String, int, int)
+    + selectAllByQuery(String, int, int, String...)
+    + selectAllByQuery(String, String...)
+    + selectByQuery(String, Map&lt;String, Object&gt;, int, int, String...)
+    + selectByQuery(String, Map&lt;String, Object&gt;, String...)
+
 [2022/11/03]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;

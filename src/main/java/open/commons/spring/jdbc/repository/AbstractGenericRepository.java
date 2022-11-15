@@ -788,7 +788,31 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     private StringBuffer createQueryForSelectBy(Map<String, Object> clmnParams) {
-        StringBuffer queryBuf = new StringBuffer(queryForSelect());
+        return createQueryForSelectBy(queryForSelect(), clmnParams);
+    }
+
+    /**
+     * 주어진 컬럼/데이터 정보를 이용하여 조회쿼리를 생성합니다. <br>
+     * 
+     * <pre>
+     * 
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param query
+     * @param clmnParams
+     *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    private StringBuffer createQueryForSelectBy(String query, Map<String, Object> clmnParams) {
+        StringBuffer queryBuf = new StringBuffer(query);
 
         if (clmnParams.size() > 0) {
             // 컬럼
@@ -1953,6 +1977,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 29.		박준홍			최초 작성
+     * 2022. 11. 15.        박준홍     내부 구현을 {@link #queryForDeleteHeader(String)}를 이용.
      * </pre>
      *
      * @return
@@ -1960,12 +1985,36 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see #queryForDeleteHeader(String)
      */
     protected String queryForDeleteHeader() {
+        return queryForDeleteHeader(this.tableName);
+    }
+
+    /**
+     * 데이터를 삭제하는 쿼리의 테이블 선언 관련 쿼리를 제공합니다.<br>
+     * 패턴: <code>DELETE FROM {table-name}</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param tableName
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForDeleteHeader(String tableName) {
         return new StringBuffer() //
                 .append("DELETE FROM") //
                 .append(" ") //
-                .append(this.tableName) //
+                .append(tableName) //
                 .toString();
     }
 
@@ -1979,6 +2028,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 29.		박준홍			최초 작성
+     * 2022. 11. 15.        박준홍     내부 구현을 {@link #queryForInsert(String)}를 이용
      * </pre>
      *
      * @return
@@ -1986,12 +2036,37 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see #queryForInsert(String)
      */
     protected String queryForInsert() {
+        return queryForInsert(this.tableName);
+    }
+
+    /**
+     * 1개의 데이터를 추가하는 쿼리를 제공합니다.<br>
+     * 패턴:
+     * <code>INSERT INTO {table-name} ( {comma-separated-column-names} ) VALUES ( {comma-separated-question-marks} )</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param tableName
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForInsert(String tableName) {
         return new StringBuffer() //
                 .append("INSERT INTO") //
                 .append(" ") //
-                .append(this.tableName) //
+                .append(tableName) //
                 .append(" (")//
                 .append(queryForColumnNames()) //
                 .append(") ") //
@@ -2104,6 +2179,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 26.		박준홍			최초 작성
+     * 2022. 11. 15.        박준홍     내부 구현을 {@link #queryForSelect(String)}를 이용
      * </pre>
      *
      * @return
@@ -2111,8 +2187,31 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 26.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * @see #queryForSelect(String)
      */
     protected String queryForSelect() {
+        return queryForSelect(this.tableName);
+    }
+
+    /**
+     * 전체 데이터를 조회하는 쿼리를 제공합니다. <br>
+     * 패턴: <code>SEELCT * FROM {table-name}</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param tableName
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForSelect(@NotEmpty String tableName) {
         return new StringBuffer() //
                 .append("SELECT") //
                 .append(" ") //
@@ -2120,7 +2219,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 .append(" ") //
                 .append("FROM") //
                 .append(" ") //
-                .append(this.tableName) //
+                .append(tableName) //
                 .toString();
     }
 
@@ -2133,6 +2232,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 29.		박준홍			최초 작성
+     * 2022. 11. 15.        박준홍     내구 구현을 {@link #queryForUpdateHeader(String)}를 이용.
      * </pre>
      *
      * @return
@@ -2140,12 +2240,35 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * @see #queryForUpdateHeader(String)
      */
     protected String queryForUpdateHeader() {
+        return queryForUpdateHeader(this.tableName);
+    }
+
+    /**
+     * 데이터를 변경하는 쿼리의 테이블 선언 관련 쿼리를 제공합니다.<br>
+     * 패턴: <code>UPDATE {table-name}</code>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 15.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param tableName
+     * @return
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForUpdateHeader(@NotEmpty String tableName) {
         return new StringBuffer() //
                 .append("UPDATE") //
                 .append(" ") //
-                .append(this.tableName) //
+                .append(tableName) //
                 .toString();
     }
 
@@ -2209,12 +2332,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     @Override
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit) {
-
-        String query = attachOffsetClause(QUERY_FOR_SELECT, offset, limit);
-
-        logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
-
-        return getList(query, SQLConsumer.setParameters(offset, limit), this.entityType);
+        return selectAllByQuery(QUERY_FOR_SELECT, offset, limit);
     }
 
     /**
@@ -2227,16 +2345,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     @Override
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
-
-        StringBuffer queryBuf = new StringBuffer();
-
-        queryBuf.append(QUERY_FOR_SELECT);
-        addOrderByClause(queryBuf, orderByArgs);
-        addOffsetClause(queryBuf, offset, limit);
-
-        logger.debug("Query: {}, offset={}, limit={}", queryBuf.toString(), offset, limit);
-
-        return getList(queryBuf.toString(), SQLConsumer.setParameters(offset, limit), this.entityType);
+        return selectAllByQuery(QUERY_FOR_SELECT, offset, limit, orderByArgs);
     }
 
     /**
@@ -2249,9 +2358,80 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     @Override
     public Result<List<T>> selectAll(String... orderByArgs) {
+        return selectAllByQuery(QUERY_FOR_SELECT, orderByArgs);
+    }
+
+    /**
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String)
+     */
+    @Override
+    public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect) {
+
+        logger.debug("Query: {}", queryForSelect);
+
+        return getList(QUERY_FOR_SELECT, SQLConsumer.setParameters(), this.entityType);
+    }
+
+    /**
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String, int, int)
+     */
+    @Override
+    public Result<List<T>> selectAllByQuery(@NotEmpty String query, @Min(0) int offset, @Min(1) int limit) {
+
+        String addedQuery = attachOffsetClause(query, offset, limit);
+
+        logger.debug("Query: {}, offset={}, limit={}", addedQuery, offset, limit);
+
+        return getList(addedQuery, SQLConsumer.setParameters(offset, limit), this.entityType);
+    }
+
+    /**
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String, int, int,
+     *      java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectAllByQuery(String query, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
 
         StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append(QUERY_FOR_SELECT);
+
+        queryBuf.append(query);
+        addOrderByClause(queryBuf, orderByArgs);
+        addOffsetClause(queryBuf, offset, limit);
+
+        logger.debug("Query: {}, offset={}, limit={}", queryBuf.toString(), offset, limit);
+
+        return getList(queryBuf.toString(), SQLConsumer.setParameters(offset, limit), this.entityType);
+    }
+
+    /**
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String,
+     *      java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectAllByQuery(String query, String... orderByArgs) {
+
+        StringBuffer queryBuf = new StringBuffer();
+        queryBuf.append(query);
         addOrderByClause(queryBuf, orderByArgs);
 
         logger.debug("Query: {}", queryBuf.toString());
@@ -2269,8 +2449,35 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     @Override
     public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
+        return selectByQuery(queryForSelect(), clmnParams, offset, limit, orderByArgs);
+    }
 
-        StringBuffer queryBuf = createQueryForSelectBy(clmnParams);
+    /**
+     *
+     * @since 2022. 2. 11.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs) {
+        return selectByQuery(queryForSelect(), clmnParams, orderByArgs);
+    }
+
+    /**
+     *
+     * @since 2022. 11. 15.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectByQuery(java.lang.String, java.util.Map, int,
+     *      int, java.lang.String[])
+     */
+    @Override
+    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
+
+        StringBuffer queryBuf = createQueryForSelectBy(query, clmnParams);
 
         addOrderByClause(queryBuf, orderByArgs);
         addOffsetClause(queryBuf, offset, limit);
@@ -2284,16 +2491,17 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
     /**
      *
-     * @since 2022. 2. 11.
-     * @version 0.3.0
+     * @since 2022. 11. 15.
+     * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectByQuery(java.lang.String, java.util.Map,
+     *      java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs) {
+    public Result<List<T>> selectByQuery(String query, @NotNull Map<String, Object> clmnParams, String... orderByArgs) {
 
-        StringBuffer queryBuf = createQueryForSelectBy(clmnParams);
+        StringBuffer queryBuf = createQueryForSelectBy(query, clmnParams);
 
         addOrderByClause(queryBuf, orderByArgs);
 
