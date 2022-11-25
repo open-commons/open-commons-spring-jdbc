@@ -35,6 +35,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,6 +56,7 @@ import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.util.ArrayItr;
 import open.commons.core.utils.ArrayUtils;
 import open.commons.core.utils.AssertUtils;
+import open.commons.core.utils.ExceptionUtils;
 import open.commons.core.utils.ObjectUtils;
 import open.commons.core.utils.SQLUtils;
 import open.commons.core.utils.ThreadUtils;
@@ -1167,8 +1169,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected final String getAssignQuery(ColumnValue cv) {
-        return String.join(" = ", cv.name(), cv.variableBinding());
+    protected final String getAssignQuery(@NotNull ColumnValue cv) {
+        return String.join(" = ", getColumnName(cv), cv.variableBinding());
     }
 
     /**
@@ -1305,6 +1307,34 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * {@link ColumnValue#name()}이 기본값 (빈 문자열)일 경우를 {@link Method#getName()}값을 이용하여 컬럼명을 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 25.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmnValue
+     * @return
+     *
+     * @since 2022. 11. 25.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    private String getColumnName(@NotNull ColumnValue clmnValue) {
+
+        Optional<Method> opt = getUpdatableColumnsAsStream().filter(m -> clmnValue.equals(m.getAnnotation(ColumnValue.class))).findAny();
+
+        if (opt.isPresent()) {
+            return SQLUtils.getColumnName(clmnValue, opt.get());
+        } else {
+            throw ExceptionUtils.newException(IllegalArgumentException.class, "'%s'에 해당하는 Method가 존재하지 않습닏.", clmnValue);
+        }
+    }
+
+    /**
      * 컬럼명을 제공한다. <br>
      * 
      * <pre>
@@ -1409,7 +1439,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                     }).toArray();
         } else {
             Map<String, Method> clmnMethods = getColumnsAsStream() //
-                    .collect(Collectors.toMap(m -> m.getAnnotation(ColumnValue.class).name(), m -> m));
+                    .collect(Collectors.toMap(m ->
+                    // start - ColumnValue#name() 기본값 (빈 문자열 ("")) 지원 : 2022. 11. 25. 오후 6:12:34
+                    SQLUtils.getColumnNameByColumnValue(m)
+                    // end - ColumnValue#name() 기본값 (빈 문자열 ("")) 지원 : 2022. 11. 25. 오후 6:12:34
+                            , m -> m));
 
             return clmns.stream() //
                     .filter(clmn -> clmnMethods.containsKey(clmn)) //
@@ -1656,8 +1690,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected final List<String> getUpdatableColumnNames() {
-        return getUpdatableColumnsAsStream().map(m -> m.getAnnotation(ColumnValue.class).name()) //
-                .collect(Collectors.toList());
+        return getUpdatableColumnsAsStream().map(m -> SQLUtils.getColumnNameByColumnValue(m)).collect(Collectors.toList());
     }
 
     /**

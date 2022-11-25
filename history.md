@@ -1,3 +1,13 @@
+[2022/11/25]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + getColumnName(ColumnValue)
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + getAssignQuery(ColumnValue)
+    + getColumnValues(T, List&lt;String&gt;)
+    + getUpdatableColumnNames()
+
 [2022/11/15]
 - Add
   + open.commons.spring.jdbc.repository.IGenericRepository&lt;T&gt;
