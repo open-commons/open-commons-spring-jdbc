@@ -33,8 +33,6 @@ import java.util.stream.Collectors;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import open.commons.core.Result;
-import open.commons.core.function.SQLConsumer;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
 /**
@@ -116,19 +114,16 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
 
     /**
      *
-     * @since 2022. 11. 2.
+     * @since 2022. 11. 29.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrNothingBy(java.lang.Object,
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrNothing(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
-
-        logger.debug("query={}, data={}", this.QUERY_FOR_INSERT_IGNORE, data);
-
-        return executeUpdate(this.QUERY_FOR_INSERT_IGNORE, SQLConsumer.setParameters(data));
+    protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+        return this.QUERY_FOR_INSERT_IGNORE;
     }
 
     /**
@@ -150,23 +145,19 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
      * 2022. 7. 14.     박준홍         최초 작성
+     * 2022. 11. 29.    박준홍     메소드 이관.
      * </pre>
      * 
-     * @param data
-     * @param method
-     *            실제 사용되지 않음.
-     * @param whereArgs
-     *            실제 사용되지 않음.
      * 
-     * @since 2022. 7. 14.
+     * @since 2022. 11. 29.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrUpdateBy(java.lang.Object,
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrUpdate(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
         // #1. 데이터 변경 쿼리 생성
         String updatePart = String.join(",", //
                 getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
@@ -186,7 +177,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
 
         logger.debug("query={}, data={}", queryBuf.toString(), data);
 
-        return executeUpdate(queryBuf.toString(), SQLConsumer.setParameters(data));
+        return queryBuf.toString();
     }
 
     /**

@@ -50,6 +50,7 @@ import open.commons.core.Result;
 import open.commons.core.annotation.ColumnDef;
 import open.commons.core.annotation.ColumnValue;
 import open.commons.core.database.ConnectionCallbackBroker2;
+import open.commons.core.database.DefaultConCallbackBroker2;
 import open.commons.core.database.annotation.TableDef;
 import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.SQLTripleFunction;
@@ -575,6 +576,73 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 데이터 생성에 사용될 {@link ConnectionCallbackBroker2}를 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param method
+     *            구현 클래스의 {@link Method}
+     * @param whereArgs
+     *            쿼리 Where 절 파라미터
+     * @return
+     *
+     * @since 2022. 11. 29.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+
+        String query = createQueryForInsertOrNothing(data, method, whereArgs);
+        Object params = createParametersForInsertOrNothing(data, method, whereArgs);
+        SQLConsumer<PreparedStatement> setter = SQLConsumer.setParameters(params);
+
+        logger.debug("query={}, data={}", query, params);
+
+        return new DefaultConCallbackBroker2(query, setter, false);
+    }
+
+    /**
+     * 데이터 생성에 사용될 {@link ConnectionCallbackBroker2}를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 11. 29.        박준홍         최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param method
+     *            구현 클래스의 {@link Method}
+     * @param whereArgs
+     *            쿼리 Where 절 파라미터
+     * @return
+     *
+     * @since 2022. 11. 29.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+        String query = createQueryForInsertOrUpdate(data, method, whereArgs);
+        Object params = createParametersForInsertOrUpdate(data, method, whereArgs);
+        SQLConsumer<PreparedStatement> setter = SQLConsumer.setParameters(params);
+
+        logger.debug("query={}, data={}", query, params);
+
+        return new DefaultConCallbackBroker2(query, setter, false);
+    }
+
+    /**
      * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
      * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
      * 
@@ -683,6 +751,60 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         return sqlBuf.toString();
     }
 
+    /**
+     * 데이터 생성에 사용될 파라미터를 제공합니다.<br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2022. 11. 29.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param method
+     *            구현 클래스의 {@link Method}
+     * @param whereArgs
+     *            쿼리 Where 절 파라미터
+     * @return
+     *
+     * @since 2022. 11. 29.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Object createParametersForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+        return data;
+    }
+
+    /**
+     * 데이터 생성에 사용될 파라미터를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 11. 29.        박준홍         최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param method
+     *            구현 클래스의 {@link Method}
+     * @param whereArgs
+     *            쿼리 Where 절 파라미터
+     * @return
+     *
+     * @since 2022. 11. 29.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected Object createParametersForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+        return data;
+    }
+
     private Object[] createParametersForSelectBy(Map<String, Object> clmnParams, Object... added) {
         return clmnParams.size() > 0 //
                 ? ArrayUtils.add(clmnParams.values().toArray(new Object[0]), added) //
@@ -720,6 +842,56 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         return queryBuf.toString();
     }
+
+    /**
+     * 데이터 생성에 사용될 Query를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 11. 29.        박준홍         최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param method
+     *            구현 클래스의 {@link Method}
+     * @param whereArgs
+     *            쿼리 Where 절 파라미터
+     * @return
+     *
+     * @since 2022. 11. 29.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected abstract String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs);
+
+    /**
+     * 데이터 생성에 사용될 쿼리를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2022. 11. 29.        박준홍         최초 작성
+     * </pre>
+     *
+     * @param <E>
+     * @param data
+     *            추가할 데이터
+     * @param method
+     *            구현 클래스의 {@link Method}
+     * @param whereArgs
+     *            쿼리 Where 절 파라미터
+     * @return
+     *
+     * @since 2022. 11. 29.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected abstract String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs);
 
     /**
      * 데이터 정렬과 Pagination을 지원하는 쿼리를 제공합니다.<br>
@@ -1938,16 +2110,21 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param data
+     *            추가할 데이터
      * @param method
+     *            구현 클래스의 {@link Method}
      * @param whereArgs
+     *            쿼리 Where 절 파라미터
      * @return
      *
      * @since 2022. 11. 2.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
+    @SuppressWarnings("unchecked")
     protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
-        throw new UnsupportedOperationException(getClass().getSimpleName() + "는 아직 이 기능을 지원하지 않습니다.");
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrNothing(data, method, whereArgs);
+        return executeUpdate(broker);
     }
 
     /**
@@ -1963,7 +2140,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param data
+     *            추가할 데이터
      * @param whereArgs
+     *            쿼리 Where 절 파라미터
      * @return
      *
      * @since 2022. 11. 2.
@@ -1987,16 +2166,21 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param data
+     *            추가할 데이터
      * @param method
+     *            구현 클래스의 {@link Method}
      * @param whereArgs
+     *            쿼리 Where 절 파라미터
      * @return
      *
      * @since 2022. 7. 13.
      * @version 2.0.0
      * @author parkjunhong77@gmail.com
      */
+    @SuppressWarnings("unchecked")
     protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
-        throw new UnsupportedOperationException(getClass().getSimpleName() + "는 아직 이 기능을 지원하지 않습니다.");
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrUpdate(data, method, whereArgs);
+        return executeUpdate(broker);
     }
 
     /**
@@ -2012,7 +2196,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * </pre>
      *
      * @param data
+     *            추가할 데이터
      * @param whereArgs
+     *            쿼리 Where 절 파라미터
      * @return
      *
      * @since 2022. 7. 14.

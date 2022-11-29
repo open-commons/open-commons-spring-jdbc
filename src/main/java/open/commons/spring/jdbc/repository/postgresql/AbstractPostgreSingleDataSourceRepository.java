@@ -32,9 +32,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
 
-import open.commons.core.Result;
 import open.commons.core.annotation.ColumnValue;
-import open.commons.core.function.SQLConsumer;
 import open.commons.core.utils.AnnotationUtils;
 import open.commons.core.utils.SQLUtils;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
@@ -91,12 +89,13 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
     public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         super(entityType, forceToPrimitive);
     }
-    
+
     /**
      * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
      * 
      * 참고: https://www.postgresql.org/docs/&lt;versoin&gt;/sql-insert.html<br>
      * Supported Versions: 15 / 14 / 13 / 12 / 11 / 10
+     * 
      * <pre>
      * [ WITH [ RECURSIVE ] with_query [, ...] ]
      * INSERT INTO table_name [ AS alias ] [ ( column_name [, ...] ) ]
@@ -123,28 +122,24 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *                   } [, ...]
      *               [ WHERE condition ]
      * </pre>
-     *  
+     * 
      * <pre>
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
      * 2022. 11. 2.     박준홍         최초 작성
+     * 2022. 11. 29.    박준홍         메소드 이관.
      * </pre>
-     *
-     * @param data
-     * @param method
-     * @param whereArgs
      * 
-     * @return
-     * 
-     * @since 2022. 11. 2.
+     * @since 2022. 11. 29.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrNothingBy(java.lang.Object, java.lang.reflect.Method, java.lang.Object[])
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrNothing(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
         // #1. 데이터 변경 쿼리 생성
         List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
                 .collect(Collectors.toList()) //
@@ -170,9 +165,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
             }
         }
 
-        logger.debug("query={}, data={}", queryBuf.toString(), data);
-
-        return executeUpdate(queryBuf.toString(), SQLConsumer.setParameters(data));
+        return queryBuf.toString();
     }
 
     /**
@@ -180,6 +173,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * 
      * 참고: https://www.postgresql.org/docs/&lt;versoin&gt;/sql-insert.html<br>
      * Supported Versions: 15 / 14 / 13 / 12 / 11 / 10
+     * 
      * <pre>
      * [ WITH [ RECURSIVE ] with_query [, ...] ]
      * INSERT INTO table_name [ AS alias ] [ ( column_name [, ...] ) ]
@@ -213,22 +207,18 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * ------------------------------------------
      * 2022. 7. 14.     박준홍         최초 작성
      * 2022. 11. 1.     박준홍         실제 구현
+     * 2022. 11. 29.    박준홍         메소드 이관
      * </pre>
      * 
-     * @param data
-     * @param method
-     * @param whereArgs
-     * 
-     * @since 2022. 7. 14.
+     * @since 2022. 11. 29.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrUpdateBy(java.lang.Object,
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrUpdate(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
-
+    protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
         // #1. 데이터 변경 쿼리 생성
         List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
                 .collect(Collectors.toList()) //
@@ -258,9 +248,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
             }
         }
 
-        logger.debug("query={}, data={}", queryBuf.toString(), data);
-
-        return executeUpdate(queryBuf.toString(), SQLConsumer.setParameters(data));
+        return queryBuf.toString();
     }
 
     /**

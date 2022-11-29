@@ -344,7 +344,7 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 30.
-     * @version _._._
+     * @version 0.0.6
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     default <E, P> Result<List<E>> getList(@NotNull String query, int partitionSize, @NotNull Class<E> type, String... columns) {

@@ -35,7 +35,6 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import open.commons.core.Result;
-import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.text.NamedTemplate;
 import open.commons.spring.jdbc.repository.AbstractGenericRepository;
@@ -143,36 +142,72 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
 
     /**
      *
-     * @since 2021. 12. 16.
-     * @version _._._
+     * @since 2022. 11. 29.
+     * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
-     *      open.commons.function.SQLTripleFunction, int, java.lang.String)
-     * 
-     * @deprecated Use {@link AbstractGenericRepository#insert(List, int)}
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createParametersForInsertOrNothing(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String valueQuery) {
-        throw new UnsupportedOperationException("#insert(List<T>, int) 를 사용하세요.");
+    protected Object createParametersForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+
+        // #1. 'USING DUAL ON' 파라미터
+        List<String> pkClmns = getVariableBindingColumnNames(method);
+        Object[] paramsUsingDualOn = getColumnValues(data, pkClmns);
+        // #2. 'INSERT' 파라미터
+        List<String> insertColumn = getColumnNames();
+        Object[] paramsInsert = getColumnValues(data, insertColumn);
+
+        Object[] params = new Object[paramsUsingDualOn.length + paramsInsert.length];
+        System.arraycopy(paramsUsingDualOn, 0, params, 0, paramsUsingDualOn.length);
+        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length, paramsInsert.length);
+
+        return params;
+
     }
 
     /**
      *
-     * @since 2022. 11. 2.
+     * @since 2022. 11. 29.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrNothingBy(java.lang.Object,
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createParametersForInsertOrUpdate(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
-        if (whereArgs == null || whereArgs.length < 1 || getVariableBindingColumnNames(method).isEmpty()) {
-            return insert(data);
-        }
+    protected Object createParametersForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
 
+        // #1. 'USING DUAL ON' 파라미터
+        List<String> pkClmns = getVariableBindingColumnNames(method);
+        Object[] paramsUsingDualOn = getColumnValues(data, pkClmns);
+        // #2. 'UPDATE SET' 파라미터
+        List<String> updatableClmns = getUpdatableColumnNames();
+        Object[] paramsUpdateSet = getColumnValues(data, updatableClmns);
+        // #3. 'INSERT' 파라미터
+        List<String> insertColumn = getColumnNames();
+        Object[] paramsInsert = getColumnValues(data, insertColumn);
+
+        Object[] params = new Object[paramsUsingDualOn.length + paramsUpdateSet.length + paramsInsert.length];
+        System.arraycopy(paramsUsingDualOn, 0, params, 0, paramsUsingDualOn.length);
+        System.arraycopy(paramsUpdateSet, 0, params, paramsUsingDualOn.length, paramsUpdateSet.length);
+        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length + paramsUpdateSet.length, paramsInsert.length);
+
+        return params;
+    }
+
+    /**
+     *
+     * @since 2022. 11. 29.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrNothing(java.lang.Object,
+     *      java.lang.reflect.Method, java.lang.Object[])
+     */
+    @Override
+    protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
         // #0. 쿼리 구문 선언
         NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_NOTHING);
 
@@ -183,8 +218,6 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
                         .map(clmn -> clmn + " = ?") //
                         .collect(Collectors.toList()) //
         );
-        // #1-1. 'USING DUAL ON' 파라미터
-        Object[] paramsUsingDualOn = getColumnValues(data, pkClmns);
 
         // #2. 'INSERT' 쿼리
         String clauseInsert = new StringBuffer() //
@@ -196,52 +229,26 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
                 .append(queryForVariableBinding()) //
                 .append(") ") //
                 .toString();
-        // #2-1. 'INSERT' 파라미터
-        Object[] paramsInsert = getColumnValues(data, getColumnNames());
 
         // #3. 쿼리 & 파라미터 병합
         queryTpl.addValue(TN_TABLE_NAME, getTableName());
         queryTpl.addValue(TN_USING_DUAL_ON, clauseUsingDualOn);
         queryTpl.addValue(TN_INSERT, clauseInsert);
 
-        Object[] params = new Object[paramsUsingDualOn.length + paramsInsert.length];
-        System.arraycopy(paramsUsingDualOn, 0, params, 0, paramsUsingDualOn.length);
-        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length, paramsInsert.length);
-
-        logger.debug("query={}, data={}", queryTpl.format(), params);
-
-        return executeUpdate(queryTpl.format(), SQLConsumer.setParameters(params));
+        return queryTpl.format();
     }
 
     /**
-     * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
-     * 
-     * 파라미터 중에 2번째({@link Method}), 3번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지 않을 수도 있습니다.
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜      | 작성자   |   내용
-     * ------------------------------------------
-     * 2022. 7. 14.     박준홍         최초 작성
-     * </pre>
      *
-     * @param data
-     * @param method
-     * @param whereArgs
-     *
-     * @since 2022. 7. 14.
+     * @since 2022. 11. 29.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#insertOrUpdateBy(java.lang.Object,
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrUpdate(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
-
-        if (whereArgs == null || whereArgs.length < 1 || getVariableBindingColumnNames(method).isEmpty()) {
-            return insert(data);
-        }
+    protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
 
         // #0. 쿼리 구문 선언
         NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_UPDATE);
@@ -253,14 +260,9 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
                         .map(clmn -> clmn + " = ?") //
                         .collect(Collectors.toList()) //
         );
-        // #1-1. 'USING DUAL ON' 파라미터
-        Object[] paramsUsingDualOn = getColumnValues(data, pkClmns);
 
         // #2. 'UPDATE SET' 쿼리
         String clauseUpdateSet = createColumnAssignQueries(new StringBuffer(), ",", getUpdatableColumnValues()).toString();
-        // #2-1. 'UPDATE SET' 파라미터
-        List<String> updatableClmns = getUpdatableColumnNames();
-        Object[] paramsUpdateSet = getColumnValues(data, updatableClmns);
 
         // #3. 'INSERT' 쿼리
         String clauseInsert = new StringBuffer() //
@@ -272,8 +274,6 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
                 .append(queryForVariableBinding()) //
                 .append(") ") //
                 .toString();
-        // #3-1. 'INSERT' 파라미터
-        Object[] paramsInsert = getColumnValues(data, getColumnNames());
 
         // #4. 쿼리 & 파라미터 병합
         queryTpl.addValue(TN_TABLE_NAME, getTableName());
@@ -281,14 +281,24 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
         queryTpl.addValue(TN_UPDATE_SET, clauseUpdateSet);
         queryTpl.addValue(TN_INSERT, clauseInsert);
 
-        Object[] params = new Object[paramsUsingDualOn.length + paramsUpdateSet.length + paramsInsert.length];
-        System.arraycopy(paramsUsingDualOn, 0, params, 0, paramsUsingDualOn.length);
-        System.arraycopy(paramsUpdateSet, 0, params, paramsUsingDualOn.length, paramsUpdateSet.length);
-        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length + paramsUpdateSet.length, paramsInsert.length);
+        return queryTpl.format();
+    }
 
-        logger.debug("query={}, data={}", queryTpl.format(), params);
-
-        return executeUpdate(queryTpl.format(), SQLConsumer.setParameters(params));
+    /**
+     *
+     * @since 2021. 12. 16.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
+     *      open.commons.function.SQLTripleFunction, int, java.lang.String)
+     * 
+     * @deprecated Use {@link AbstractGenericRepository#insert(List, int)}
+     */
+    @Override
+    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            @NotNull String valueQuery) {
+        throw new UnsupportedOperationException("#insert(List<T>, int) 를 사용하세요.");
     }
 
     /**

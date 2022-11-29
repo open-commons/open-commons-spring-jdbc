@@ -36,7 +36,7 @@ import org.springframework.jdbc.core.PreparedStatementCallback;
  * 
  * @since 2019. 3. 28.
  * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
- * @version _._._
+ * @version 0.0.1
  */
 public class DefaultPreparedStatementCallback<T> implements PreparedStatementCallback<T> {
 
@@ -51,7 +51,7 @@ public class DefaultPreparedStatementCallback<T> implements PreparedStatementCal
      * </pre>
      *
      * @since 2019. 3. 28.
-     * @version _._._
+     * @version 0.0.1
      */
     public DefaultPreparedStatementCallback() {
     }
