@@ -1,3 +1,8 @@
+[2023/01/11]
+- Add
+  + open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder
+    + at(): 데이터가 사용되는 위치
+
 [2022/11/25]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository

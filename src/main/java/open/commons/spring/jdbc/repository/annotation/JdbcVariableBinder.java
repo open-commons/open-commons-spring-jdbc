@@ -48,19 +48,37 @@ import open.commons.core.annotation.ColumnValue;
 public @interface JdbcVariableBinder {
 
     /**
+     * 데이터가 사용되는 위치 <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2023. 1. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2023. 1. 11.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    ColumnLocation at() default ColumnLocation.WHERE;
+
+    /**
      * 컬럼명을 제공합니다.<br>
      * 
      * <pre>
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 1. 22.      박준홍         최초 작성
+     * 2021. 12. 13.      박준홍         최초 작성
      * </pre>
      *
      * @return
      *
-     * @since 2020. 1. 22.
-     * @version 1.6.17
+     * @since 2021. 12. 13.
+     * @version 0.3.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see ColumnValue#name()
@@ -93,19 +111,60 @@ public @interface JdbcVariableBinder {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 1.     박준홍         최초 작성
+     * 2021. 12. 13.     박준홍         최초 작성
      * </pre>
      *
      * @return
      *
-     * @since 2021. 12. 1.
-     * @version 1.8.0
+     * @since 2021. 12. 13.
+     * @version 0.3.0
      * @author Park Jun-Hong (parkjunhong77@gmail.com)
      * 
      * @see ColumnValue#variableBinding()
      */
     String variableBinding() default "?";
 
+    /**
+     * 컬럼이 적용되는 위치.
+     * 
+     * @since 2023. 1. 11.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public static enum ColumnLocation {
+        /**
+         * 'UPDATE' 쿼리의 'SET' 컬럼 설정 부분<br>
+         * 
+         * <pre>
+         * UPDATE &lt;table&gt; SET &lt;column&gt; = ...
+         * </pre>
+         */
+        UPDATE_SET, //
+        /**
+         * 'WHEREH' 컬럼 설정 부분<br>
+         * 
+         * <pre>
+         * ... WHERE <column> LOGICAl_OP ...
+         * </pre>
+         */
+        WHERE, //
+        /**
+         * 'INSERT' 컬럼 설정 부분<br>
+         * 
+         * <pre>
+         * INSERT INTO &lt;table&gt; ( &lt;column&gt; ...) VALUES ( ...
+         * </pre>
+         */
+        INSERT, //
+    }
+
+    /**
+     * 'WHERE' 구문에 사용되는 논리연산자.
+     * 
+     * @since 2021. 12. 13.
+     * @version 0.3.0
+     * @author parkjunhong77@gmail.com
+     */
     public static enum WhereCompare {
         EQ("="), //
         GE(">="), //
@@ -134,6 +193,8 @@ public @interface JdbcVariableBinder {
         NOT_LIKE_POST("NOT LIKE"), //
         /** format: */
         IS_NOT_NULL("IS NOT NULL"), //
+        /** 지원하지 않는 위치 */
+        UNSUPPORTED("UNSUPPORTED"), //
         ;
 
         private final String op;
