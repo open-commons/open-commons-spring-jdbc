@@ -2815,7 +2815,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 11. 30.
@@ -2865,7 +2866,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 3.
@@ -2926,7 +2928,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 3.
@@ -2989,7 +2992,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      *
      * @return
      *
@@ -3047,7 +3051,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
@@ -3113,7 +3118,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
@@ -3183,7 +3189,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 9.
@@ -3245,7 +3252,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 3.
@@ -3319,7 +3327,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 9.
@@ -3409,7 +3418,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      *
      * @return
      *
@@ -3484,7 +3494,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
@@ -3552,7 +3563,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
@@ -3635,7 +3647,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
@@ -3733,7 +3746,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *            <li>포맷: {column} {direction}<br>
      *            <li>예: name asc
      * @param columnNames
-     *            컬럼 목록
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
@@ -3800,6 +3814,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
@@ -3872,6 +3888,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
@@ -3942,6 +3960,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
@@ -4016,6 +4036,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
+     *            요청쿼리 처리 결과에서 필요한 컬럼이름.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
