@@ -1393,6 +1393,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 break;
             case LIKE:
                 buf.append(vb.operator().get());
+                buf.append(" ");
                 buf.append(vb.variableBinding());
                 whereArgs[posParam] = String.join((String) whereArgs[posParam], "%", "%");
                 break;

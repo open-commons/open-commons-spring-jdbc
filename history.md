@@ -1,3 +1,8 @@
+[2023/08/02]
+- Bugfix
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + getAssignQuery(JdbcVariableBinder, int, Object...): WhereCompare.LIKE 처리 로직 버그 수정. (연산자와  '?' 사이 빈칸 누락 버그)
+
 [2023/01/11]
 - Add
   + open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder
