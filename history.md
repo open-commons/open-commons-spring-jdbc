@@ -1,3 +1,8 @@
+[2023/08/07]
+- Bugfix
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + createQueryForOrderByForPagination(int, Object[], int, int, String...): 메소드 거리값 증가 누락 버그 수정
+    
 [2023/08/02]
 - Bugfix
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;

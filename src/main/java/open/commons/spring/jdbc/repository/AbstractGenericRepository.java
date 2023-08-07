@@ -909,6 +909,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2022. 2. 10.		박준홍			최초 작성
+     * 2023. 8. 7.      박준홍         메소드 거리값 증가 누락 버그 수정
      * </pre>
      * 
      * @param distance
@@ -932,7 +933,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected String createQueryForOrderByForPagination(int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
-        return createQueryForOrderByQueryForPagination(QUERY_FOR_SELECT, distance, whereArgs, offset, limit, orderByArgs);
+        return createQueryForOrderByQueryForPagination(QUERY_FOR_SELECT, distance + 1, whereArgs, offset, limit, orderByArgs);
     }
 
     /**
