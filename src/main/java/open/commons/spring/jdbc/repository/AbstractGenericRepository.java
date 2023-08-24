@@ -159,6 +159,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     protected final String QUERY_FOR_COUNT;
 
+    /** 데이터를 제공하는 메소드가 없는 경우 로그 미발생 여부 */
+    protected final boolean ignoreNoDataMethod;
+
     /**
      * <pre>
      * [개정이력]
@@ -173,10 +176,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      * 
-     * @see #AbstractGenericRepository(Class, boolean)
+     * @see #AbstractGenericRepository(Class, boolean, boolean)
      */
     public AbstractGenericRepository(@NotNull Class<T> entityType) {
-        this(entityType, true);
+        this(entityType, true, true);
     }
 
     /**
@@ -194,8 +197,34 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @since 2021. 11. 26.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
+     * 
+     * @see #AbstractGenericRepository(Class, boolean, boolean)
      */
     public AbstractGenericRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+        this(entityType, forceToPrimitive, true);
+    }
+
+    /**
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2023. 8. 24.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param entityType
+     *            DBMS Table에 연결된 데이터 타입.
+     * @param forceToPrimitive
+     *            Wrapper class인 경우 Primitive 타입으로 강제로 변환할지 여부.
+     * @param ignoreNoDataMethod
+     *            데이터를 제공하는 메소드가 없는 경우 로그 미발생 여부
+     *
+     * @since 2023. 8. 24.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public AbstractGenericRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+
         this.entityType = entityType;
         this.tableName = getTableName();
 
@@ -213,6 +242,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         this.forceToPrimitive = forceToPrimitive;
 
         this.QUERY_FOR_COUNT = String.join(" ", "SELECT count(*) AS count FROM", getTableName());
+
+        this.ignoreNoDataMethod = ignoreNoDataMethod;
     }
 
     /**

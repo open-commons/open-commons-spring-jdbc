@@ -1,3 +1,8 @@
+[2023/08/24]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository<T>
+    + AbstractGenericRepository(Class&lt;T&gt;, boolean, boolean): 데이터를 제공하는 메소드가 없는 경우 로그 미발생 여부 추가
+
 [2023/08/07]
 - Bugfix
   + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
