@@ -225,6 +225,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      */
     public AbstractGenericRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
 
+        this.ignoreNoDataMethod = ignoreNoDataMethod;
+        
         this.entityType = entityType;
         this.tableName = getTableName();
 
@@ -243,7 +245,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         this.QUERY_FOR_COUNT = String.join(" ", "SELECT count(*) AS count FROM", getTableName());
 
-        this.ignoreNoDataMethod = ignoreNoDataMethod;
     }
 
     /**
