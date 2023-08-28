@@ -87,7 +87,33 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @author parkjunhong77@gmail.com
      */
     public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
-        super(entityType, forceToPrimitive);
+        this(entityType, forceToPrimitive, true);
+    }
+
+    /**
+     * 
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2023. 8. 28.     박준홍         최초 작성
+     * </pre>
+     *
+     * @param entityType
+     *            DBMS Table에 연결된 데이터 타입.
+     * @param forceToPrimitive
+     *            Wrapper class인 경우 Primitive 타입으로 강제로 변환할지 여부.
+     * @param ignoreNoDataMethod
+     *            데이터를 제공하는 메소드가 없는 경우 로그 미발생 여부
+     *
+     * @since 2023. 8. 28.
+     * @version 0.4.0
+     * @author parkjunhong77@gmail.com
+     */
+    public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+        super(entityType, forceToPrimitive, ignoreNoDataMethod);
     }
 
     /**
