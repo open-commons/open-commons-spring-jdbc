@@ -1,3 +1,19 @@
+[2023/10/20]
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + open.commons.spring.jdbc.repository.AbstractGenericRepository.createWhereClause(List&lt;Parameter&gt;, String, Object...): open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder의 편의기능(#name이 설정되지 않은 경우 파라미터 이름을 사용)을 지원하기 위한 기능
+    + PARAMETER_COLUMN_NAME : Function&lt;Parameter, String&gt;: open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder의 편의기능(#name이 설정되지 않은 경우 파라미터 이름을 사용)을 지원하기 위한 기능
+    + PARAMETER_JDBC_VARIABLE_BINDER : Function&lt;Parameter, JdbcVariableBinder&gt;: open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder의 편의기능(#name이 설정되지 않은 경우 파라미터 이름을 사용)을 지원하기 위한 기능
+  + open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder
+    + columnNameType(): DB Column Name 타입 지정.
+    
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;
+    + addWhereClause(StringBuffer, Method, Object...): open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder의 편의기능(#name이 설정되지 않은 경우 파라미터 이름을 사용)을 지원하기 위한 기능
+    + attachWhereClause(String, Method, Object...): open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder의 편의기능(#name이 설정되지 않은 경우 파라미터 이름을 사용)을 지원하기 위한 기능
+    + getAssignQuery(JdbcVariableBinder, int, Object...): open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder의 편의기능(#name이 설정되지 않은 경우 파라미터 이름을 사용)을 지원하기 위한 기능
+    + getVariableBindingColumnNames(Method): open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder의 편의기능(#name이 설정되지 않은 경우 파라미터 이름을 사용)을 지원하기 위한 기능
+
 [2023/08/24]
 - Add
   + open.commons.spring.jdbc.repository.AbstractGenericRepository<T>

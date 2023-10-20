@@ -33,6 +33,7 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+import open.commons.core.annotation.ColumnDef.ColumnNameType;
 import open.commons.core.annotation.ColumnValue;
 
 /**
@@ -64,6 +65,27 @@ public @interface JdbcVariableBinder {
      * @author parkjunhong77@gmail.com
      */
     ColumnLocation at() default ColumnLocation.WHERE;
+
+    /**
+     * 컬럼명을 변환하는 방식.<br>
+     * 프로그래밍 언어와 DBMS 간 명명규칙이 상이하기 때문에 필요. <br>
+     * <b>기본값: {@link ColumnNameType#NAME}</b>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜      | 작성자   |   내용
+     * ------------------------------------------
+     * 2023. 10. 19.     박준홍         최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2020. 1. 16.
+     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @see ColumnNameType
+     */
+    ColumnNameType columnNameType() default ColumnNameType.NAME;
 
     /**
      * 컬럼명을 제공합니다.<br>

@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -82,8 +83,33 @@ import open.commons.spring.jdbc.repository.exceptions.UnsupportedVariableBinding
  */
 public abstract class AbstractGenericRepository<T> extends AbstractGenericDao implements IGenericRepository<T> {
 
+    /**
+     * {@link Parameter}에 설정된 {@link JdbcVariableBinder}를 제공합니다.<br>
+     * 
+     * @param p
+     *            메소드 파라미터
+     * @return
+     */
+    private static final Function<Parameter, JdbcVariableBinder> PARAMETER_JDBC_VARIABLE_BINDER = p -> {
+        return p.getAnnotation(JdbcVariableBinder.class);
+    };
+
+    /**
+     * {@link Parameter}에 설정된 {@link JdbcVariableBinder#name()} 값을 제공합니다.<br>
+     * 단, {@link JdbcVariableBinder#name()}값이 빈 문자열인 경우, {@link Parameter#getName()}값을 제공합니다.
+     * 
+     * @param p
+     *            메소드 파라미터
+     * @return
+     */
+    private static final Function<Parameter, String> PARAMETER_COLUMN_NAME = p -> {
+        JdbcVariableBinder b = PARAMETER_JDBC_VARIABLE_BINDER.apply(p);
+        return SQLUtils.getColumnName(b.name(), b.columnNameType(), p.getName());
+    };
+
     /** DB Table 데이터 타입. */
     protected final Class<T> entityType;
+
     /**
      * 테이블 이름<br>
      *
@@ -108,7 +134,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see #queryForSelect()
      */
     protected final String QUERY_FOR_SELECT;
-
     /**
      * 여러 개 데이터를 추가하는 쿼리 중 테이블 및 데이터 선언 관련 쿼리<br>
      * 
@@ -127,6 +152,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see #queryForPartitionConcatValue()
      */
     protected final String QUERY_FOR_PARTITION_CONCAT_VQ;
+
     /**
      * 여러 개 데이터를 추가하는 쿼리 중 마지막 쿼리<br>
      * 
@@ -226,7 +252,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     public AbstractGenericRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
 
         this.ignoreNoDataMethod = ignoreNoDataMethod;
-        
+
         this.entityType = entityType;
         this.tableName = getTableName();
 
@@ -368,8 +394,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
             logger.info("쿼리에 사용될 컬럼 개수({})와 파라미터 개수({})가 일치하지 않습니다.", columns.size(), whereArgs.length);
         }
 
+        List<Parameter> parameters = getVariableBindingParameters(method);
+
         queryBuf.append(" ");
-        queryBuf.append(createWhereClause(columns, "AND", whereArgs));
+        queryBuf.append(createWhereClause(parameters, "AND", whereArgs));
     }
 
     /**
@@ -495,12 +523,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected String attachWhereClause(String queryHeader, @NotNull Method method, Object... whereArgs) {
 
         List<JdbcVariableBinder> columns = getVariableBinders(method);
-
         if (hasNoWhereCompares(columns, WhereCompare.IN, WhereCompare.NOT_IN) && columns.size() != whereArgs.length) {
             logger.info("쿼리에 사용될 컬럼 개수({})와 파라미터 개수({})가 일치하지 않습니다.", columns.size(), whereArgs.length);
         }
 
-        return String.join(" ", queryHeader, createWhereClause(columns, "AND", whereArgs));
+        List<Parameter> parameters = getVariableBindingParameters(method);
+
+        return String.join(" ", queryHeader, createWhereClause(parameters, "AND", whereArgs));
     }
 
     /**
@@ -1200,22 +1229,28 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 29.		박준홍			최초 작성
+     * 2023. 10. 19.        박준홍     파라미터에서 
+     *                                  - {@link JdbcVariableBinder} 제거.
+     *                                  - {@link Parameter} 추가
+     *                                 이에 따라 {@link Parameter}을 이용하여 내부 로직 변경.
      * </pre>
-     *
-     * @param columns
+     * 
+     * @param parameters
+     *            {@link JdbcVariableBinder}가 설정된 {@link Parameter} 목록
      * @param concatenator
      *            Where 구문 컬럼 접속자
      * @param whereArgs
      *            파라미터 개수
+     *
      * @return
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected String createWhereClause(@NotNull List<JdbcVariableBinder> columns, String concatenator, Object... whereArgs) {
+    protected String createWhereClause(List<Parameter> parameters, String concatenator, Object... whereArgs) {
 
-        if (columns.size() < 1) {
+        if (parameters.size() < 1) {
             return "";
         }
 
@@ -1224,25 +1259,30 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         buf.append("WHERE");
         buf.append(" ");
 
-        Iterator<JdbcVariableBinder> itr = columns.iterator();
+        Iterator<Parameter> itrParams = parameters.iterator();
 
         int paramCount = whereArgs.length;
         int posParam = 0;
 
-        JdbcVariableBinder vbNow = itr.next();
-        buf.append(getAssignQuery(vbNow, posParam, whereArgs));
+        Parameter paramNow = itrParams.next();
+
+        buf.append(PARAMETER_COLUMN_NAME.apply(paramNow));
+        buf.append(" ");
+
+        buf.append(getAssignQuery(PARAMETER_JDBC_VARIABLE_BINDER.apply(paramNow), posParam, whereArgs));
         paramCount--;
 
         boolean hasNext = true;
         while (hasNext) {
             posParam++;
-            JdbcVariableBinder vbLatest = vbNow;
-            switch (vbLatest.operator()) {
+
+            Parameter paramLatest = paramNow;
+            switch (PARAMETER_JDBC_VARIABLE_BINDER.apply(paramLatest).operator()) {
                 case IN:
                 case NOT_IN:
-                    if (itr.hasNext()) {
-                        throw new UnsupportedVariableBindingException(
-                                String.format("'IN' 구문 이후에 다른 연산자가 오는 경우는 지원하지 않습니다. 연산자=%s", columns.stream().map(c -> c.operator().get()).collect(Collectors.toList())));
+                    if (itrParams.hasNext()) {
+                        throw new UnsupportedVariableBindingException(String.format("'IN' 구문 이후에 다른 연산자가 오는 경우는 지원하지 않습니다. 연산자=%s",
+                                parameters.stream().map(p -> p.getAnnotation(JdbcVariableBinder.class)).map(c -> c.operator().get()).collect(Collectors.toList())));
                     }
                     for (int i = 0; i < paramCount; i++) {
                         buf.append(", ");
@@ -1252,16 +1292,21 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                     hasNext = false;
                     break;
                 default:
-                    if (!itr.hasNext()) {
+                    if (!itrParams.hasNext()) {
                         hasNext = false;
                         break;
                     }
 
-                    vbNow = itr.next();
+                    paramNow = itrParams.next();
+
                     buf.append(" ");
                     buf.append(concatenator);
                     buf.append(" ");
-                    buf.append(getAssignQuery(vbNow, posParam, whereArgs));
+
+                    buf.append(PARAMETER_COLUMN_NAME.apply(paramNow));
+                    buf.append(" ");
+
+                    buf.append(getAssignQuery(PARAMETER_JDBC_VARIABLE_BINDER.apply(paramNow), posParam, whereArgs));
                     paramCount--;
                     break;
             }
@@ -1404,8 +1449,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         StringBuffer buf = new StringBuffer();
 
-        buf.append(vb.name());
-        buf.append(" ");
+        // 호출하는 함수로 이관
+        // buf.append(vb.name());
+        // buf.append(" ");
 
         switch (vb.operator()) {
             case EQ:
@@ -2029,6 +2075,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 29.		박준홍			최초 작성
+     * 2023. 10. 19.        박준홍     {@link JdbcVariableBinder#name()} 값이 빈 문자열일 경우 {@link Parameter#getName()} 값을 제공.
      * </pre>
      *
      * @param method
@@ -2042,7 +2089,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected List<String> getVariableBindingColumnNames(@NotNull Method method) {
 
         List<String> columnNames = getVariableBindingParametersAsStream(method) //
-                .map(p -> p.getAnnotation(JdbcVariableBinder.class).name()) //
+                .map(PARAMETER_COLUMN_NAME::apply) //
                 .collect(Collectors.toList());
 
         return columnNames;
