@@ -18,6 +18,17 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	
+	<developers>
+		<developer>
+			<name>Park, Jun-Hong</name>
+			<email>parkjunhong77@gmail.com</email>
+		</developer>
+	</developers>
+	<scm>
+		<url>https://github.com/parkjunhong/open-commons-spring-jdbc</url>
+		<developerConnection>parkjunhong77@gmail.com</developerConnection>
+	</scm>
 
 	<properties>
 		<!-- >>> begin: plugin dependencies -->
