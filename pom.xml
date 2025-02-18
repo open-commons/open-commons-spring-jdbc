@@ -39,10 +39,6 @@
 		<compile.encoding-version>UTF-8</compile.encoding-version>
 		<compile.source-version>1.8</compile.source-version>
 		<compile.target-version>1.8</compile.target-version>
-
-		<maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
-		<maven-source-plugin.version>2.2.1</maven-source-plugin.version>
-		<maven-javadoc-plugin.version>3.0.1</maven-javadoc-plugin.version>
 		<!-- >>> end: plugin dependencies -->
 
 		<!-- >>> begin: dependencies -->
