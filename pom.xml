@@ -5,10 +5,12 @@
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>2.7.15</version>
 	</parent>
-	<groupId>open.commons</groupId>
+	<groupId>io.github.open-commons</groupId>
 	<artifactId>open-commons-spring-jdbc</artifactId>
 	<version>0.5.0-SNAPSHOT</version>
 	<name>Open Commons for Spring JDBC</name>
+	<description>Open Commons Spring JDBC Project</description>
+	<url>https://github.com/open-commons/open-commons-spring-jdbc</url>
 
 	<licenses>
 		<license>
@@ -17,17 +19,21 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
+	
+	<scm>
+		<connection>scm:git:https://github.com/open-commons/open-commons-spring-jdbc.git</connection>
+		<developerConnection>scm:git:https://github.com/open-commons/open-commons-spring-jdbc.git</developerConnection>
+		<url>https://github.com/open-commons/open-commons-spring-jdbc</url>
+	</scm>
 
 	<developers>
 		<developer>
 			<name>Park, Jun-Hong</name>
 			<email>parkjunhong77@gmail.com</email>
+			<organization>https://github.com/open-commons</organization>
+			<organizationUrl>https://github.com/open-commons</organizationUrl>
 		</developer>
 	</developers>
-	<scm>
-		<url>https://github.com/parkjunhong/open-commons-spring-jdbc</url>
-		<developerConnection>parkjunhong77@gmail.com</developerConnection>
-	</scm>
 
 	<properties>
 		<!-- >>> begin: plugin dependencies -->
@@ -50,12 +56,11 @@
 
 	<distributionManagement>
 		<repository>
-			<id>releases</id>
-			<name>Release Repository</name>
-			<url>https://nexus3.ymtech.co.kr/repository/maven-releases/</url>
+			<id>maven-central</id>
+			<url>https://central.sonatype.com</url>
 		</repository>
 		<snapshotRepository>
-			<id>snapshots</id>
+			<id>ymtech-maven-repo</id>
 			<name>Snapshot Repository</name>
 			<url>https://nexus3.ymtech.co.kr/repository/maven-snapshots/</url>
 		</snapshotRepository>
@@ -156,7 +161,7 @@
 
 		<!-- >>> begin: open-commons -->
 		<dependency>
-			<groupId>open.commons</groupId>
+			<groupId>io.github.open-commons</groupId>
 			<artifactId>open-commons-core</artifactId>
 			<version>${open-commons-core.version}</version>
 		</dependency>
@@ -255,6 +260,33 @@
 				</executions>
 			</plugin>
 			<!-- <<< end: javadoc -->
+			<!-- Maven Central Deployment plugin -->
+			<plugin>
+				<groupId>org.sonatype.central</groupId>
+				<artifactId>central-publishing-maven-plugin</artifactId>
+				<version>0.7.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<publishingServerId>maven-central</publishingServerId>
+					<!-- autoPublish>true</autoPublish>
+             		<waitUntil>published</waitUntil -->
+				</configuration>
+			</plugin>
+			<!-- GPG signature plugin -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 	</build>
 </project>
