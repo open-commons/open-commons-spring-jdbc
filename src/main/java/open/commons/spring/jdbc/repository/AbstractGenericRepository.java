@@ -1913,6 +1913,38 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * 테이블에서 Primary Key로 사용 중인 컬럼 정보를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 1.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2025. 4. 1.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final List<String> getPrimaryKeys() {
+
+        // #1. Method: ColumnValue.primaryKey() 값이 true 경우
+        List<Method> columns = getColumnMethods();
+        if (columns.size() < 1) {
+            return null;
+        }
+
+        return columns.stream().filter(m -> {
+            ColumnValue annoCv = m.getAnnotation(ColumnValue.class);
+            return annoCv != null && annoCv.primaryKey();
+        }).map(m -> SQLUtils.getColumnName(m))//
+                .collect(Collectors.toList()) //
+        ;
+    }
+
+    /**
      *
      * @since 2021. 12. 7.
      * @version 0.3.0

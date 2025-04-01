@@ -786,13 +786,13 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
      *         </ul>
-     *
+     * 
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
-    public <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) {
+    public <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
 
         Result<Integer> result = new Result<>();
 
@@ -1637,12 +1637,17 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
      *         </ul>
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, boolean required, String... columns) {
+    public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, boolean required, String... columns)
+            throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         return getObject(query, null, entity, required, columns);
     }
 
@@ -1667,12 +1672,15 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
      *         </ul>
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, String... columns) {
+    public <T> Result<T> getObject(@NotNull String query, @NotNull Class<T> entity, String... columns)
+            throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         return getObject(query, null, entity, false, columns);
     }
 
@@ -1701,12 +1709,17 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
      *         </ul>
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, boolean required, String... columns) {
+    public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, boolean required, String... columns)
+            throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         Result<T> result = new Result<>();
 
         try {
@@ -1758,12 +1771,15 @@ public abstract class AbstractGenericDao implements IGenericDao {
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
      *         </ul>
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, String... columns) {
+    public <T> Result<T> getObject(@NotNull String query, SQLConsumer<PreparedStatement> setter, @NotNull Class<T> entity, String... columns)
+            throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         return getObject(query, setter, entity, false, columns);
     }
 
@@ -1784,6 +1800,10 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
      * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2020. 7. 30.
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
@@ -1810,11 +1830,16 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
      * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2020. 7. 30.
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String... columns) {
+    public Result<Map<String, Object>> getObjectAsMap(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean required, String... columns)
+            throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         return getObject(query, setter, ENTITY_DTO_MAP, required, columns);
     }
 
@@ -1835,6 +1860,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
      * @return
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2020. 7. 30.
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
@@ -1858,6 +1885,8 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
      * @return
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2020. 7. 30.
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
@@ -1952,6 +1981,10 @@ public abstract class AbstractGenericDao implements IGenericDao {
      * @param converter
      *            컬럼에 해당하는 데이터를 받고자 하는 데이터 타입으로 변환하는 함수
      * @return
+     * @throws EmptyResultDataAccessException
+     *             required 값이 <code>true</code>인 경우 조회 결과가 없는 경우
+     * @throws IncorrectResultSizeDataAccessException
+     *             조회 결과 데이터 개수가 2개 이상인 경우
      *
      * @since 2022. 3. 2.
      * @version 1.8.0
