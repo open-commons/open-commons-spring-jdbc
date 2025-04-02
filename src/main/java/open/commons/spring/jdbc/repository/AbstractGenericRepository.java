@@ -32,10 +32,12 @@ import java.lang.reflect.Parameter;
 import java.sql.PreparedStatement;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -58,9 +60,11 @@ import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.util.ArrayItr;
 import open.commons.core.utils.ArrayUtils;
 import open.commons.core.utils.AssertUtils;
+import open.commons.core.utils.CollectionUtils;
 import open.commons.core.utils.ExceptionUtils;
 import open.commons.core.utils.ObjectUtils;
 import open.commons.core.utils.SQLUtils;
+import open.commons.core.utils.StringUtils;
 import open.commons.core.utils.ThreadUtils;
 import open.commons.spring.jdbc.dao.AbstractGenericDao;
 import open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder;
@@ -772,6 +776,102 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
+     * Primary Key가 중복되는 경우 데이터를 갱신하기 위한 데이터 제공 구문을 생성해서 제공합니다. <br>
+     * 
+     * 참고 쿼리
+     * 
+     * <pre>
+     * MERGE INTO TB_USER T
+     * USING (
+     *   SELECT 
+     *     'user001' AS ID, 
+     *     'cred_001' AS CREDENTIAL, 
+     *     'manager' AS TITLE,
+     *     'user001@newmail.com' AS EMAIL
+     * ) AS SRC
+     * ON (T.ID = SRC.ID AND T.CREDENTIAL = SRC.CREDENTIAL)
+     * WHEN MATCHED THEN
+     *   UPDATE SET T.EMAIL = SRC.EMAIL
+     * WHEN NOT MATCHED THEN
+     *   INSERT (ID, CREDENTIAL, TITLE, EMAIL)
+     *   VALUES (SRC.ID, SRC.CREDENTIAL, SRC.TITLE, SRC.EMAIL);
+     * </pre>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmns
+     *            컬럼 목록
+     * @param one
+     *            비교 테이블 1
+     * @param other
+     *            비교 테이블 2
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createMergeUsingOnClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
+        return clmns.stream().map(clmn -> new StringBuilder().append(one).append(".").append(clmn) //
+                .append(" = ") //
+                .append(other).append(".").append(clmn).toString()) //
+                .collect(Collectors.joining(" AND "));
+    }
+
+    /**
+     * Primary Key가 중복되는 경우 데이터를 갱신하기 위한 구문을 생성해서 제공합니다. <br>
+     * 
+     * 참고 쿼리
+     * 
+     * <pre>
+     * MERGE INTO TB_USER T
+     * USING (
+     *   SELECT 
+     *     'user001' AS ID, 
+     *     'cred_001' AS CREDENTIAL, 
+     *     'manager' AS TITLE,
+     *     'user001@newmail.com' AS EMAIL
+     * ) AS SRC
+     * ON (T.ID = SRC.ID AND T.CREDENTIAL = SRC.CREDENTIAL)
+     * WHEN MATCHED THEN
+     *   UPDATE SET T.EMAIL = SRC.EMAIL
+     * WHEN NOT MATCHED THEN
+     *   INSERT (ID, CREDENTIAL, TITLE, EMAIL)
+     *   VALUES (SRC.ID, SRC.CREDENTIAL, SRC.TITLE, SRC.EMAIL);
+     * </pre>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmns
+     *            컬럼 목록
+     * @param one
+     *            테이블 1
+     * @param other
+     *            테이블 2
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createUpdateSetClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
+        return clmns.stream().map(clmn -> new StringBuilder().append(one).append(".").append(clmn) //
+                .append(" = ") //
+                .append(other).append(".").append(clmn).toString()) //
+                .collect(Collectors.joining(", "));
+    }
+
+    /**
      * 정렬을 위한 Order By 구분을 생성하여 제공합니다. <br>
      * 패턴: <code>ORDER BY {column} {direction}(, {column} {direction})*</code>
      * 
@@ -1266,7 +1366,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
 
         Parameter paramNow = itrParams.next();
 
-        buf.append(PARAMETER_COLUMN_NAME.apply(paramNow));
+        buf.append(validateColumnName(PARAMETER_COLUMN_NAME.apply(paramNow)));
         buf.append(" ");
 
         buf.append(getAssignQuery(PARAMETER_JDBC_VARIABLE_BINDER.apply(paramNow), posParam, whereArgs));
@@ -1303,7 +1403,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                     buf.append(concatenator);
                     buf.append(" ");
 
-                    buf.append(PARAMETER_COLUMN_NAME.apply(paramNow));
+                    buf.append(validateColumnName(PARAMETER_COLUMN_NAME.apply(paramNow)));
                     buf.append(" ");
 
                     buf.append(getAssignQuery(PARAMETER_JDBC_VARIABLE_BINDER.apply(paramNow), posParam, whereArgs));
@@ -1568,6 +1668,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2022. 11. 25.		박준홍			최초 작성
+     * 2025. 4. 2           박준홍         DBMS Reserved Keyword 검증 적용
      * </pre>
      *
      * @param clmnValue
@@ -1596,6 +1697,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2021. 11. 26.		박준홍			최초 작성
+     * 2025. 4. 2           박준홍         DBMS Reserved Keyword 검증 적용
      * </pre>
      *
      * @return
@@ -1928,14 +2030,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    protected final List<String> getPrimaryKeys() {
+    protected final List<String> getPrimaryKeyColumns() {
 
-        // #1. Method: ColumnValue.primaryKey() 값이 true 경우
         List<Method> columns = getColumnMethods();
         if (columns.size() < 1) {
             return null;
         }
 
+        // Method: ColumnValue.primaryKey() 값이 true 경우
         return columns.stream().filter(m -> {
             ColumnValue annoCv = m.getAnnotation(ColumnValue.class);
             return annoCv != null && annoCv.primaryKey();
@@ -1943,6 +2045,42 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
                 .collect(Collectors.toList()) //
         ;
     }
+
+    /**
+     * DBMS에서 예약어로 사용되는 단어 목록를 모두 대문자로 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return 예약어로 사용되는 단어 목록.
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected abstract Set<String> getReservedKeywords();
+
+    /**
+     * 예약어로 사용되는 단어를 감싸는 문자를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected abstract CharSequence getReservedKeywordWrappingCharacter();
 
     /**
      *
@@ -2343,7 +2481,37 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @see #getColumnNames()
      */
     protected String queryForColumnNames() {
-        return String.join(", ", getColumnNames().toArray(new String[0]));
+        return String.join(", ", validateColumnNames(getColumnNames()));
+    }
+
+    /**
+     * 컬럼이름을 콤마(,)로 연결시킨 문자열을 제공합니다. <br>
+     * <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param tblAlias
+     *            테이블명 alias
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForColumnNames(String tblAlias) {
+        if (tblAlias == null || tblAlias.trim().isEmpty()) {
+            return queryForColumnNames();
+        } else {
+            final String trimTblAlias = tblAlias.trim();
+            return validateColumnNames(getColumnNames()).stream() //
+                    .map(clmn -> new StringBuilder(trimTblAlias).append(".").append(clmn))//
+                    .collect(Collectors.joining(","));
+        }
     }
 
     /**
@@ -2675,6 +2843,45 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
             while (itr.hasNext()) {
                 queryBuf.append(", ");
                 queryBuf.append(itr.next().variableBinding());
+            }
+        }
+
+        return queryBuf.toString();
+    }
+
+    /**
+     * 'Select' 구문에서 사용되는 데이터 바인딩 쿼리를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String queryForVariableBindingOnSelect() {
+
+        Iterator<String> clmnNames = getColumnNames().iterator();
+        Iterator<ColumnValue> clmnValues = getEntityColumnValues().iterator();
+
+        final StringBuffer queryBuf = new StringBuffer();
+
+        if (clmnValues.hasNext()) {
+            queryBuf.append(clmnValues.next().variableBinding());
+            queryBuf.append(" AS ");
+            queryBuf.append(clmnNames.next());
+
+            while (clmnValues.hasNext()) {
+                queryBuf.append(", ");
+                queryBuf.append(clmnValues.next().variableBinding());
+                queryBuf.append(" AS ");
+                queryBuf.append(clmnNames.next());
             }
         }
 
@@ -4231,6 +4438,58 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         return updateBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
     }
 
+    /**
+     * 컬럼이름이 DBMS Reserved Keyword인 경우 DBMS에서 정한 문자로 감싼 문자열을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmnName
+     *            컬럼이름.
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String validateColumnName(@NotEmpty String clmnName) {
+        Set<String> rkw = getReservedKeywords();
+        CharSequence kwrc = getReservedKeywordWrappingCharacter();
+        if (rkw == null || rkw.isEmpty() || !rkw.contains(clmnName.trim().toUpperCase())) {
+            return clmnName;
+        } else if (kwrc == null) {
+            throw ExceptionUtils.newException(IllegalStateException.class, "예약어가 설정되었으나, 예약어를 감싸는 문자가 설정되지 않았습니다. 컬럼명=%s, 예약어=%s", clmnName, CollectionUtils.toString(rkw));
+        } else {
+            return String.join("", kwrc, clmnName, kwrc);
+        }
+    }
+
+    /**
+     * 컬럼이름이 DBMS Reserved Keyword인 경우 DBMS에서 정한 문자로 감싼 문자열을 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmns
+     *            컬럼이름 목록
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected List<String> validateColumnNames(@NotNull List<String> clmns) {
+        return clmns.stream().map(clmn -> validateColumnName(clmn)).collect(Collectors.toList());
+    }
+
     protected static Object[] array(Object... any) {
         return any != null ? any : new Object[0];
     }
@@ -4290,5 +4549,27 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     protected static boolean hasWhereCompares(Collection<JdbcVariableBinder> binders, @NotNull WhereCompare... compares) {
         List<WhereCompare> list = Arrays.asList(compares);
         return binders.stream().filter(c -> list.contains(c.operator())).findAny().isPresent();
+    }
+
+    /**
+     * 콤마(,)로 구분된 예약어 문자열을 {@link Set} 객체로 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param reservedKeywordString
+     *            콤마(,)로 구분된 예약어 문자열
+     * @return 중복없는 예약어(대문자) 목록
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected static final Set<String> loadReservedKeywords(@NotNull String reservedKeywordString) {
+        return Collections.unmodifiableSet(StringUtils.splitAsSet(reservedKeywordString, ",", kw -> kw != null ? kw.trim().toUpperCase() : null));
     }
 }

@@ -28,6 +28,7 @@ package open.commons.spring.jdbc.repository.mariadb;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
@@ -44,7 +45,58 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  */
 public abstract class AbstractMariadbSingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
 
-    protected final String QUERY_FOR_OFFSET = "LIMIT ?, ?";
+    /**
+     * 예약어 목록 문자열
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final String RESERVED_KEYWORD_STRING = //
+            "ACCESSIBLE, ADD, ALL, ALTER, ANALYZE, AND, AS, ASC, ASENSITIVE, " //
+                    + "BEFORE, BETWEEN, BIGINT, BINARY, BLOB, BOTH, BY, CALL, CASCADE, " //
+                    + "CASE, CHANGE, CHAR, CHARACTER, CHECK, COLLATE, COLUMN, CONDITION, " //
+                    + "CONSTRAINT, CONTINUE, CONVERT, CREATE, CROSS, CURRENT_DATE, " //
+                    + "CURRENT_TIME, CURRENT_TIMESTAMP, CURRENT_USER, CURSOR, DATABASE, " //
+                    + "DATABASES, DAY_HOUR, DAY_MICROSECOND, DAY_MINUTE, DAY_SECOND, " //
+                    + "DEC, DECIMAL, DECLARE, DEFAULT, DELAYED, DELETE, DESC, DESCRIBE, " //
+                    + "DETERMINISTIC, DISTINCT, DISTINCTROW, DIV, DOUBLE, DROP, DUAL, " //
+                    + "EACH, ELSE, ELSEIF, ENCLOSED, ESCAPED, EXISTS, EXIT, EXPLAIN, " //
+                    + "FALSE, FETCH, FLOAT, FLOAT4, FLOAT8, FOR, FORCE, FOREIGN, FROM, " //
+                    + "FULLTEXT, GENERATED, GET, GRANT, GROUP, HAVING, HIGH_PRIORITY, " //
+                    + "HOUR_MICROSECOND, HOUR_MINUTE, HOUR_SECOND, IF, IGNORE, IN, " //
+                    + "INDEX, INFILE, INNER, INOUT, INSENSITIVE, INSERT, INT, INT1, " //
+                    + "INT2, INT3, INT4, INT8, INTEGER, INTERVAL, INTO, IO_AFTER_GTIDS, " //
+                    + "IO_BEFORE_GTIDS, IS, ITERATE, JOIN, KEY, KEYS, KILL, LEADING, " //
+                    + "LEAVE, LEFT, LIKE, LIMIT, LINEAR, LINES, LOAD, LOCALTIME, LOCALTIMESTAMP, " //
+                    + "LOCK, LONG, LONGBLOB, LONGTEXT, LOOP, LOW_PRIORITY, MASTER_BIND, " //
+                    + "MASTER_SSL_VERIFY_SERVER_CERT, MATCH, MAXVALUE, MEDIUMBLOB, MEDIUMINT, " //
+                    + "MEDIUMTEXT, MIDDLEINT, MINUTE_MICROSECOND, MINUTE_SECOND, MOD, MODIFIES, " //
+                    + "NATURAL, NOT, NO_WRITE_TO_BINLOG, NULL, NUMERIC, ON, OPTIMIZE, OPTION, " //
+                    + "OPTIONALLY, OR, ORDER, OUT, OUTER, OUTFILE, PARTITION, PRECISION, PRIMARY, " //
+                    + "PROCEDURE, PURGE, RANGE, READ, READS, READ_WRITE, REAL, REFERENCES, REGEXP, " //
+                    + "RELEASE, RENAME, REPEAT, REPLACE, REQUIRE, RESIGNAL, RESTRICT, RETURN, " //
+                    + "REVOKE, RIGHT, RLIKE, SCHEMA, SCHEMAS, SECOND_MICROSECOND, SELECT, SENSITIVE, " //
+                    + "SEPARATOR, SET, SHOW, SIGNAL, SMALLINT, SPATIAL, SPECIFIC, SQL, SQLEXCEPTION, " //
+                    + "SQLSTATE, SQLWARNING, SQL_BIG_RESULT, SQL_CALC_FOUND_ROWS, SQL_SMALL_RESULT, " //
+                    + "SSL, STARTING, STORED, STRAIGHT_JOIN, TABLE, TERMINATED, THEN, TINYBLOB, " //
+                    + "TINYINT, TINYTEXT, TO, TRAILING, TRIGGER, TRUE, UNDO, UNION, UNIQUE, UNLOCK, " //
+                    + "UNSIGNED, UPDATE, USAGE, USE, USING, UTC_DATE, UTC_TIME, UTC_TIMESTAMP, " //
+                    + "VALUES, VARBINARY, VARCHAR, VARCHARACTER, VARYING, VIRTUAL, WHEN, WHERE, " //
+                    + "WHILE, WITH, WRITE, XOR, YEAR_MONTH, ZEROFILL" //
+    ;
+    /**
+     * 예약어 목록
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final Set<String> RESERVED_KEYWORDS = loadReservedKeywords(RESERVED_KEYWORD_STRING);
+    /**
+     * 예약어 감싸는 문자
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final CharSequence RESERVED_KEYWORDS_WRAPPING_CHARACTER = "\"";
+
+    protected static final String QUERY_FOR_OFFSET = "LIMIT ?, ?";
 
     /**
      * 'INSERT IGNORE' 기본 쿼리
@@ -207,6 +259,32 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
 
     /**
      *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywords()
+     */
+    @Override
+    protected Set<String> getReservedKeywords() {
+        return RESERVED_KEYWORDS;
+    }
+
+    /**
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywordWrappingCharacter()
+     */
+    @Override
+    protected CharSequence getReservedKeywordWrappingCharacter() {
+        return RESERVED_KEYWORDS_WRAPPING_CHARACTER;
+    }
+
+    /**
+     *
      * @since 2021. 12. 24.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
@@ -241,14 +319,14 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      */
     @Override
     protected String queryForPartitionHeader() {
-        List<String> columns = getColumnNames();
+        List<String> columns = validateColumnNames(getColumnNames());
 
         return new StringBuffer() //
                 .append("INSERT INTO") //
                 .append(" ") //
                 .append(this.tableName) //
                 .append(" (")//
-                .append(String.join(", ", columns.toArray(new String[0]))) //
+                .append(String.join(", ", columns)) //
                 .append(") ") //
                 .append("VALUES") //
                 .toString();

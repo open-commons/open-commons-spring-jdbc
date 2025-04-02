@@ -28,6 +28,7 @@ package open.commons.spring.jdbc.repository.postgresql;
 
 import java.lang.reflect.Method;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotNull;
@@ -46,7 +47,36 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  */
 public abstract class AbstractPostgreSingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
 
-    protected final String QUERY_FOR_OFFSET = "OFFSET ? LIMIT ?";
+    /**
+     * 예약어 목록 문자열
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final String RESERVED_KEYWORD_STRING = //
+            "ALL, ANALYSE, ANALYZE, AND, ANY, ARRAY, AS, ASC, ASYMMETRIC, AUTHORIZATION, " //
+                    + "BINARY, BOTH, CASE, CAST, CHECK, COLLATE, COLUMN, CONSTRAINT, CREATE, " //
+                    + "CURRENT_CATALOG, CURRENT_DATE, CURRENT_ROLE, CURRENT_TIME, " //
+                    + "CURRENT_TIMESTAMP, CURRENT_USER, DEFAULT, DEFERRABLE, DESC, DISTINCT, DO, " //
+                    + "ELSE, END, EXCEPT, FALSE, FETCH, FOR, FOREIGN, FROM, GRANT, GROUP, HAVING, " //
+                    + "IN, INITIALLY, INTERSECT, INTO, LATERAL, LEADING, LIMIT, LOCALTIME, " //
+                    + "LOCALTIMESTAMP, NOT, NULL, OFFSET, ON, ONLY, OR, ORDER, PLACING, PRIMARY, " //
+                    + "REFERENCES, RETURNING, SELECT, SESSION_USER, SOME, SYMMETRIC, TABLE, THEN, " //
+                    + "TO, TRAILING, TRUE, UNION, UNIQUE, USER, USING, VARIADIC, WHEN, WHERE, WINDOW, WITH" //
+    ;
+    /**
+     * 예약어 목록
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final Set<String> RESERVED_KEYWORDS = loadReservedKeywords(RESERVED_KEYWORD_STRING);
+    /**
+     * 예약어 감싸는 문자
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final CharSequence RESERVED_KEYWORDS_WRAPPING_CHARACTER = "\"";
+
+    protected static final String QUERY_FOR_OFFSET = "OFFSET ? LIMIT ?";
 
     /**
      * <pre>
@@ -179,6 +209,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
             List<String> primaryKeys = AnnotationUtils.getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
                     .filter(m -> m.getAnnotation(ColumnValue.class).primaryKey()) //
                     .map(m -> SQLUtils.getColumnName(m)) //
+                    .map(cn -> validateColumnName(cn)) //
                     .collect(Collectors.toList()) //
             ;
 
@@ -258,6 +289,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
             List<String> primaryKeys = AnnotationUtils.getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
                     .filter(m -> m.getAnnotation(ColumnValue.class).primaryKey()) //
                     .map(m -> SQLUtils.getColumnName(m)) //
+                    .map(cn -> validateColumnName(cn)) //
                     .collect(Collectors.toList()) //
             ;
 
@@ -275,6 +307,32 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
         }
 
         return queryBuf.toString();
+    }
+
+    /**
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywords()
+     */
+    @Override
+    protected Set<String> getReservedKeywords() {
+        return RESERVED_KEYWORDS;
+    }
+
+    /**
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywordWrappingCharacter()
+     */
+    @Override
+    protected CharSequence getReservedKeywordWrappingCharacter() {
+        return RESERVED_KEYWORDS_WRAPPING_CHARACTER;
     }
 
     /**
@@ -313,15 +371,14 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      */
     @Override
     protected String queryForPartitionHeader() {
-
-        List<String> columns = getColumnNames();
+        List<String> columns = validateColumnNames(getColumnNames());
 
         return new StringBuffer() //
                 .append("INSERT INTO") //
                 .append(" ") //
                 .append(this.tableName) //
                 .append(" (")//
-                .append(String.join(", ", columns.toArray(new String[0]))) //
+                .append(String.join(", ", columns)) //
                 .append(") ") //
                 .append("VALUES") //
                 .toString();

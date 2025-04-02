@@ -29,6 +29,7 @@ package open.commons.spring.jdbc.repository.oracle;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.Min;
@@ -48,6 +49,38 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  * @author parkjunhong77@gmail.com
  */
 public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends AbstractSingleDataSourceRepository<T> {
+
+    /**
+     * 예약어 목록 문자열
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final String RESERVED_KEYWORD_STRING = //
+            "ACCESS, ADD, ALL, ALTER, AND, ANY, AS, ASC, AUDIT, BETWEEN, BY, CHAR, " //
+                    + "CHECK, CLUSTER, COLUMN, COMMENT, COMPRESS, CONNECT, CREATE, CURRENT, " //
+                    + "DATE, DECIMAL, DEFAULT, DELETE, DESC, DISTINCT, DROP, ELSE, EXCLUSIVE, " //
+                    + "EXISTS, FILE, FLOAT, FOR, FROM, GRANT, GROUP, HAVING, IDENTIFIED, " //
+                    + "IMMEDIATE, IN, INCREMENT, INDEX, INITIAL, INSERT, INTEGER, INTERSECT, " //
+                    + "INTO, IS, LEVEL, LIKE, LOCK, LONG, MAXEXTENTS, MINUS, MLSLABEL, MODE, " //
+                    + "MODIFY, NOAUDIT, NOCOMPRESS, NOT, NOWAIT, NULL, NUMBER, OF, OFFLINE, " //
+                    + "ON, ONLINE, OPTION, OR, ORDER, PCTFREE, PRIOR, PUBLIC, RAW, RENAME, " //
+                    + "RESOURCE, REVOKE, ROW, ROWID, ROWLABEL, ROWNUM, ROWS, SELECT, SESSION, " //
+                    + "SET, SHARE, SIZE, SMALLINT, START, SUCCESSFUL, SYNONYM, SYSDATE, TABLE, " //
+                    + "THEN, TO, TRIGGER, UID, UNION, UNIQUE, UPDATE, USER, VALIDATE, VALUES, " //
+                    + "VARCHAR, VARCHAR2, VIEW, WHENEVER, WHERE, WITH" //
+    ;
+    /**
+     * 예약어 목록
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final Set<String> RESERVED_KEYWORDS = loadReservedKeywords(RESERVED_KEYWORD_STRING);
+    /**
+     * 예약어 감싸는 문자
+     * 
+     * @since 2025. 4. 2.
+     */
+    protected static final CharSequence RESERVED_KEYWORDS_WRAPPING_CHARACTER = "\"";
 
     protected static final String TN_TABLE_NAME = "TABLE_NAME";
     protected static final String TN_USING_DUAL_ON = "USING_DUAL_ON_CLAUSE";
@@ -329,6 +362,32 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
 
     /**
      *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywords()
+     */
+    @Override
+    protected Set<String> getReservedKeywords() {
+        return RESERVED_KEYWORDS;
+    }
+
+    /**
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywordWrappingCharacter()
+     */
+    @Override
+    protected CharSequence getReservedKeywordWrappingCharacter() {
+        return RESERVED_KEYWORDS_WRAPPING_CHARACTER;
+    }
+
+    /**
+     *
      * @since 2021. 12. 16.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
@@ -390,13 +449,13 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
     @Override
     protected String queryForPartitionValue() {
 
-        List<String> columns = getColumnNames();
+        List<String> columns = validateColumnNames(getColumnNames());
 
         return new StringBuffer()//
                 .append("INTO ") //
                 .append(getTableName()) //
                 .append(" ( ") //
-                .append(String.join(", ", columns.toArray(new String[0]))) //
+                .append(String.join(", ", columns)) //
                 .append(" ) ") //
                 .append("VALUES") //
                 .append(" ( ") //
