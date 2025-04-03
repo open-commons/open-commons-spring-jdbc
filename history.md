@@ -1,3 +1,9 @@
+[2025/04/03]
+- Add
+  + H2 DB 기능 지원
+    + open.commons.spring.jdbc.config.h2 패키지
+    + open.commons.spring.jdbc.repository.h2 패키지
+
 [2025/02/21]
 Apply 'Maven Central Deployment'
 

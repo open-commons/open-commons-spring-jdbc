@@ -776,51 +776,44 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     }
 
     /**
-     * Primary Key가 중복되는 경우 데이터를 갱신하기 위한 데이터 제공 구문을 생성해서 제공합니다. <br>
+     * 2개 테이블의 컬럼들을 매칭시키고, 각 매칭된 내용을 연결자를 이용해서 연결한 구문을 제공합니다.<br>
      * 
-     * 참고 쿼리
+     * 예)
      * 
      * <pre>
-     * MERGE INTO TB_USER T
-     * USING (
-     *   SELECT 
-     *     'user001' AS ID, 
-     *     'cred_001' AS CREDENTIAL, 
-     *     'manager' AS TITLE,
-     *     'user001@newmail.com' AS EMAIL
-     * ) AS SRC
-     * ON (T.ID = SRC.ID AND T.CREDENTIAL = SRC.CREDENTIAL)
-     * WHEN MATCHED THEN
-     *   UPDATE SET T.EMAIL = SRC.EMAIL
-     * WHEN NOT MATCHED THEN
-     *   INSERT (ID, CREDENTIAL, TITLE, EMAIL)
-     *   VALUES (SRC.ID, SRC.CREDENTIAL, SRC.TITLE, SRC.EMAIL);
+     * - T.ID = SRC.ID AND T.CREDENTIAL = SRC.CREDENTIAL
+     * - T.EMAIL = SRC.EMAIL, T.TITLE = SRC.TITLE
      * </pre>
      * 
      * <pre>
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 4. 2.		박준홍			최초 작성
+     * 2025. 4. 3.		박준홍			최초 작성
      * </pre>
      *
      * @param clmns
      *            컬럼 목록
      * @param one
-     *            비교 테이블 1
+     *            테이블 1
      * @param other
-     *            비교 테이블 2
+     *            테이블 2
+     * @param concatenator
+     *            각 컬럼 매칭을 연결할 문자.<br>
+     *            컬럼 매칭 결과에 문자열 형태로 이어지기 때문에,<br>
+     *            "연결자가 기호가 아니라 문자일 경우"<br>
+     *            반드시 맨앞/맨뒤에 빈칸을 추가해야 함.
      * @return
      *
-     * @since 2025. 4. 2.
+     * @since 2025. 4. 3.
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    protected String createMergeUsingOnClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
+    private String createMergeAssembleColumnMatch(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other, @NotEmpty String concatenator) {
         return clmns.stream().map(clmn -> new StringBuilder().append(one).append(".").append(clmn) //
                 .append(" = ") //
                 .append(other).append(".").append(clmn).toString()) //
-                .collect(Collectors.joining(" AND "));
+                .collect(Collectors.joining(concatenator));
     }
 
     /**
@@ -864,11 +857,53 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    protected String createUpdateSetClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
-        return clmns.stream().map(clmn -> new StringBuilder().append(one).append(".").append(clmn) //
-                .append(" = ") //
-                .append(other).append(".").append(clmn).toString()) //
-                .collect(Collectors.joining(", "));
+    protected String createMergeUpdateSetClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
+        return createMergeAssembleColumnMatch(clmns, one, other, ", ");
+    }
+
+    /**
+     * Primary Key가 중복되는 경우 데이터를 갱신하기 위한 데이터 제공 구문을 생성해서 제공합니다. <br>
+     * 
+     * 참고 쿼리
+     * 
+     * <pre>
+     * MERGE INTO TB_USER T
+     * USING (
+     *   SELECT 
+     *     'user001' AS ID, 
+     *     'cred_001' AS CREDENTIAL, 
+     *     'manager' AS TITLE,
+     *     'user001@newmail.com' AS EMAIL
+     * ) AS SRC
+     * ON (T.ID = SRC.ID AND T.CREDENTIAL = SRC.CREDENTIAL)
+     * WHEN MATCHED THEN
+     *   UPDATE SET T.EMAIL = SRC.EMAIL
+     * WHEN NOT MATCHED THEN
+     *   INSERT (ID, CREDENTIAL, TITLE, EMAIL)
+     *   VALUES (SRC.ID, SRC.CREDENTIAL, SRC.TITLE, SRC.EMAIL);
+     * </pre>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 2.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param clmns
+     *            컬럼 목록
+     * @param one
+     *            비교 테이블 1
+     * @param other
+     *            비교 테이블 2
+     * @return
+     *
+     * @since 2025. 4. 2.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected String createMergeUsingOnClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
+        return createMergeAssembleColumnMatch(clmns, one, other, " AND ");
     }
 
     /**

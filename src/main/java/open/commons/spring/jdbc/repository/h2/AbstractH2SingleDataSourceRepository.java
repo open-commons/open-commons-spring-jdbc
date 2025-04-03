@@ -30,13 +30,10 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Set;
 
-import javax.sql.DataSource;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-
-import open.commons.core.utils.ExceptionUtils;
+import open.commons.core.text.NamedTemplate;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
 /**
@@ -46,7 +43,7 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  * @version 0.5.0
  * @author parkjunhong77@gmail.com
  */
-public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
+public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
 
     /**
      * 예약어 목록 문자열
@@ -96,14 +93,35 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
     protected static final CharSequence RESERVED_KEYWORDS_WRAPPING_CHARACTER = "\"";
     protected static final String QUERY_FOR_OFFSET = "LIMIT ?, ?";
 
+    /** 테이블 이름 */
     protected static final String TN_TABLE_NAME = "TABLE_NAME";
+    /** 'Select' 데이터 할당(binding) 쿼리 */
     protected static final String TN_DATA_BINDING_QUERY = "DATA_BINDING_QUERY";
+    /** PK 또는 Unique Key 비교 구문 */
     protected static final String TN_USING_ON_COMPARE_CLAUSE = "USING_ON_COMPARE_CLAUSE";
+    /** 데이터 갱신 구문 */
     protected static final String TN_UPDATE_SET_CLAUSE = "UPDATE_SET_CLAUSE";
+    /** 컬럼 설정 구문 */
     protected static final String TN_INSERT_COLUMN_CLAUSE = "INSERT_COLUMN_CLAUSE";
+    /** 'Insert' 데이터 할당(binding) 쿼리 */
     protected static final String TN_INSERT_VALUE_BINDING_CLAUSE = "INSERT_VALUE_BINDING_CLAUSE";
-    protected static final String TN_TABLE_ALIAS = "tbl";
-    protected static final String TN_DATA_ALIAS = "src";
+    /** 테이블명 alias */
+    protected static final String TN_TABLE_ALIAS = "TABLE_ALIAS";
+    /** 신규 데이터 가상 테이블 alais */
+    protected static final String TN_DATA_ALIAS = "DATA_ALIAS";
+    /**
+     * 아래 지시자를 동적으로 생성해야 함.
+     * 
+     * <pre>
+     * - {@link #TN_TABLE_NAME}: {@value #TN_TABLE_NAME}
+     * - {@link #TN_TABLE_ALIAS}: {@value #TN_TABLE_ALIAS}
+     * - {@link #TN_DATA_BINDING_QUERY}: {@value #TN_DATA_BINDING_QUERY}
+     * - {@link #TN_DATA_ALIAS}: {@value #TN_DATA_ALIAS}
+     * - {@link #TN_USING_ON_COMPARE_CLAUSE}: {@value #TN_USING_ON_COMPARE_CLAUSE}
+     * - {@link #TN_INSERT_COLUMN_CLAUSE}: {@value #TN_INSERT_COLUMN_CLAUSE}
+     * - {@link #TN_INSERT_VALUE_BINDING_CLAUSE}: {@value #TN_INSERT_VALUE_BINDING_CLAUSE}
+     * </pre>
+     */
     protected static final String QUERY_TPL_INSERT_OR_NOTHING = new StringBuilder() //
             .append("MERGE INTO {").append(TN_TABLE_NAME).append("} AS ").append(TN_TABLE_ALIAS).append(" ") //
             .append("USING ( ") //
@@ -114,6 +132,20 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
             .append("  INSERT ( {").append(TN_INSERT_COLUMN_CLAUSE).append("} ) ") //
             .append("  VALUES ( {").append(TN_INSERT_VALUE_BINDING_CLAUSE).append("} ) ") //
             .toString();
+    /**
+     * 아래 지시자를 동적으로 생성해야 함.
+     * 
+     * <pre>
+     * - {@link #TN_TABLE_NAME}: {@value #TN_TABLE_NAME}
+     * - {@link #TN_TABLE_ALIAS}: {@value #TN_TABLE_ALIAS}
+     * - {@link #TN_DATA_BINDING_QUERY}: {@value #TN_DATA_BINDING_QUERY}
+     * - {@link #TN_DATA_ALIAS}: {@value #TN_DATA_ALIAS}
+     * - {@link #TN_USING_ON_COMPARE_CLAUSE}: {@value #TN_USING_ON_COMPARE_CLAUSE}
+     * - {@link #TN_UPDATE_SET_CLAUSE}: {@value #TN_UPDATE_SET_CLAUSE}
+     * - {@link #TN_INSERT_COLUMN_CLAUSE}: {@value #TN_INSERT_COLUMN_CLAUSE}
+     * - {@link #TN_INSERT_VALUE_BINDING_CLAUSE}: {@value #TN_INSERT_VALUE_BINDING_CLAUSE}
+     * </pre>
+     */
     protected static final String QUERY_TPL_INSERT_OR_UPDATE = new StringBuilder() //
             .append("MERGE INTO {").append(TN_TABLE_NAME).append("} AS ").append(TN_TABLE_ALIAS).append(" ") //
             .append("USING ( ") //
@@ -198,30 +230,8 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
     public AbstractH2SingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
 
-        // Primary Key 컬럼 확인
-        List<String> pkColumns = getPrimaryKeyColumns();
-        if (pkColumns == null || pkColumns.size() < 1) {
-            logger.warn("'{}' 테이블에 Primary Key가 설정되지 않았습니다.", this.tableName);
-            this.QUERY_FOR_INSERT_OR_NOTHING = new StringBuffer() //
-                    .append("INSERT INTO").append(" ").append(this.tableName) //
-                    .append(" (").append(queryForColumnNames()).append(" )") //
-                    .append(" VALUES (").append(queryForVariableBinding()).append(" )") //
-                    .toString();
-        } else {
-            this.QUERY_FOR_INSERT_OR_NOTHING = new StringBuffer() //
-                    .append("MERGE INTO").append(" ").append(this.tableName).append(" AS tbl") //
-                    .append("USING  (") //
-                    .append(" SELECT").append(" ") //
-                    .append(queryForVariableBindingOnSelect()) //
-                    .append(") AS src") //
-                    .append(" ON (").append(createMergeUsingOnClause(validateColumnNames(pkColumns), "tbl", "src")).append(" )") //
-                    .append(" WHEN NOT MATCHED THEN") //
-                    .append("  INSERT INTO (").append(queryForColumnNames()).append(")") //
-                    .append("  VALUES (").append(queryForColumnNames("src")).append(")") //
-                    .toString();
-        }
-        
-        this.QUERY_FOR_INSERT_OR_UPDATE = null;
+        this.QUERY_FOR_INSERT_OR_NOTHING = createQueryForInsertOrNothing(null, null, (Object[]) null);
+        this.QUERY_FOR_INSERT_OR_UPDATE = createQueryForInsertOrUpdate(null, null, (Object[]) null);
     }
 
     /**
@@ -265,11 +275,45 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
      */
     @Override
     protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
-        if (this.QUERY_FOR_INSERT_OR_NOTHING == null) {
-            throw ExceptionUtils.newException(UnsupportedOperationException.class, "'%s' 테이블에 PrimaryKey가 설정되지 않아서 지원하지 않습니다. 해당 기능을 사용하기 위해서는 Primary Key를 설정하기 바랍니다.",
-                    this.tableName);
+        if (this.QUERY_FOR_INSERT_OR_NOTHING != null) {
+            return this.QUERY_FOR_INSERT_OR_NOTHING;
+        } else {
+            // Primary Key 컬럼 확인
+            List<String> pkColumns = validateColumnNames(getPrimaryKeyColumns());
+            if (pkColumns == null || pkColumns.size() < 1) {
+                logger.warn("'{}' 테이블에 Primary Key가 설정되지 않았습니다.", this.tableName);
+                return queryForInsert();
+            } else {
+                /**
+                 * <pre>
+                 * - TN_TABLE_NAME: "TABLE_NAME"
+                 * - TN_TABLE_ALIAS: "TABLE_ALIAS"
+                 * - TN_DATA_BINDING_QUERY: "DATA_BINDING_QUERY"
+                 * - TN_DATA_ALIAS: "DATA_ALIAS"
+                 * - TN_USING_ON_COMPARE_CLAUSE: "USING_ON_COMPARE_CLAUSE"
+                 * - TN_UPDATE_SET_CLAUSE: "UPDATE_SET_CLAUSE"
+                 * - TN_INSERT_COLUMN_CLAUSE: "INSERT_COLUMN_CLAUSE"
+                 * - TN_INSERT_VALUE_BINDING_CLAUSE: "INSERT_VALUE_BINDING_CLAUSE"
+                 * </pre>
+                 */
+                final String ALIAS_TABLE = "tbl";
+                final String ALIAS_DATA = "data";
+
+                // #1. 쿼리 구문 선언
+                NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_NOTHING);
+                // #2. 구문 설정
+                queryTpl.addValue(TN_TABLE_NAME, getTableName());
+                queryTpl.addValue(TN_TABLE_ALIAS, ALIAS_TABLE);
+                queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingOnSelect());
+                queryTpl.addValue(TN_DATA_ALIAS, ALIAS_DATA);
+                queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE, createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
+                queryTpl.addValue(TN_UPDATE_SET_CLAUSE, createMergeUpdateSetClause(validateColumnNames(getUpdatableColumnNames()), ALIAS_TABLE, ALIAS_DATA));
+                queryTpl.addValue(TN_INSERT_COLUMN_CLAUSE, queryForColumnNames());
+                queryTpl.addValue(TN_INSERT_VALUE_BINDING_CLAUSE, queryForColumnNames(ALIAS_DATA));
+
+                return queryTpl.format();
+            }
         }
-        return this.QUERY_FOR_INSERT_OR_NOTHING;
     }
 
     /**
@@ -283,8 +327,44 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
      */
     @Override
     protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+        if (this.QUERY_FOR_INSERT_OR_UPDATE != null) {
+            return this.QUERY_FOR_INSERT_OR_UPDATE;
+        } else {
+            // Primary Key 컬럼 확인
+            List<String> pkColumns = validateColumnNames(getPrimaryKeyColumns());
+            if (pkColumns == null || pkColumns.size() < 1) {
+                logger.warn("'{}' 테이블에 Primary Key가 설정되지 않았습니다.", this.tableName);
+                return queryForInsert();
+            } else {
+                /**
+                 * <pre>
+                 * - TN_TABLE_NAME: "TABLE_NAME"
+                 * - TN_TABLE_ALIAS: "tbl"
+                 * - TN_DATA_BINDING_QUERY: "DATA_BINDING_QUERY"
+                 * - TN_DATA_ALIAS: "src"
+                 * - TN_USING_ON_COMPARE_CLAUSE: "USING_ON_COMPARE_CLAUSE"
+                 * - TN_UPDATE_SET_CLAUSE}: TN_UPDATE_SET_CLAUSE}
+                 * - TN_INSERT_COLUMN_CLAUSE: "INSERT_COLUMN_CLAUSE"
+                 * - TN_INSERT_VALUE_BINDING_CLAUSE: "INSERT_VALUE_BINDING_CLAUSE"
+                 * </pre>
+                 */
+                final String ALIAS_TABLE = "tbl";
+                final String ALIAS_DATA = "data";
 
-        return null;
+                // #1. 쿼리 구문 선언
+                NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_NOTHING);
+                // #2. 구문 설정
+                queryTpl.addValue(TN_TABLE_NAME, getTableName());
+                queryTpl.addValue(TN_TABLE_ALIAS, ALIAS_TABLE);
+                queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingOnSelect());
+                queryTpl.addValue(TN_DATA_ALIAS, ALIAS_DATA);
+                queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE, createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
+                queryTpl.addValue(TN_INSERT_COLUMN_CLAUSE, queryForColumnNames());
+                queryTpl.addValue(TN_INSERT_VALUE_BINDING_CLAUSE, queryForColumnNames(ALIAS_DATA));
+
+                return queryTpl.format();
+            }
+        }
     }
 
     /**
@@ -323,7 +403,7 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {
-        return this.QUERY_FOR_OFFSET;
+        return QUERY_FOR_OFFSET;
     }
 
     /**
@@ -336,7 +416,7 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
      */
     @Override
     protected String queryForPartitionConcatValue() {
-        return null;
+        return ",";
     }
 
     /**
@@ -349,7 +429,17 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
      */
     @Override
     protected String queryForPartitionHeader() {
-        return null;
+        List<String> columns = validateColumnNames(getColumnNames());
+
+        return new StringBuffer() //
+                .append("INSERT INTO") //
+                .append(" ") //
+                .append(this.tableName) //
+                .append(" (")//
+                .append(String.join(", ", columns)) //
+                .append(") ") //
+                .append("VALUES") //
+                .toString();
     }
 
     /**
@@ -362,7 +452,7 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
      */
     @Override
     protected String queryForPartitionTail() {
-        return null;
+        return "";
     }
 
     /**
@@ -375,31 +465,6 @@ public class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataS
      */
     @Override
     protected String queryForPartitionValue() {
-        return null;
+        return new StringBuilder().append("( ").append(queryForVariableBinding()).append(" )").toString();
     }
-
-    /**
-     *
-     * @since 2025. 4. 1.
-     * @version 0.5.0
-     * @author parkjunhong77@gmail.com
-     *
-     * @see open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository#setDataSource(javax.sql.DataSource)
-     */
-    @Override
-    public void setDataSource(@NotNull DataSource dataSource) {
-    }
-
-    /**
-     *
-     * @since 2025. 4. 1.
-     * @version 0.5.0
-     * @author parkjunhong77@gmail.com
-     *
-     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#setQuerySource(org.springframework.context.support.ReloadableResourceBundleMessageSource)
-     */
-    @Override
-    public void setQuerySource(@NotNull ReloadableResourceBundleMessageSource querySource) {
-    }
-
 }
