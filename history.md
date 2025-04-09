@@ -3,6 +3,9 @@
   + open.commons.spring.jdbc.repository.h2.AbstractH2SingleDataSourceRepository&lt;T&gt;
     + QUERY_TPL_INSERT_OR_NOTHING: 쿼리 템플릿 오류
     + QUERY_TPL_INSERT_OR_UPDATE: 쿼리 템플릿 오류
+- Add
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository
+    + queryForVariableBindingAliasingColumnName(boolean): <span style="color:red; font-weight:bold;">H2 DB에서 "? AS {column}" 구문파싱시 {column}을 타입으로 처리하는 오류에 대응.</span>
 
 [2025/04/03]
 - Add

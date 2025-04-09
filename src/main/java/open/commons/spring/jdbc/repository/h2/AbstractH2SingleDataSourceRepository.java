@@ -304,10 +304,9 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
                 // #2. 구문 설정
                 queryTpl.addValue(TN_TABLE_NAME, getTableName());
                 queryTpl.addValue(TN_TABLE_ALIAS, ALIAS_TABLE);
-                queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingOnSelect());
+                queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingAliasingColumnName(true));
                 queryTpl.addValue(TN_DATA_ALIAS, ALIAS_DATA);
                 queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE, createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
-                queryTpl.addValue(TN_UPDATE_SET_CLAUSE, createMergeUpdateSetClause(validateColumnNames(getUpdatableColumnNames()), ALIAS_TABLE, ALIAS_DATA));
                 queryTpl.addValue(TN_INSERT_COLUMN_CLAUSE, queryForColumnNames());
                 queryTpl.addValue(TN_INSERT_VALUE_BINDING_CLAUSE, queryForColumnNames(ALIAS_DATA));
 
@@ -352,13 +351,14 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
                 final String ALIAS_DATA = "data";
 
                 // #1. 쿼리 구문 선언
-                NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_NOTHING);
+                NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_UPDATE);
                 // #2. 구문 설정
                 queryTpl.addValue(TN_TABLE_NAME, getTableName());
                 queryTpl.addValue(TN_TABLE_ALIAS, ALIAS_TABLE);
-                queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingOnSelect());
+                queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingAliasingColumnName(true));
                 queryTpl.addValue(TN_DATA_ALIAS, ALIAS_DATA);
                 queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE, createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
+                queryTpl.addValue(TN_UPDATE_SET_CLAUSE, createMergeUpdateSetClause(validateColumnNames(getUpdatableColumnNames()), ALIAS_TABLE, ALIAS_DATA));
                 queryTpl.addValue(TN_INSERT_COLUMN_CLAUSE, queryForColumnNames());
                 queryTpl.addValue(TN_INSERT_VALUE_BINDING_CLAUSE, queryForColumnNames(ALIAS_DATA));
 

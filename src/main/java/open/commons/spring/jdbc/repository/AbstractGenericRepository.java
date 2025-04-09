@@ -57,6 +57,7 @@ import open.commons.core.database.DefaultConCallbackBroker2;
 import open.commons.core.database.annotation.TableDef;
 import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.SQLTripleFunction;
+import open.commons.core.function.TripleFunction;
 import open.commons.core.util.ArrayItr;
 import open.commons.core.utils.ArrayUtils;
 import open.commons.core.utils.AssertUtils;
@@ -109,6 +110,45 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
     private static final Function<Parameter, String> PARAMETER_COLUMN_NAME = p -> {
         JdbcVariableBinder b = PARAMETER_JDBC_VARIABLE_BINDER.apply(p);
         return SQLUtils.getColumnName(b.name(), b.columnNameType(), p.getName());
+    };
+
+    /**
+     * 'SELECT' 구문에서 사용되는 DATA BINDING 구문을 생성합니다.
+     * 
+     * @param clmnName
+     *            컬럼이름
+     * @param clmnValue
+     *            컬럼 정보
+     * 
+     * @param castByClmnRealType
+     *            데이터를 컬럼 타입으로 CAST 여부
+     * 
+     * @since 2025. 4. 8.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    private static final TripleFunction<String, ColumnValue, Boolean, String> VARIABLE_BINDER_ON_SELECT = (clmnName, clmnValue, castByClmnRealType) -> {
+        StringBuilder buf = new StringBuilder();
+
+        String clmnRealType = clmnValue.columnType() != null ? clmnValue.columnType().trim() : null;
+        castByClmnRealType = castByClmnRealType && clmnRealType != null;
+
+        if (castByClmnRealType) {
+            buf.append(" CAST (");
+        }
+
+        buf.append(clmnValue.variableBinding());
+
+        if (castByClmnRealType) {
+            buf.append(" AS ");
+            buf.append(clmnRealType);
+            buf.append(") ");
+        }
+
+        buf.append(" AS ");
+        buf.append(clmnName);
+
+        return buf.toString();
     };
 
     /** DB Table 데이터 타입. */
@@ -2011,7 +2051,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      * @author parkjunhong77@gmail.com
      */
     protected List<ColumnValue> getEntityColumnValues() {
-        return getColumnMethods().stream() //
+        return getColumnsAsStream() //
                 .map(m -> m.getAnnotation(ColumnValue.class)) //
                 .collect(Collectors.toList());
     }
@@ -2892,15 +2932,19 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2025. 4. 2.		박준홍			최초 작성
+     * 2025. 4. 8.      박준홍         clmnUppserCase 항목 추가. H2 DB에서 "? AS {column}" 구문파싱시 {column}을 타입으로 처리하는 오류에 대응.
      * </pre>
-     *
+     * 
+     * @param castByClmnRealType
+     *            컬럼타입으로 CAST 여부
+     * 
      * @return
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    protected String queryForVariableBindingOnSelect() {
+    protected String queryForVariableBindingAliasingColumnName(boolean castByClmnRealType) {
 
         Iterator<String> clmnNames = getColumnNames().iterator();
         Iterator<ColumnValue> clmnValues = getEntityColumnValues().iterator();
@@ -2908,15 +2952,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
         final StringBuffer queryBuf = new StringBuffer();
 
         if (clmnValues.hasNext()) {
-            queryBuf.append(clmnValues.next().variableBinding());
-            queryBuf.append(" AS ");
-            queryBuf.append(clmnNames.next());
-
+            queryBuf.append(VARIABLE_BINDER_ON_SELECT.apply(clmnNames.next(), clmnValues.next(), castByClmnRealType));
             while (clmnValues.hasNext()) {
                 queryBuf.append(", ");
-                queryBuf.append(clmnValues.next().variableBinding());
-                queryBuf.append(" AS ");
-                queryBuf.append(clmnNames.next());
+                queryBuf.append(VARIABLE_BINDER_ON_SELECT.apply(clmnNames.next(), clmnValues.next(), castByClmnRealType));
             }
         }
 
