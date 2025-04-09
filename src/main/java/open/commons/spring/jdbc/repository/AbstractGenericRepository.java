@@ -2545,7 +2545,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericDao im
             final String trimTblAlias = tblAlias.trim();
             return validateColumnNames(getColumnNames()).stream() //
                     .map(clmn -> new StringBuilder(trimTblAlias).append(".").append(clmn))//
-                    .collect(Collectors.joining(","));
+                    .collect(Collectors.joining(", "));
         }
     }
 

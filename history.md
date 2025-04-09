@@ -1,3 +1,9 @@
+[2025/04/09]
+- Bugfix
+  + open.commons.spring.jdbc.repository.h2.AbstractH2SingleDataSourceRepository&lt;T&gt;
+    + QUERY_TPL_INSERT_OR_NOTHING: 쿼리 템플릿 오류
+    + QUERY_TPL_INSERT_OR_UPDATE: 쿼리 템플릿 오류
+
 [2025/04/03]
 - Add
   + H2 DB 기능 지원

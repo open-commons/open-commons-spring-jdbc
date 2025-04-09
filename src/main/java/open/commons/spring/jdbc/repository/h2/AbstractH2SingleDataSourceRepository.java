@@ -123,10 +123,10 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * </pre>
      */
     protected static final String QUERY_TPL_INSERT_OR_NOTHING = new StringBuilder() //
-            .append("MERGE INTO {").append(TN_TABLE_NAME).append("} AS ").append(TN_TABLE_ALIAS).append(" ") //
+            .append("MERGE INTO {").append(TN_TABLE_NAME).append("} AS {").append(TN_TABLE_ALIAS).append("} ") //
             .append("USING ( ") //
             .append("  SELECT {").append(TN_DATA_BINDING_QUERY).append("} ") //
-            .append(") AS ").append(TN_DATA_ALIAS).append(" ") //
+            .append(") AS {").append(TN_DATA_ALIAS).append("} ") //
             .append("ON ( {").append(TN_USING_ON_COMPARE_CLAUSE).append("} ) ") //
             .append("WHEN NOT MATCHED THEN") //
             .append("  INSERT ( {").append(TN_INSERT_COLUMN_CLAUSE).append("} ) ") //
@@ -147,10 +147,10 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * </pre>
      */
     protected static final String QUERY_TPL_INSERT_OR_UPDATE = new StringBuilder() //
-            .append("MERGE INTO {").append(TN_TABLE_NAME).append("} AS ").append(TN_TABLE_ALIAS).append(" ") //
+            .append("MERGE INTO {").append(TN_TABLE_NAME).append("} AS {").append(TN_TABLE_ALIAS).append("} ") //
             .append("USING ( ") //
             .append("  SELECT {").append(TN_DATA_BINDING_QUERY).append("} ") //
-            .append(") AS ").append(TN_DATA_ALIAS).append(" ") //
+            .append(") AS {").append(TN_DATA_ALIAS).append("} ") //
             .append("ON ( {").append(TN_USING_ON_COMPARE_CLAUSE).append("} ) ") //
             .append("WHEN MATCHED THEN") //
             .append("  UPDATE SET {").append(TN_UPDATE_SET_CLAUSE).append("} ") //
