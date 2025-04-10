@@ -20,7 +20,7 @@ maven (**[Go to LATEST](https://nexus3.ymtech.co.kr/#browse/browse:maven-public:
 </repositories>
 
 <dependency>
-  <groupId>open.commons</groupId>
+  <groupId>io.github.open-commons</groupId>
   <artifactId>open-commons-spring-jdbc</artifactId>
   <version>${open-commons-spring-jdbc.version}</version>
 </dependency>
