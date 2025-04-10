@@ -1,14 +1,21 @@
 # open-commons-spring-jdbc
 Open Commons for Spring JDBC
 
+---
 # History
 See [history.md](./history.md).
 
-# Wiki
+---
+# HOWTO
 See [Wiki](https://github.com/parkjunhong/open-commons-spring-jdbc/wiki)
 
-# Repository
-maven (**[Go to LATEST](https://nexus3.ymtech.co.kr/#browse/browse:maven-public:open%2Fcommons%2Fopen-commons-spring-jdbc)**)
+---
+# 'release' Repository
+NOT YET (**[Go to LATEST](https://central.sonatype.com/artifact/io.github.open-commons/open-commons-spring-jdbc)**)
+
+# 'snapshot' Repository
+**[Go to LATEST](https://nexus3.ymtech.co.kr/#browse/browse:maven-public:open%2Fcommons%2Fopen-commons-spring-jdbc)**
+
 ``` xml
 <repositories>
   <repository>
@@ -18,10 +25,4 @@ maven (**[Go to LATEST](https://nexus3.ymtech.co.kr/#browse/browse:maven-public:
     <layout>default</layout>
   </repository>
 </repositories>
-
-<dependency>
-  <groupId>open.commons</groupId>
-  <artifactId>open-commons-spring-jdbc</artifactId>
-  <version>${open-commons-spring-jdbc.version}</version>
-</dependency>
 ```
