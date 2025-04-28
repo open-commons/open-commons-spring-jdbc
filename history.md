@@ -1,3 +1,12 @@
+[2025/04/28]
+- New
+  + open.commons.spring.jdbc.config.DatabaseInitResources: open-commons-spring-web 에서 이관됨.
+- Add
+  + open.commons.spring.jdbc.config.ConfigUtils: DBMS 데이터 초기화 기능 추가 및 DataSource 생성 유틸 
+    + createDataSource(Class<D>)
+    + createHikariDataSource()
+    + initializeDbmsDefaultData(DataSource, DatabaseInitResources, Map<String, Object>)
+
 [2025/04/09]
 - Bugfix
   + open.commons.spring.jdbc.repository.h2.AbstractH2SingleDataSourceRepository&lt;T&gt;
