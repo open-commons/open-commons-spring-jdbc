@@ -1,7 +1,8 @@
 [2025/04/28]
 - New
   + open.commons.spring.jdbc.config.DatabaseInitResources: open-commons-spring-web 에서 이관됨.
-  + open.commons.spring.jdbc.config.JdbcConfigHelper: DBMS 데이터 초기화 기능 추가 및 DataSource 생성 유틸 
+  + open.commons.spring.jdbc.config.JdbcConfigHelper: DBMS 데이터 초기화 기능 추가 및 DataSource 생성 유틸
+  + open.commons.spring.jdbc.config.h2.AbstractH2ServerConfig: H2 외부 연동을 위한 서버 설정
 - Deprecated
   + open.commons.spring.jdbc.config.ConfigUtils:  Use open.commons.spring.jdbc.config.JdbcConfigHelper
 
