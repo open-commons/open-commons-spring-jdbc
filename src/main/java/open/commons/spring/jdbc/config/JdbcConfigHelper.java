@@ -61,7 +61,7 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 public class JdbcConfigHelper {
 
-    private static Logger logger = LoggerFactory.getLogger(ConfigUtils.class);
+    private static Logger logger = LoggerFactory.getLogger(JdbcConfigHelper.class);
 
     /**
      * <br>

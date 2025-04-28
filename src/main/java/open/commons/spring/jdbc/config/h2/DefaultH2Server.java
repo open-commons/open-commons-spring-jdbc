@@ -30,7 +30,6 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.validation.constraints.NotNull;
 
@@ -39,6 +38,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import open.commons.core.function.SQLFunction;
+import open.commons.core.utils.ExceptionUtils;
 import open.commons.spring.jdbc.config.h2.AbstractH2ServerTypeArgs.H2ServerType;
 
 /**
@@ -48,13 +48,15 @@ import open.commons.spring.jdbc.config.h2.AbstractH2ServerTypeArgs.H2ServerType;
  * @version 0.5.0
  * @author parkjunhong77@gmail.com
  */
-public abstract class AbstractH2ServerConfig {
+public class DefaultH2Server {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
 
+    /** H2 서버 구동을 위한 정보 */
     protected final H2ServerArgs serverArgs;
+    /** H2 서버 유형 */
     protected final H2ServerType serverType;
-
+    /** H2 서버 */
     protected Server server;
 
     /**
@@ -76,12 +78,27 @@ public abstract class AbstractH2ServerConfig {
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    public AbstractH2ServerConfig(@NotNull H2ServerArgs serverArgs, @NotNull H2ServerType serverType) {
+    public DefaultH2Server(@NotNull H2ServerArgs serverArgs, @NotNull H2ServerType serverType) {
         this.serverArgs = serverArgs;
         this.serverType = serverType;
     }
 
-    @PostConstruct
+    /**
+     * 서버 유형에 따라 H2 서버를 구동시킵니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 4. 28.		박준홍			최초 작성
+     * </pre>
+     *
+     * @throws SQLException
+     *
+     * @since 2025. 4. 28.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
     public void startServer() throws SQLException {
 
         SQLFunction<String[], Server> creator = null;
@@ -97,7 +114,7 @@ public abstract class AbstractH2ServerConfig {
                 creator = Server::createWebServer;
                 break;
             default:
-                break;
+                throw ExceptionUtils.newException(IllegalArgumentException.class, "지원하지 않는 서버 유형입니다. 입력값=%s", this.serverType);
         }
 
         List<String> baseArgs = this.serverArgs.getBaseArguments();
