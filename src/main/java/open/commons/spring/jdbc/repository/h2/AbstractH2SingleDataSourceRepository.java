@@ -35,6 +35,7 @@ import javax.validation.constraints.NotNull;
 
 import open.commons.core.text.NamedTemplate;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
+import open.commons.spring.jdbc.view.h2.H2Commons;
 
 /**
  * H2 DB 연동을 위한 클래스.
@@ -44,54 +45,6 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  * @author parkjunhong77@gmail.com
  */
 public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
-
-    /**
-     * 예약어 목록 문자열
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final String RESERVED_KEYWORD_STRING = //
-            "ALL, ALTER, AND, ANY, ARRAY, AS, ASYMMETRIC, AUTHORIZATION, BETWEEN, BIGINT," //
-                    + "BINARY, BOOLEAN, BOTH, BY, CALL, CALLED, CASE, CAST, CHAR, CHARACTER," //
-                    + "CHECK, CLOB, CLOSE, COLLATE, COLUMN, COMMIT, CONDITION, CONNECT, CONSTRAINT," //
-                    + "CONTINUE, CONVERT, CORRESPONDING, CREATE, CROSS, CUBE, CURRENT, CURRENT_DATE," //
-                    + "CURRENT_PATH, CURRENT_ROLE, CURRENT_SCHEMA, CURRENT_TIME, CURRENT_TIMESTAMP," //
-                    + "CURRENT_USER, CURSOR, CYCLE, DATE, DAY, DEALLOCATE, DEC, DECIMAL, DECLARE," //
-                    + "DEFAULT, DELETE, DENSE_RANK, DEREF, DESCRIBE, DETERMINISTIC, DISTINCT, DOUBLE," //
-                    + "DROP, DYNAMIC, ELSE, END, ESCAPE, EXCEPT, EXEC, EXECUTE, EXISTS, EXTERNAL," //
-                    + "EXTRACT, FALSE, FETCH, FIRST, FLOAT, FOR, FOREIGN, FREE, FROM, FULL, FUNCTION," //
-                    + "GET, GRANT, GROUP, GROUPING, HAVING, HOLD, HOUR, IDENTITY, IF, IMMEDIATE," //
-                    + "IN, INDICATOR, INNER, INOUT, INSENSITIVE, INSERT, INT, INTEGER, INTERSECT," //
-                    + "INTERVAL, INTO, IS, JOIN, LANGUAGE, LARGE, LATERAL, LEADING, LEFT, LIKE," //
-                    + "LOCAL, LOCALTIME, LOCALTIMESTAMP, MATCH, MEMBER, MERGE, METHOD, MINUTE," //
-                    + "MODIFIES, MODULE, MONTH, MULTISET, NATIONAL, NATURAL, NCHAR, NCLOB, NEW," //
-                    + "NO, NONE, NOT, NULL, NULLIF, NUMERIC, OF, OLD, ON, ONLY, OPEN, OR, ORDER," //
-                    + "OUT, OUTER, OVER, OVERLAPS, PARAMETER, PARTITION, PRECISION, PREPARE," //
-                    + "PRIMARY, PROCEDURE, RANGE, RANK, READS, REAL, RECURSIVE, REF, REFERENCES," //
-                    + "REFERENCING, REGR_AVGX, REGR_AVGY, REGR_COUNT, REGR_INTERCEPT, REGR_R2," //
-                    + "REGR_SLOPE, REGR_SXX, REGR_SXY, REGR_SYY, RELEASE, RESULT, RETURN," //
-                    + "RETURNS, REVOKE, RIGHT, ROLLBACK, ROLLUP, ROW, ROW_NUMBER, ROWS, SAVEPOINT," //
-                    + "SCOPE, SCROLL, SEARCH, SECOND, SELECT, SENSITIVE, SESSION_USER, SET, SIMILAR," //
-                    + "SMALLINT, SOME, SPECIFIC, SPECIFICTYPE, SQL, SQLEXCEPTION, SQLSTATE," //
-                    + "SQLWARNING, START, STATIC, SUBMULTISET, SYMMETRIC, SYSTEM, SYSTEM_USER," //
-                    + "TABLE, TABLESAMPLE, THEN, TIME, TIMESTAMP, TIMEZONE_HOUR, TIMEZONE_MINUTE," //
-                    + "TO, TRAILING, TRANSLATION, TREAT, TRIGGER, TRUE, UESCAPE, UNION, UNIQUE," //
-                    + "UNKNOWN, UNNEST, UPDATE, USER, USING, VALUE, VALUES, VARCHAR, VARYING," //
-                    + "WHEN, WHENEVER, WHERE, WHILE, WINDOW, WITH, WITHIN, WITHOUT, YEAR" //
-    ;
-    /**
-     * 예약어 목록
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final Set<String> RESERVED_KEYWORDS = loadReservedKeywords(RESERVED_KEYWORD_STRING);
-    /**
-     * 예약어 감싸는 문자
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final CharSequence RESERVED_KEYWORDS_WRAPPING_CHARACTER = "\"";
-    protected static final String QUERY_FOR_OFFSET = "LIMIT ?, ?";
 
     /** 테이블 이름 */
     protected static final String TN_TABLE_NAME = "TABLE_NAME";
@@ -373,11 +326,11 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywords()
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywords()
      */
     @Override
     protected Set<String> getReservedKeywords() {
-        return RESERVED_KEYWORDS;
+        return H2Commons.RESERVED_KEYWORDS;
     }
 
     /**
@@ -386,11 +339,11 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywordWrappingCharacter()
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywordWrappingCharacter()
      */
     @Override
     protected CharSequence getReservedKeywordWrappingCharacter() {
-        return RESERVED_KEYWORDS_WRAPPING_CHARACTER;
+        return H2Commons.RESERVED_KEYWORDS_WRAPPING_CHARACTER;
     }
 
     /**
@@ -399,11 +352,11 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForOffset(int, int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {
-        return QUERY_FOR_OFFSET;
+        return H2Commons.QUERY_FOR_OFFSET;
     }
 
     /**

@@ -73,7 +73,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#afterPropertiesSet()
+     * @see open.commons.spring.jdbc.dao.AbstractGenericRetrieve#afterPropertiesSet()
      */
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -83,9 +83,8 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#execute(open.commons.function.SQLFunction)
+     * @see open.commons.spring.jdbc.dao.AbstractGenericRetrieve#execute(open.commons.core.function.SQLFunction)
      */
-    @Override
     protected <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException {
 
         Collection<DataSource> colDataSources = getDataSources();

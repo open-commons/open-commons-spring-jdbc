@@ -95,6 +95,8 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @see open.commons.spring.jdbc.dao.AbstractGenericRetrieve#execute(open.commons.core.function.SQLFunction)
      */
     protected <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException {
 

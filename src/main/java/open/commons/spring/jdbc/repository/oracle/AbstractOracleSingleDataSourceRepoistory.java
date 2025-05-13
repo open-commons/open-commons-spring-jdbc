@@ -40,6 +40,7 @@ import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.text.NamedTemplate;
 import open.commons.spring.jdbc.repository.AbstractGenericRepository;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
+import open.commons.spring.jdbc.view.oracle.OracleCommons;
 
 /**
  * Oracle DBMS 연동을 위한 클래스.
@@ -49,38 +50,6 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  * @author parkjunhong77@gmail.com
  */
 public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends AbstractSingleDataSourceRepository<T> {
-
-    /**
-     * 예약어 목록 문자열
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final String RESERVED_KEYWORD_STRING = //
-            "ACCESS, ADD, ALL, ALTER, AND, ANY, AS, ASC, AUDIT, BETWEEN, BY, CHAR, " //
-                    + "CHECK, CLUSTER, COLUMN, COMMENT, COMPRESS, CONNECT, CREATE, CURRENT, " //
-                    + "DATE, DECIMAL, DEFAULT, DELETE, DESC, DISTINCT, DROP, ELSE, EXCLUSIVE, " //
-                    + "EXISTS, FILE, FLOAT, FOR, FROM, GRANT, GROUP, HAVING, IDENTIFIED, " //
-                    + "IMMEDIATE, IN, INCREMENT, INDEX, INITIAL, INSERT, INTEGER, INTERSECT, " //
-                    + "INTO, IS, LEVEL, LIKE, LOCK, LONG, MAXEXTENTS, MINUS, MLSLABEL, MODE, " //
-                    + "MODIFY, NOAUDIT, NOCOMPRESS, NOT, NOWAIT, NULL, NUMBER, OF, OFFLINE, " //
-                    + "ON, ONLINE, OPTION, OR, ORDER, PCTFREE, PRIOR, PUBLIC, RAW, RENAME, " //
-                    + "RESOURCE, REVOKE, ROW, ROWID, ROWLABEL, ROWNUM, ROWS, SELECT, SESSION, " //
-                    + "SET, SHARE, SIZE, SMALLINT, START, SUCCESSFUL, SYNONYM, SYSDATE, TABLE, " //
-                    + "THEN, TO, TRIGGER, UID, UNION, UNIQUE, UPDATE, USER, VALIDATE, VALUES, " //
-                    + "VARCHAR, VARCHAR2, VIEW, WHENEVER, WHERE, WITH" //
-    ;
-    /**
-     * 예약어 목록
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final Set<String> RESERVED_KEYWORDS = loadReservedKeywords(RESERVED_KEYWORD_STRING);
-    /**
-     * 예약어 감싸는 문자
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final CharSequence RESERVED_KEYWORDS_WRAPPING_CHARACTER = "\"";
 
     protected static final String TN_TABLE_NAME = "TABLE_NAME";
     protected static final String TN_USING_DUAL_ON = "USING_DUAL_ON_CLAUSE";
@@ -129,8 +98,6 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
             // 'INSERT' 구문 작성
             .append(" {").append(TN_INSERT).append("} ") //
             .toString();
-
-    protected static final String QUERY_FOR_OFFSET = "OFFSET ? ROWS FETCH NEXT ? ROWS ONLY";
 
     /**
      * <br>
@@ -366,11 +333,11 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywords()
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywords()
      */
     @Override
     protected Set<String> getReservedKeywords() {
-        return RESERVED_KEYWORDS;
+        return OracleCommons.RESERVED_KEYWORDS;
     }
 
     /**
@@ -379,11 +346,11 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywordWrappingCharacter()
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywordWrappingCharacter()
      */
     @Override
     protected CharSequence getReservedKeywordWrappingCharacter() {
-        return RESERVED_KEYWORDS_WRAPPING_CHARACTER;
+        return OracleCommons.RESERVED_KEYWORDS_WRAPPING_CHARACTER;
     }
 
     /**
@@ -392,11 +359,11 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForOffset(int, int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {
-        return QUERY_FOR_OFFSET;
+        return OracleCommons.QUERY_FOR_OFFSET;
     }
 
     /**

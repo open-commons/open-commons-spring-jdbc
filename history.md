@@ -1,3 +1,11 @@
+[2025/05/13]
+- New
+  + open.commons.spring.jdbc.view 패키지 추가: VIEW 에 대한 데이터 조회 기능 추가
+    + H2, MariaDB, Oracle, PostgreSQL 에 대한 SingleDataSource 코드 추가
+- Modify
+  + open.commons.spring.jdbc.repository.AbstractGenericRepository&lt;T&gt;: 상속 구조 변경
+    + open.commons.spring.jdbc.dao.AbstractGenericDao -> open.commons.spring.jdbc.view.AbstractGenericView&lt;T&gt;
+
 [2025/04/28]
 - New
   + open.commons.spring.jdbc.config.DatabaseInitResources: open-commons-spring-web 에서 이관됨.

@@ -31,12 +31,14 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 
 import open.commons.core.annotation.ColumnValue;
 import open.commons.core.utils.AnnotationUtils;
 import open.commons.core.utils.SQLUtils;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
+import open.commons.spring.jdbc.view.postgresql.PgSqlCommons;
 
 /**
  * PostgreSQL 연동을 위한 클래스.
@@ -46,37 +48,6 @@ import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
  * @author parkjunhong77@gmail.com
  */
 public abstract class AbstractPostgreSingleDataSourceRepository<T> extends AbstractSingleDataSourceRepository<T> {
-
-    /**
-     * 예약어 목록 문자열
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final String RESERVED_KEYWORD_STRING = //
-            "ALL, ANALYSE, ANALYZE, AND, ANY, ARRAY, AS, ASC, ASYMMETRIC, AUTHORIZATION, " //
-                    + "BINARY, BOTH, CASE, CAST, CHECK, COLLATE, COLUMN, CONSTRAINT, CREATE, " //
-                    + "CURRENT_CATALOG, CURRENT_DATE, CURRENT_ROLE, CURRENT_TIME, " //
-                    + "CURRENT_TIMESTAMP, CURRENT_USER, DEFAULT, DEFERRABLE, DESC, DISTINCT, DO, " //
-                    + "ELSE, END, EXCEPT, FALSE, FETCH, FOR, FOREIGN, FROM, GRANT, GROUP, HAVING, " //
-                    + "IN, INITIALLY, INTERSECT, INTO, LATERAL, LEADING, LIMIT, LOCALTIME, " //
-                    + "LOCALTIMESTAMP, NOT, NULL, OFFSET, ON, ONLY, OR, ORDER, PLACING, PRIMARY, " //
-                    + "REFERENCES, RETURNING, SELECT, SESSION_USER, SOME, SYMMETRIC, TABLE, THEN, " //
-                    + "TO, TRAILING, TRUE, UNION, UNIQUE, USER, USING, VARIADIC, WHEN, WHERE, WINDOW, WITH" //
-    ;
-    /**
-     * 예약어 목록
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final Set<String> RESERVED_KEYWORDS = loadReservedKeywords(RESERVED_KEYWORD_STRING);
-    /**
-     * 예약어 감싸는 문자
-     * 
-     * @since 2025. 4. 2.
-     */
-    protected static final CharSequence RESERVED_KEYWORDS_WRAPPING_CHARACTER = "\"";
-
-    protected static final String QUERY_FOR_OFFSET = "OFFSET ? LIMIT ?";
 
     /**
      * <pre>
@@ -315,11 +286,11 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywords()
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywords()
      */
     @Override
     protected Set<String> getReservedKeywords() {
-        return RESERVED_KEYWORDS;
+        return PgSqlCommons.RESERVED_KEYWORDS;
     }
 
     /**
@@ -328,11 +299,11 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#getReservedKeywordWrappingCharacter()
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywordWrappingCharacter()
      */
     @Override
     protected CharSequence getReservedKeywordWrappingCharacter() {
-        return RESERVED_KEYWORDS_WRAPPING_CHARACTER;
+        return PgSqlCommons.RESERVED_KEYWORDS_WRAPPING_CHARACTER;
     }
 
     /**
@@ -341,11 +312,11 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForOffset(int, int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */
     @Override
-    protected String queryForOffset(int offset, int limit) {
-        return QUERY_FOR_OFFSET;
+    protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {
+        return PgSqlCommons.QUERY_FOR_OFFSET;
     }
 
     /**
