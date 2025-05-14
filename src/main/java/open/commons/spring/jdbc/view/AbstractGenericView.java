@@ -475,7 +475,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#countAll()
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#countAll()
      */
     @Override
     public Result<Integer> countAll() {
@@ -488,7 +488,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#countBy(java.util.Map)
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#countBy(java.util.Map)
      */
     @Override
     public Result<Integer> countBy(@NotNull Map<String, Object> clmnParams) {
@@ -1449,7 +1449,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#getEntityType()
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#getEntityType()
      */
     @Override
     public Class<T> getEntityType() {
@@ -1530,7 +1530,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#getTableName()
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#getTableName()
      */
     @Override
     public String getTableName() {
@@ -1841,7 +1841,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll()
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll()
      */
     @Override
     public Result<List<T>> selectAll() {
@@ -1857,7 +1857,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(int, int)
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll(int, int)
      */
     @Override
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit) {
@@ -1870,7 +1870,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(int, int, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll(int, int, java.lang.String[])
      */
     @Override
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
@@ -1883,7 +1883,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAll(java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll(java.lang.String[])
      */
     @Override
     public Result<List<T>> selectAll(String... orderByArgs) {
@@ -1896,7 +1896,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String)
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String)
      */
     @Override
     public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect) {
@@ -1912,7 +1912,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String, int, int)
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String, int, int)
      */
     @Override
     public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect, @Min(0) int offset, @Min(1) int limit) {
@@ -1930,7 +1930,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String, int, int,
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String, int, int,
      *      java.lang.String[])
      */
     @Override
@@ -1953,8 +1953,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectAllByQuery(java.lang.String,
-     *      java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String, java.lang.String[])
      */
     @Override
     public Result<List<T>> selectAllByQuery(String queryForSelect, String... orderByArgs) {
@@ -1974,7 +1973,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, int, int, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectBy(java.util.Map, int, int, java.lang.String[])
      */
     @Override
     public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
@@ -1987,7 +1986,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectBy(java.util.Map, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectBy(java.util.Map, java.lang.String[])
      */
     @Override
     public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs) {
@@ -2000,7 +1999,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectByQuery(java.lang.String, java.util.Map, int,
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectByQuery(java.lang.String, java.util.Map, int,
      *      int, java.lang.String[])
      */
     @Override
@@ -2024,7 +2023,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#selectByQuery(java.lang.String, java.util.Map,
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectByQuery(java.lang.String, java.util.Map,
      *      java.lang.String[])
      */
     @Override
