@@ -48,7 +48,7 @@
 		<!-- >>> end: plugin dependencies -->
 
 		<!-- >>> begin: dependencies -->
-		<commons-io.version>2.11.0</commons-io.version>
+		<commons-io.version>2.14.0</commons-io.version>
 
 		<open-commons-core.version>2.1.0-SNAPSHOT</open-commons-core.version>
 		<!-- <<< end: dependencies -->
