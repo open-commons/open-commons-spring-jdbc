@@ -248,7 +248,7 @@ public class JdbcConfigHelper {
 
         String sql = sqlTemplate.format();
 
-        logger.debug("sql=\n{}", sql);
+        logger.trace("sql=\n{}", sql);
 
         return new InputStreamResource(new ByteArrayInputStream(sql.getBytes(StandardCharsets.UTF_8)));
     }
