@@ -29,11 +29,13 @@ package open.commons.spring.jdbc.dao;
 
 import java.util.Locale;
 
+import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
 
 /**
  * DAO 클래스 공통 기능 정의 클래스.
@@ -61,6 +63,25 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @version 0.1.0
      */
     // JdbcTemplate getJdbcTemplate();
+
+    /**
+     * {@link TransactionAwareDataSourceProxy} 객체 또는 {@link TransactionAwareDataSourceProxy} 제공하는 객체를 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 6. 11.		박준홍		 제공되는 {@link DataSource} 객체가 {@link TransactionAwareDataSourceProxy} 을 강제하기 위해서 구현 클래스에서 제공되는 것을 최상위 인터페이스로 옮김.<br>
+     *                               
+     * </pre>
+     *
+     * @return {@link TransactionAwareDataSourceProxy} 객체 또는 {@link TransactionAwareDataSourceProxy} 제공하는 객체
+     *
+     * @since 2025. 6. 11.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    <T> T getDataSource();
 
     /**
      * 이름에 해당하는 쿼리를 제공한다. <br>

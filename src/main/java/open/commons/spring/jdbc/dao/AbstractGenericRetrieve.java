@@ -45,6 +45,7 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import javax.sql.DataSource;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -57,6 +58,10 @@ import org.springframework.dao.IncorrectResultSizeDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.ConnectionProxy;
 import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.jdbc.datasource.TransactionAwareDataSourceProxy;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import open.commons.core.Result;
 import open.commons.core.annotation.ColumnDef;
@@ -180,6 +185,9 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            {@link Connection}
      * @param t
      *            {@link JdbcTemplate}
+     * 
+     * @deprecated {@link Repository} 계층 클래스의 메소드를 {@link Transactional}로 관리하고, 이를 위해서 {@link #getDataSource()}에서
+     *             {@link TransactionAwareDataSourceProxy} 객체를 제공하는 것을 강제함에 따라 사용하지 않음.
      */
     private final BiFunction<Connection, JdbcTemplate, Connection> CONN_CREATOR = (c, t) -> {
         return (Connection) Proxy.newProxyInstance(ConnectionProxy.class.getClassLoader(), new Class<?>[] { ConnectionProxy.class }, new CloseSuppressingInvocationHandler(c, t));
@@ -551,6 +559,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * ------------------------------------------
      * 2019. 3. 28.		박준홍			최초 작성
      * 2019. 6. 5.		박준홍			작업용 Connection 객체 생성 로직 수직
+     * 2025. 6. 11.     박준홍         {@link Transactional}을 이용하여 {@link Repository} 메소드를 관리하기 위해서 통합.
+     * 
      * </pre>
      *
      * @param act
@@ -561,7 +571,20 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    protected abstract <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException;
+    protected <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException {
+        Connection con = null;
+        DataSource dataSource = null;
+        try {
+            dataSource = getDataSource();
+            con = DataSourceUtils.getConnection(dataSource);
+            return act.apply(con);
+        } catch (SQLException e) {
+            logger.warn("Fail to execute query. con={}", con.toString(), e);
+            throw e;
+        } finally {
+            DataSourceUtils.releaseConnection(con, dataSource);
+        }
+    }
 
     /**
      * 조회된 데이터 개수를 제공합니다. <br>
@@ -823,6 +846,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * 2019. 6. 5.		박준홍			최초 작성
      * 2020. 2. 13.		박준홍			springframework 5.1.13 >= 대응
      * 2020. 4. 15.		박준홍			private -> protected
+     * 2025. 6. 11.     박준홍         {@link #getDataSource()}에서 {@link TransactionAwareDataSourceProxy} 객체를 제공하는 것을 강제함에 따라 사용하지 않음.
      * </pre>
      *
      * @param con
@@ -833,6 +857,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2019. 6. 5.
      * @version 0.0.6
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
+     * 
+     * @deprecated {@link #getDataSource()}에서 {@link TransactionAwareDataSourceProxy} 객체를 제공하는 것을 강제함에 따라 사용하지 않음. *
      */
     protected final Connection getConnection(@NotNull Connection con, @NotNull JdbcTemplate jdbcTemplate) throws SQLException {
         try {
@@ -872,6 +898,32 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     public Result<Integer> getCount(@NotNull String selectQuery, Object... params) {
         String query = wrapQueryForCount(selectQuery);
         return executeCountOf(query, params);
+    }
+
+    /**
+     * {@link DataSource}를 {@link TransactionAwareDataSourceProxy}로 감싸서 제공합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 6. 11.		박준홍			최초 작성
+     * </pre>
+     *
+     * @param dataSource
+     * @return
+     *
+     * @since 2025. 6. 11.
+     * @version 0.5.0
+     * @author parkjunhong77@gmail.com
+     */
+    protected final DataSource getDataSource0(@NotNull DataSource dataSource) {
+        Assert.notNull(dataSource, "datasource는 절대 null 일 수 없습니다.");
+        if (dataSource instanceof TransactionAwareDataSourceProxy) {
+            return dataSource;
+        } else {
+            return new TransactionAwareDataSourceProxy(dataSource);
+        }
     }
 
     /**

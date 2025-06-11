@@ -1,3 +1,9 @@
+[2025/06/11]
+- Release: 0.6.0-SNAPSHOT
+- New
+  + open.commons.spring.jdbc.config.TransactionManagerConfiguration: DAO 메소드를 Service 계층에서 @Transactional 어노테이션으로 관리 지원.
+  + 그에 따른 새로운 클래스 추가와 기존 클래스 소스 리팩토링 진행.
+
 [2025/05/13]
 - New
   + open.commons.spring.jdbc.view 패키지 추가: VIEW 에 대한 데이터 조회 기능 추가

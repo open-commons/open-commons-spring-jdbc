@@ -29,6 +29,7 @@ package open.commons.spring.jdbc.repository;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
@@ -54,6 +55,7 @@ import open.commons.core.utils.ArrayUtils;
 import open.commons.core.utils.ExceptionUtils;
 import open.commons.core.utils.SQLUtils;
 import open.commons.spring.jdbc.dao.DefaultConnectionCallback2;
+import open.commons.spring.jdbc.exception.RuntimeDataAccessException;
 import open.commons.spring.jdbc.view.AbstractGenericView;
 
 /**
@@ -648,12 +650,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> deleteBy(@NotNull Method method, Object... whereArgs) {
+    protected Result<Integer> deleteBy(@NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
         String query = attachWhereClause(QUERY_FOR_DELETE_HEADER, method, whereArgs);
 
         logger.debug("Query: {}, data={}", query, Arrays.toString(whereArgs));
@@ -675,12 +678,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param whereArgs
      *            'WHERE' 절에 사용될 파라미터.
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2021. 12. 3.
      * @version 0.3.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> deleteBy(Object... whereArgs) {
+    protected Result<Integer> deleteBy(Object... whereArgs) throws RuntimeDataAccessException {
         return deleteBy(getCurrentMethod(1, whereArgs), whereArgs);
     }
 
@@ -700,13 +704,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
      *         </ul>
+     * @throws RuntimeDataAccessException
      * 
      * @since 2019. 3. 28.
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SuppressWarnings("unchecked")
-    public <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
+    public <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws RuntimeDataAccessException {
 
         Result<Integer> result = new Result<>();
 
@@ -731,7 +736,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
 
                         pos++;
                     }
-                } catch (Exception e) {
+                } catch (SQLException e) {
                     logger.error("data.pos={}, cause={}", pos, e.getMessage(), e);
                     throw e;
                 }
@@ -743,7 +748,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
 
         } catch (Exception e) {
             logger.warn(e.getMessage(), e);
-            result.setMessage(e.getMessage());
+            throw new RuntimeDataAccessException("", e);
         } finally {
             watch.stop();
             logger.trace("Data.count: {}, Elapsed.total: {}", updated, watch.getAsPretty());
@@ -848,6 +853,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param tailQuery
      *            쿼리 마지막
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
@@ -856,7 +862,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @see SQLTripleFunction#setParameters(String...)
      */
     public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) {
+            @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) throws RuntimeDataAccessException {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
     }
 
@@ -890,6 +896,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param tailQuery
      *            쿼리 마지막
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2020. 6. 15.
      * @version 0.2.0
@@ -898,7 +905,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @see SQLTripleFunction#setParameters(String...)
      */
     public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
+            @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ,
                 tailQuery);
         return executeUpdate(brokers);
@@ -919,17 +926,18 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param setter
      *            요청쿼리 파라미터 설정 객체
      * @return 쿼리 처리결과
+     * @throws RuntimeDataAccessException
      *
      * @since 2019. 3. 29.
      * @version 0.0.6
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter) {
+    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter) throws RuntimeDataAccessException {
         return executeUpdate(query, setter, false);
     }
 
     @SuppressWarnings("unchecked")
-    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) {
+    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) throws RuntimeDataAccessException {
         return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
 
@@ -1177,13 +1185,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param whereArgs
      *            쿼리 Where 절 파라미터
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2022. 11. 2.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
     @SuppressWarnings("unchecked")
-    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) {
+    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrNothing(data, method, whereArgs);
         return executeUpdate(broker);
     }
@@ -1205,12 +1214,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param whereArgs
      *            쿼리 Where 절 파라미터
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2022. 11. 2.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> insertOrNothingBy(T data, Object... whereArgs) {
+    protected Result<Integer> insertOrNothingBy(T data, Object... whereArgs) throws RuntimeDataAccessException {
         return insertOrNothingBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
     }
 
@@ -1233,13 +1243,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param whereArgs
      *            쿼리 Where 절 파라미터
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2022. 7. 13.
      * @version 2.0.0
      * @author parkjunhong77@gmail.com
      */
     @SuppressWarnings("unchecked")
-    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) {
+    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrUpdate(data, method, whereArgs);
         return executeUpdate(broker);
     }
@@ -1261,12 +1272,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @param whereArgs
      *            쿼리 Where 절 파라미터
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2022. 7. 14.
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> insertOrUpdateBy(T data, Object... whereArgs) {
+    protected Result<Integer> insertOrUpdateBy(T data, Object... whereArgs) throws RuntimeDataAccessException {
         return insertOrUpdateBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
     }
 
@@ -1550,6 +1562,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *            'WHERE' 절에 사용될 파라미터.
      *
      * @return
+     * @throws RuntimeDataAccessException
      *
      * @since 2021. 12. 3.
      * @version 0.3.0
@@ -1557,7 +1570,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * 
      * @see ColumnValue
      */
-    protected Result<Integer> updateBy(T data, Object... whereArgs) {
+    protected Result<Integer> updateBy(T data, Object... whereArgs) throws RuntimeDataAccessException {
         return updateBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
     }
 

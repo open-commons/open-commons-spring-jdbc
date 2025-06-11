@@ -26,17 +26,13 @@
 
 package open.commons.spring.jdbc.view;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-
 import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceUtils;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import open.commons.core.function.SQLFunction;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 
 /**
@@ -120,64 +116,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
     }
 
     /**
-     *
-     * @since 2025. 5. 13.
-     * @version 0.5.0
-     * @author parkjunhong77@gmail.com
-     *
-     * @see open.commons.spring.jdbc.dao.AbstractGenericRetrieve#execute(open.commons.core.function.SQLFunction)
-     */
-    @Override
-    protected <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException {
-        Connection con = DataSourceUtils.getConnection(getDataSource());
-        Connection conToWork = null;
-
-        JdbcTemplate jdbcTemplate = getJdbcTemplate();
-
-        try {
-            con.setAutoCommit(false);
-            // (start) [BUG-FIX]: spring 5.x 부터 4.x에 존재하던 public NativeJdbcExtractor getNativeJdbcExtractor()
-            // 를 제거함에 따라 호환성 지원 / Park_Jun_Hong_(parkjunhong77@gmail.com): 2019. 6. 5. 오후 5:14:17
-            conToWork = getConnection(con, jdbcTemplate);
-            // (end): 2019. 6. 5. 오후 5:14:17
-
-            conToWork.setAutoCommit(false);
-            R r = act.apply(conToWork);
-
-            return r;
-
-        } catch (SQLException e) {
-            logger.warn("Fail to execute query.", e);
-
-            try {
-                con.rollback();
-            } catch (SQLException ignored) {
-            }
-
-            StringBuffer msg = new StringBuffer();
-            msg.append("con=");
-            msg.append(con.toString());
-            msg.append(", con-to-work=");
-            msg.append(conToWork != null ? conToWork.toString() : null);
-
-            DataAccessException dae = jdbcTemplate.getExceptionTranslator().translate("ConnectionCallback", msg.toString(), e);
-            throw new SQLException(dae.getMessage(), dae);
-        } finally {
-            try {
-                if (con != null) {
-                    con.commit();
-                }
-            } catch (SQLException ignored) {
-            }
-
-            DataSourceUtils.releaseConnection(con, dataSource);
-
-            con = null;
-            conToWork = null;
-        }
-    }
-
-    /**
      * {@link DataSource}를 제공한다. <br>
      * 
      * <pre>
@@ -185,6 +123,7 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
      * 2025. 5. 13.		박준홍			코드 복제. {@link AbstractSingleDataSourceRepository}
+     * 2025. 6. 11.     박준홍         {@link Transactional}을 이용하여 {@link Repository} 계층 클래스의 메소드를 관리하기 위해서 DataSource를 TransactionAwareDataSourceProxy로 감싸는 걸 적용.
      * </pre>
      *
      * @return
@@ -192,9 +131,13 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * @since 2025. 5. 13.
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
+     *
+     * @see open.commons.spring.jdbc.dao.IGenericDao#getDataSource()
      */
-    public DataSource getDataSource() {
-        return this.dataSource;
+    @SuppressWarnings({ "unchecked" })
+    @Override
+    public <T> T getDataSource() {
+        return (T) getDataSource0(this.dataSource);
     }
 
     /**
