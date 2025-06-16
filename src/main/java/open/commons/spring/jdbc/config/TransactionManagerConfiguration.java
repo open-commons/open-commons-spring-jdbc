@@ -30,7 +30,8 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -67,7 +68,7 @@ public class TransactionManagerConfiguration {
     }
 
     /**
-     * {@link Repository} 계층에서 사용하는 {@link Connection}에 대한 transaction를 관리하기 위한 설정 <br>
+     * {@link Repository} 계층에서 사용하는 {@link Connection}에 대한 기본 transaction를 관리 Bean을 제공합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -76,7 +77,7 @@ public class TransactionManagerConfiguration {
      * 2025. 6. 11.		박준홍			최초 작성
      * </pre>
      *
-     * @param dataSource
+     * @param dataSources
      * @return
      *
      * @since 2025. 6. 11.
@@ -84,7 +85,8 @@ public class TransactionManagerConfiguration {
      * @author parkjunhong77@gmail.com
      */
     @Bean
-    @ConditionalOnBean(DataSource.class)
+    @ConditionalOnSingleCandidate(DataSource.class)
+    @ConditionalOnMissingBean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
