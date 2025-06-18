@@ -30,6 +30,8 @@ import java.sql.Connection;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnSingleCandidate;
 import org.springframework.context.annotation.Bean;
@@ -48,6 +50,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @Configuration
 @EnableTransactionManagement
 public class TransactionManagerConfiguration {
+
+    private final Logger logger = LoggerFactory.getLogger(TransactionManagerConfiguration.class);
 
     /**
      * <br>
@@ -88,7 +92,9 @@ public class TransactionManagerConfiguration {
     @ConditionalOnSingleCandidate(DataSource.class)
     @ConditionalOnMissingBean
     public PlatformTransactionManager transactionManager(DataSource dataSource) {
-        return new DataSourceTransactionManager(dataSource);
+        PlatformTransactionManager txManager = new DataSourceTransactionManager(dataSource);
+        logger.info("[transaction-manager] default-tx-manager={}", txManager);
+        return txManager;
     }
 
 }
