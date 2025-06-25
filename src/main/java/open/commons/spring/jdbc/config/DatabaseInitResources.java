@@ -26,7 +26,11 @@
 
 package open.commons.spring.jdbc.config;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +68,7 @@ public class DatabaseInitResources {
 
     public static final String PATH_CLASSPATH = "classpath:";
     public static final String PATH_FILE = "file:";
+    public static final String PATH_DIRECTORY = "dir:";
 
     /** 테이블 생성을 위한 쿼리 */
     private List<String> schema;
@@ -97,6 +102,7 @@ public class DatabaseInitResources {
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
      * 2025. 4. 25.      박준홍         최초 작성
+     * 2025. 6. 25      박준홍         디렉토리 처리 추가 ("dir:")
      * </pre>
      *
      * @param sqlList
@@ -120,13 +126,23 @@ public class DatabaseInitResources {
 
             sql = sql.trim();
             if (sql.startsWith(PATH_CLASSPATH)) {
-                return new ClassPathResource(sql.replace(PATH_CLASSPATH, ""));
+                return Arrays.asList(new ClassPathResource(sql.replace(PATH_CLASSPATH, "")));
             } else if (sql.startsWith(PATH_FILE)) {
-                return new FileSystemResource(sql.replace(PATH_FILE, ""));
+                return Arrays.asList(new FileSystemResource(sql.replace(PATH_FILE, "")));
+            } else if (sql.startsWith(PATH_DIRECTORY)) {
+                String dir = sql.replace(PATH_DIRECTORY, "");
+                try {
+                    return Files.list(Paths.get(dir)) //
+                            .filter(path -> path.toString().endsWith(".sql")) //
+                            .map(path -> new FileSystemResource(path)) //
+                            .collect(Collectors.toList());
+                } catch (IOException e) {
+                    throw ExceptionUtils.newException(IllegalArgumentException.class, "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
+                }
             } else {
                 throw ExceptionUtils.newException(IllegalArgumentException.class, "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
             }
-        }).collect(Collectors.toList());
+        }).flatMap(List::stream).collect(Collectors.toList());
     }
 
     /**
@@ -170,7 +186,22 @@ public class DatabaseInitResources {
     }
 
     /**
-     * <br>
+     * DML 쿼리가 있는 파일들을 설정합니다.<br>
+     * 파일 경로 정보는 아래와 같은 접두어를 지원합니다.
+     * <li>classpath: 패키지 내에 포함된 것을 의미.
+     * <ul>
+     * <li>예) classpath:resources.queries.user-info
+     * </ul>
+     * <li>file: 단일 파일을 의미
+     * <ul>
+     * <li>예) file:./resources/queries/user-info.sql
+     * </ul>
+     * <li>dir: 디렉토리 내의 파일들을 의미.<br>
+     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른
+     * 디렉토리에 설정하기 바랍니다.
+     * <ul>
+     * <li>예) dir:./resources/queries
+     * </ul>
      * 
      * <pre>
      * [개정이력]
@@ -196,7 +227,22 @@ public class DatabaseInitResources {
     }
 
     /**
-     * <br>
+     * DDL 쿼리가 있는 파일들을 설정합니다.<br>
+     * 파일 경로 정보는 아래와 같은 접두어를 지원합니다.
+     * <li>classpath: 패키지 내에 포함된 것을 의미.
+     * <ul>
+     * <li>예) classpath:resources.queries.user-table
+     * </ul>
+     * <li>file: 단일 파일을 의미
+     * <ul>
+     * <li>예) file:./resources/queries/user-table.sql
+     * </ul>
+     * <li>dir: 디렉토리 내의 파일들을 의미.<br>
+     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른
+     * 디렉토리에 설정하기 바랍니다.
+     * <ul>
+     * <li>예) dir:./resources/queries
+     * </ul>
      * 
      * <pre>
      * [개정이력]

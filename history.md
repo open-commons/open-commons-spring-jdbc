@@ -1,3 +1,11 @@
+[2025/06/26]
+- Add
+  + 스키마/데이터 자동생성을 위한 쿼리 파일 문법 확장
+    + 'dir:': 해당 디렉토리 내의 모든 파일 *.sql 추가
+    + 관련 메소드:
+      + open.commons.spring.jdbc.config.DatabaseInitResources.setData(List&lt;String&gt;)
+      + open.commons.spring.jdbc.config.DatabaseInitResources.setSchema(List&lt;tring&gt;)
+
 [2025/06/11]
 - Release: 0.6.0-SNAPSHOT
 - New
