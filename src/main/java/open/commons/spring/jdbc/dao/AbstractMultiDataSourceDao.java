@@ -154,8 +154,8 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      */
     @SuppressWarnings("unchecked")
     @Override
-    public <T> T getDataSource() {
-        return (T) this.dataSources.stream().map(//
+    public <E> E getDataSource() {
+        return (E) this.dataSources.stream().map(//
                 ds -> ds instanceof TransactionAwareDataSourceProxy //
                         ? ds //
                         : new TransactionAwareDataSourceProxy(ds) //

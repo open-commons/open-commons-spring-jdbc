@@ -81,7 +81,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    <T> T getDataSource();
+    <E> E getDataSource();
 
     /**
      * 이름에 해당하는 쿼리를 제공한다. <br>

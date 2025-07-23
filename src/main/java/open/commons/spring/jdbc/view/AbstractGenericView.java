@@ -55,7 +55,7 @@ import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.TripleFunction;
 import open.commons.core.util.ArrayItr;
 import open.commons.core.utils.ArrayUtils;
-import open.commons.core.utils.AssertUtils;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.CollectionUtils;
 import open.commons.core.utils.ExceptionUtils;
 import open.commons.core.utils.ObjectUtils;
@@ -768,7 +768,6 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    @SuppressWarnings("unchecked")
     protected String createQueryForOrderByQueryForPagination(String queryForSelect, int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
 
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), int.class, int.class, String[].class);
@@ -1388,7 +1387,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see #getCurrentMethod(int, Class...)
      */
     protected final Method getCurrentMethod(int distance, @NotEmpty Object... parameters) throws IllegalArgumentException {
-        AssertUtils.assertNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
+        AssertUtils2.assertNotNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
 
         return getCurrentMethod(distance + 1, ObjectUtils.readClasses(this.forceToPrimitive, parameters));
     }
@@ -1535,7 +1534,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
     @Override
     public String getTableName() {
         TableDef tblAnno = this.entityType.getAnnotation(TableDef.class);
-        AssertUtils.assertNull("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", tblAnno, UnsupportedOperationException.class);
+        AssertUtils2.assertNotNull("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", tblAnno, UnsupportedOperationException.class);
         return tblAnno.table();
     }
 

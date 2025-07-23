@@ -32,7 +32,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
 
-import open.commons.core.utils.AssertUtils;
+import open.commons.core.utils.AssertUtils2;
 
 /**
  * 단일 DBMS와 연동하는 기능을 지원한다.
@@ -68,7 +68,7 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        AssertUtils.assertNull("DataSource MUST NOT BE null.", this.dataSource);
+        AssertUtils2.assertNotNull("DataSource MUST NOT BE null.", this.dataSource);
     }
 
     /**
@@ -93,8 +93,8 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      */
     @SuppressWarnings({ "unchecked" })
     @Override
-    public <T> T getDataSource() {
-        return (T) getDataSource0(this.dataSource);
+    public <E> E getDataSource() {
+        return (E) getDataSource0(this.dataSource);
     }
 
     /**

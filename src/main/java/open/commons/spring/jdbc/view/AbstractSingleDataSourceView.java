@@ -136,8 +136,8 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      */
     @SuppressWarnings({ "unchecked" })
     @Override
-    public <T> T getDataSource() {
-        return (T) getDataSource0(this.dataSource);
+    public <E> E getDataSource() {
+        return (E) getDataSource0(this.dataSource);
     }
 
     /**

@@ -1615,17 +1615,19 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
         }
 
         Map<String, Object> mapData = mapResult.getData();
-        // begin - PATCH [2020. 8. 13.]: required == false 인 경우 Map<> 데이터 검증 추가. |
-        // Park_Jun_Hong_(parkjunhong77@gmail.com)
-        if (mapData == null && !required) {
-            return new Result<T>(null, true);
+        Object o = null;
+        if (mapData == null || (o = mapData.get(column)) == null) {
+            if (required) {
+                throw new EmptyResultDataAccessException(1);
+            } else {
+                return new Result<T>(null, true);
+            }
+        } else {
+            return new Result<T>(converter != null //
+                    ? converter.apply(o)//
+                    : (T) o //
+                    , true);
         }
-        // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 8. 13.
-
-        return new Result<T>(converter != null //
-                ? converter.apply(mapData.get(column))//
-                : (T) mapData.get(column) //
-                , true);
     }
 
     /**
@@ -1823,7 +1825,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @version 1.8.0
      * @author parkjunhong77@gmail.com
      */
-    @SuppressWarnings("unchecked")
+     @SuppressWarnings("unchecked")
     public <T> Result<List<T>> getValues(@NotNull @NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotNull @NotEmpty String column, Function<Object, T> converter) {
         Result<List<Map<String, Object>>> mapResult = getListAsMap(query, setter, column);
 
@@ -1832,14 +1834,18 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
         }
 
         List<Map<String, Object>> mapData = mapResult.getData();
+        if (mapData != null) {
+            List<T> data = mapData.stream() //
+                    .map(m -> converter != null //
+                            ? converter.apply(m.get(column)) //
+                            : (T) m.get(column)) //
+                    .collect(Collectors.toList());
 
-        List<T> data = mapData.stream() //
-                .map(m -> converter != null //
-                        ? converter.apply(m.get(column)) //
-                        : (T) m.get(column)) //
-                .collect(Collectors.toList());
+            return new Result<>(data, true);
+        } else {
+            return new Result<>(null, true);
+        }
 
-        return new Result<>(data, true);
     }
 
     /**

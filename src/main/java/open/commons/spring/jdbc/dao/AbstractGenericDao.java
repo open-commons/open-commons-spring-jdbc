@@ -171,8 +171,8 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    @SuppressWarnings("unchecked")
-    public <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
+    @SafeVarargs
+    public final <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
 
         Result<Integer> result = new Result<>();
 
@@ -557,7 +557,6 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
         return executeUpdate(query, setter, false);
     }
 
-    @SuppressWarnings("unchecked")
     public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) {
         return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }

@@ -37,6 +37,8 @@ import open.commons.spring.jdbc.repository.annotation.JdbcVariableBinder;
  */
 public class UnsupportedVariableBindingException extends RuntimeException {
 
+    private static final long serialVersionUID = 1L;
+
     /**
      * <br>
      * 

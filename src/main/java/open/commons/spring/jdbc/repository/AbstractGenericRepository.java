@@ -710,8 +710,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.1.0
      * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    @SuppressWarnings("unchecked")
-    public <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws RuntimeDataAccessException {
+    @SafeVarargs
+    public final <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws RuntimeDataAccessException {
 
         Result<Integer> result = new Result<>();
 
@@ -936,7 +936,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
         return executeUpdate(query, setter, false);
     }
 
-    @SuppressWarnings("unchecked")
     public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) throws RuntimeDataAccessException {
         return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
@@ -1191,7 +1190,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.4.0
      * @author parkjunhong77@gmail.com
      */
-    @SuppressWarnings("unchecked")
     protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrNothing(data, method, whereArgs);
         return executeUpdate(broker);
@@ -1249,7 +1247,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 2.0.0
      * @author parkjunhong77@gmail.com
      */
-    @SuppressWarnings("unchecked")
     protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrUpdate(data, method, whereArgs);
         return executeUpdate(broker);

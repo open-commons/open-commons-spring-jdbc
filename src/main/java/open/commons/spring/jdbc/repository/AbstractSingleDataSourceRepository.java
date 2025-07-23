@@ -33,7 +33,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import open.commons.core.utils.AssertUtils;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
 
 /**
@@ -133,7 +133,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        AssertUtils.assertNull("DataSource MUST NOT BE null.", this.dataSource);
+        AssertUtils2.assertNotNull("DataSource MUST NOT BE null.", this.dataSource);
     }
 
     /**
@@ -159,8 +159,8 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      */
     @SuppressWarnings({ "unchecked" })
     @Override
-    public <T> T getDataSource() {
-        return (T) getDataSource0(this.dataSource);
+    public <E> E getDataSource() {
+        return (E) getDataSource0(this.dataSource);
     }
 
     /**
