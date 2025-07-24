@@ -1,3 +1,9 @@
+[2025/07/24]
+- Dependencies
+  + Add
+    + jakarta.validation:jakarata.validation-api:${managed-version}
+    + com.google.code.findbugs:jsr305:3.0.2
+
 [2025/06/26]
 - Add
   + 스키마/데이터 자동생성을 위한 쿼리 파일 문법 확장

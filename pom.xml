@@ -1,298 +1,313 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.7.15</version>
-	</parent>
-	<groupId>io.github.open-commons</groupId>
-	<artifactId>open-commons-spring-jdbc</artifactId>
-	<version>0.6.0-SNAPSHOT</version>
-	<name>Open Commons for Spring JDBC</name>
-	<description>Open Commons Spring JDBC Project</description>
-	<url>https://github.com/open-commons/open-commons-spring-jdbc</url>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>2.7.15</version>
+  </parent>
+  <groupId>io.github.open-commons</groupId>
+  <artifactId>open-commons-spring-jdbc</artifactId>
+  <version>0.6.0-SNAPSHOT</version>
+  <name>Open Commons for Spring JDBC</name>
+  <description>Open Commons Spring JDBC Project</description>
+  <url>https://github.com/open-commons/open-commons-spring-jdbc</url>
 
-	<licenses>
-		<license>
-			<name>Apache License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-		</license>
-	</licenses>
-	
-	<scm>
-		<connection>scm:git:https://github.com/open-commons/open-commons-spring-jdbc.git</connection>
-		<developerConnection>scm:git:https://github.com/open-commons/open-commons-spring-jdbc.git</developerConnection>
-		<url>https://github.com/open-commons/open-commons-spring-jdbc</url>
-	</scm>
+  <licenses>
+    <license>
+      <name>Apache License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
 
-	<developers>
-		<developer>
-			<name>Park, Jun-Hong</name>
-			<email>parkjunhong77@gmail.com</email>
-			<organization>https://github.com/open-commons</organization>
-			<organizationUrl>https://github.com/open-commons</organizationUrl>
-		</developer>
-	</developers>
+  <scm>
+    <connection>
+      scm:git:https://github.com/open-commons/open-commons-spring-jdbc.git</connection>
+    <developerConnection>
+      scm:git:https://github.com/open-commons/open-commons-spring-jdbc.git</developerConnection>
+    <url>https://github.com/open-commons/open-commons-spring-jdbc</url>
+  </scm>
 
-	<properties>
-		<!-- >>> begin: plugin dependencies -->
-		<build.finalName>open-commons-spring-jdbc-${project.version}</build.finalName>
+  <developers>
+    <developer>
+      <name>Park, Jun-Hong</name>
+      <email>parkjunhong77@gmail.com</email>
+      <organization>https://github.com/open-commons</organization>
+      <organizationUrl>https://github.com/open-commons</organizationUrl>
+    </developer>
+  </developers>
 
-		<encoding>UTF-8</encoding>
-		<java-version>1.8</java-version>
+  <properties>
+    <!-- >>> begin: plugin dependencies -->
+    <build.finalName>open-commons-spring-jdbc-${project.version}</build.finalName>
 
-		<compile.encoding-version>UTF-8</compile.encoding-version>
-		<compile.source-version>1.8</compile.source-version>
-		<compile.target-version>1.8</compile.target-version>
-		<!-- >>> end: plugin dependencies -->
+    <encoding>UTF-8</encoding>
+    <java-version>1.8</java-version>
 
-		<!-- >>> begin: dependencies -->
-		<commons-io.version>2.14.0</commons-io.version>
+    <compile.encoding-version>UTF-8</compile.encoding-version>
+    <compile.source-version>1.8</compile.source-version>
+    <compile.target-version>1.8</compile.target-version>
+    <!-- >>> end: plugin dependencies -->
 
-		<open-commons-core.version>2.1.0-SNAPSHOT</open-commons-core.version>
-		<!-- <<< end: dependencies -->
-	</properties>
+    <!-- >>> begin: dependencies -->
+    <commons-io.version>2.14.0</commons-io.version>
 
-	<distributionManagement>
-		<repository>
-			<id>maven-central</id>
-			<url>https://central.sonatype.com</url>
-		</repository>
-		<snapshotRepository>
-			<id>ymtech-maven-repo</id>
-			<name>Snapshot Repository</name>
-			<url>https://nexus3.ymtech.co.kr/repository/maven-snapshots/</url>
-		</snapshotRepository>
-	</distributionManagement>
+    <open-commons-core.version>2.1.0-SNAPSHOT</open-commons-core.version>
+    <code-findbugs-jsr305.version>3.0.2</code-findbugs-jsr305.version>
+    <!-- <<< end: dependencies -->
+  </properties>
 
-	<repositories>
-		<!-- ===== -->
-		<repository>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>https://repo1.maven.org/maven2/</url>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>ymtech-maven-repo</id>
-			<name>YMTECH Maven Repository</name>
-			<url>https://nexus3.ymtech.co.kr/repository/maven-public/</url>
-			<layout>default</layout>
-		</repository>
-	</repositories>
+  <distributionManagement>
+    <repository>
+      <id>maven-central</id>
+      <url>https://central.sonatype.com</url>
+    </repository>
+    <snapshotRepository>
+      <id>ymtech-maven-repo</id>
+      <name>Snapshot Repository</name>
+      <url>https://nexus3.ymtech.co.kr/repository/maven-snapshots/</url>
+    </snapshotRepository>
+  </distributionManagement>
 
-	<pluginRepositories>
-		<!-- >>> Maven Central -->
-		<pluginRepository>
-			<id>central</id>
-			<name>Central Repository</name>
-			<url>https://repo1.maven.org/maven2</url>
-		</pluginRepository>
-	</pluginRepositories>
+  <repositories>
+    <!-- ===== -->
+    <repository>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo1.maven.org/maven2/</url>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+    <repository>
+      <id>ymtech-maven-repo</id>
+      <name>YMTECH Maven Repository</name>
+      <url>https://nexus3.ymtech.co.kr/repository/maven-public/</url>
+      <layout>default</layout>
+    </repository>
+  </repositories>
 
-	<dependencies>
-		<!-- >>> begin: Spring -->
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-context</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-webmvc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework</groupId>
-			<artifactId>spring-jdbc</artifactId>
-		</dependency>
-		<!-- <<< end: Spring -->
+  <pluginRepositories>
+    <!-- >>> Maven Central -->
+    <pluginRepository>
+      <id>central</id>
+      <name>Central Repository</name>
+      <url>https://repo1.maven.org/maven2</url>
+    </pluginRepository>
+  </pluginRepositories>
 
-		<!-- ********************** -->
-		<!-- begin: jdbc -->
-		<!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-jdbc</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.zaxxer</groupId>
-			<artifactId>HikariCP</artifactId>
-		</dependency>
+  <dependencies>
+    <!-- >>> begin: Spring -->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-jdbc</artifactId>
+    </dependency>
+    <!-- <<< end: Spring -->
+
+    <!-- ********************** -->
+    <!-- begin: jdbc -->
+    <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.zaxxer</groupId>
+      <artifactId>HikariCP</artifactId>
+    </dependency>
 
     <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
     </dependency>
-		<!-- end: jdbc -->
-		<!-- ********************** -->
+    <!-- end: jdbc -->
+    <!-- ********************** -->
 
-		<!-- begin: Validation -->
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-		</dependency>
-		<!-- end : Validation -->
+    <!-- ************** -->
+    <!-- >>> begin: Validation -->
+    <!--
+    https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
+    <dependency>
+      <groupId>com.google.code.findbugs</groupId>
+      <artifactId>jsr305</artifactId>
+      <version>${code-findbugs-jsr305.version}</version>
+    </dependency>
+    <!-- <<< end: Validation -->
+    <!-- ************** -->
 
-		<!-- ********************** -->
-		<!-- begin: slf4j -->
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-		</dependency>
-		<!-- end: slf4j -->
-		<!-- ********************** -->
+    <!-- ********************** -->
+    <!-- begin: slf4j -->
+    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+    </dependency>
+    <!-- end: slf4j -->
+    <!-- ********************** -->
 
-		<!-- ********************** -->
-		<!-- begin: refletions -->
-		<!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
-		<dependency>
-			<groupId>org.reflections</groupId>
-			<artifactId>reflections</artifactId>
-			<version>0.9.11</version>
-		</dependency>
-		<!-- end: reflections -->
-		<!-- ********************** -->
+    <!-- ********************** -->
+    <!-- begin: refletions -->
+    <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
+    <dependency>
+      <groupId>org.reflections</groupId>
+      <artifactId>reflections</artifactId>
+      <version>0.9.11</version>
+    </dependency>
+    <!-- end: reflections -->
+    <!-- ********************** -->
 
-		<!-- >>> begin: Apache Commons -->
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>${commons-io.version}</version>
-		</dependency>
-		<!-- <<< end: Apache Commons -->
+    <!-- >>> begin: Apache Commons -->
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>${commons-io.version}</version>
+    </dependency>
+    <!-- <<< end: Apache Commons -->
 
-		<!-- >>> begin: open-commons -->
-		<dependency>
-			<groupId>io.github.open-commons</groupId>
-			<artifactId>open-commons-core</artifactId>
-			<version>${open-commons-core.version}</version>
-		</dependency>
-		<!-- <<< end: open-commons -->
+    <!-- >>> begin: open-commons -->
+    <dependency>
+      <groupId>io.github.open-commons</groupId>
+      <artifactId>open-commons-core</artifactId>
+      <version>${open-commons-core.version}</version>
+    </dependency>
+    <!-- <<< end: open-commons -->
 
-		<!-- >>> begin: junit -->
-		<!-- https://mvnrepository.com/artifact/junit/junit -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core -->
-		<dependency>
-			<groupId>org.hamcrest</groupId>
-			<artifactId>hamcrest-core</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<!-- <<< end: junit -->
+    <!-- >>> begin: junit -->
+    <!-- https://mvnrepository.com/artifact/junit/junit -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core -->
+    <dependency>
+      <groupId>org.hamcrest</groupId>
+      <artifactId>hamcrest-core</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- <<< end: junit -->
 
-	</dependencies>
+  </dependencies>
 
-	<build>
-		<finalName>${build.finalName}</finalName>
-		<defaultGoal>install</defaultGoal>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-			<resource>
-				<directory>${project.basedir}</directory>
-				<includes>
-					<include>LICENSE</include>
-				</includes>
-				<targetPath>META-INF</targetPath>
-			</resource>
-		</resources>
-		<plugins>
-			<!-- >>> begin: compile -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<!-- <version>${maven-compiler-plugin.version}</version> -->
-				<configuration>
-					<encoding>${compile.encoding-version}</encoding>
-					<source>${compile.source-version}</source>
-					<target>${compile.target-version}</target>
-				</configuration>
-			</plugin>
-			<!-- <<< end: compile -->
-			<!-- >>> begin: source -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<!-- <version>${maven-source-plugin.version}</version> -->
-				<configuration>
-					<encoding>UTF-8</encoding>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- <<< end: source -->
-			<!-- >>> begin: javadoc -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<!-- <version>${maven-javadoc-plugin.version}</version> -->
-				<configuration>
-					<goal>deploy</goal>
-					<show>private</show>
-					<nohelp>true</nohelp>
-					<additionalOptions>
-						<additionalOption>-Xdoclint:none</additionalOption>
-					</additionalOptions>
-					<charset>${encoding}</charset>
-					<docencoding>${encoding}</docencoding>
-					<encoding>${encoding}</encoding>
-				</configuration>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- <<< end: javadoc -->
-			<!-- Maven Central Deployment plugin -->
-			<plugin>
-				<groupId>org.sonatype.central</groupId>
-				<artifactId>central-publishing-maven-plugin</artifactId>
-				<version>0.7.0</version>
-				<extensions>true</extensions>
-				<configuration>
-					<publishingServerId>maven-central</publishingServerId>
-					<!-- autoPublish>true</autoPublish>
+  <build>
+    <finalName>${build.finalName}</finalName>
+    <defaultGoal>install</defaultGoal>
+    <sourceDirectory>src/main/java</sourceDirectory>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+        <includes>
+          <include>**/*.*</include>
+        </includes>
+      </resource>
+      <resource>
+        <directory>${project.basedir}</directory>
+        <includes>
+          <include>LICENSE</include>
+        </includes>
+        <targetPath>META-INF</targetPath>
+      </resource>
+    </resources>
+    <plugins>
+      <!-- >>> begin: compile -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <!-- <version>${maven-compiler-plugin.version}</version> -->
+        <configuration>
+          <encoding>${compile.encoding-version}</encoding>
+          <source>${compile.source-version}</source>
+          <target>${compile.target-version}</target>
+        </configuration>
+      </plugin>
+      <!-- <<< end: compile -->
+      <!-- >>> begin: source -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-source-plugin</artifactId>
+        <!-- <version>${maven-source-plugin.version}</version> -->
+        <configuration>
+          <encoding>UTF-8</encoding>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-sources</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- <<< end: source -->
+      <!-- >>> begin: javadoc -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <!-- <version>${maven-javadoc-plugin.version}</version> -->
+        <configuration>
+          <goal>deploy</goal>
+          <show>private</show>
+          <nohelp>true</nohelp>
+          <additionalOptions>
+            <additionalOption>-Xdoclint:none</additionalOption>
+          </additionalOptions>
+          <charset>${encoding}</charset>
+          <docencoding>${encoding}</docencoding>
+          <encoding>${encoding}</encoding>
+        </configuration>
+        <executions>
+          <execution>
+            <id>attach-javadocs</id>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- <<< end: javadoc -->
+      <!-- Maven Central Deployment plugin -->
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.7.0</version>
+        <extensions>true</extensions>
+        <configuration>
+          <publishingServerId>maven-central</publishingServerId>
+          <!-- autoPublish>true</autoPublish>
              		<waitUntil>published</waitUntil -->
-				</configuration>
-			</plugin>
-			<!-- GPG signature plugin -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
+        </configuration>
+      </plugin>
+      <!-- GPG signature plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-gpg-plugin</artifactId>
+        <version>1.5</version>
+        <executions>
+          <execution>
+            <id>sign-artifacts</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>sign</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 </project>
