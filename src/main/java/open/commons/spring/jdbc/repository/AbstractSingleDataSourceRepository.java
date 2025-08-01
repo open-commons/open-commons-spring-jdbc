@@ -133,7 +133,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        AssertUtils2.assertNotNull("DataSource MUST NOT BE null.", this.dataSource);
+        AssertUtils2.notNull("DataSource MUST NOT BE null.", this.dataSource);
     }
 
     /**

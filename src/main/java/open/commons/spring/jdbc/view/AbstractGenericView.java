@@ -1387,7 +1387,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see #getCurrentMethod(int, Class...)
      */
     protected final Method getCurrentMethod(int distance, @NotEmpty Object... parameters) throws IllegalArgumentException {
-        AssertUtils2.assertNotNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
+        AssertUtils2.notNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
 
         return getCurrentMethod(distance + 1, ObjectUtils.readClasses(this.forceToPrimitive, parameters));
     }
@@ -1534,7 +1534,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
     @Override
     public String getTableName() {
         TableDef tblAnno = this.entityType.getAnnotation(TableDef.class);
-        AssertUtils2.assertNotNull("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", tblAnno, UnsupportedOperationException.class);
+        AssertUtils2.notNull("DBMS Table에 연결된 Entity 정의가 존재하지 않습니다.", tblAnno, UnsupportedOperationException.class);
         return tblAnno.table();
     }
 
