@@ -50,7 +50,7 @@ public interface IGenericRepository<T> extends IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param data
@@ -71,7 +71,7 @@ public interface IGenericRepository<T> extends IGenericRetrieve<T> {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 11. 26.		박준홍			최초 작성
+     * 2021. 11. 26.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param data
@@ -92,7 +92,7 @@ public interface IGenericRepository<T> extends IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param data

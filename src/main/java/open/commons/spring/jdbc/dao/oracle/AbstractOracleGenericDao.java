@@ -52,7 +52,7 @@ public abstract class AbstractOracleGenericDao extends AbstractSingleDataSourceD
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 17.		박준홍			최초 작성
+     * 2020. 1. 17.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @since 2020. 1. 17.

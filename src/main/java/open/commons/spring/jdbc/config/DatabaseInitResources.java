@@ -83,7 +83,7 @@ public class DatabaseInitResources {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 25.      박준홍         최초 작성
+     * 2025. 4. 25.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      *
@@ -101,8 +101,8 @@ public class DatabaseInitResources {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 25.      박준홍         최초 작성
-     * 2025. 6. 25      박준홍         디렉토리 처리 추가 ("dir:")
+     * 2025. 4. 25.      parkjunhong77@gmail.com         최초 작성
+     * 2025. 6. 25      parkjunhong77@gmail.com         디렉토리 처리 추가 ("dir:")
      * </pre>
      *
      * @param sqlList
@@ -152,7 +152,7 @@ public class DatabaseInitResources {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 25.      박준홍         최초 작성
+     * 2025. 4. 25.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -172,7 +172,7 @@ public class DatabaseInitResources {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 25.      박준홍         최초 작성
+     * 2025. 4. 25.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -207,7 +207,7 @@ public class DatabaseInitResources {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 25.      박준홍         최초 작성
+     * 2025. 4. 25.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param data
@@ -248,7 +248,7 @@ public class DatabaseInitResources {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 25.      박준홍         최초 작성
+     * 2025. 4. 25.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param schema

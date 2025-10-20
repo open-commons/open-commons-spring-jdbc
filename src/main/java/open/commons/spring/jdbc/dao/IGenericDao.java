@@ -53,7 +53,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @return
@@ -71,7 +71,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 6. 11.		박준홍		 제공되는 {@link DataSource} 객체가 {@link TransactionAwareDataSourceProxy} 을 강제하기 위해서 구현 클래스에서 제공되는 것을 최상위 인터페이스로 옮김.<br>
+     * 2025. 6. 11.		parkjunhong77@gmail.com		 제공되는 {@link DataSource} 객체가 {@link TransactionAwareDataSourceProxy} 을 강제하기 위해서 구현 클래스에서 제공되는 것을 최상위 인터페이스로 옮김.<br>
      *                               
      * </pre>
      *
@@ -90,7 +90,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param name
@@ -113,7 +113,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param name
@@ -139,7 +139,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param name
@@ -165,7 +165,7 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @return

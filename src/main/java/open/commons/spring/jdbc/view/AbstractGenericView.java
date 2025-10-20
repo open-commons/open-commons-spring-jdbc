@@ -183,7 +183,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 6.     박준홍         최초 작성
+     * 2021. 12. 6.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param entityType
@@ -203,7 +203,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param entityType
@@ -225,7 +225,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2023. 8. 24.     박준홍         최초 작성
+     * 2023. 8. 24.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param entityType
@@ -261,7 +261,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryHeader
@@ -288,7 +288,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryHeader
@@ -317,7 +317,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryHeader
@@ -354,7 +354,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryHeader
@@ -386,7 +386,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryHeader
@@ -420,7 +420,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryHeader
@@ -455,7 +455,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param parameters
@@ -508,7 +508,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 28.        박준홍         최초 작성
+     * 2021. 12. 28.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -537,7 +537,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 28.        박준홍         최초 작성
+     * 2021. 12. 28.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param whereArgs
@@ -560,7 +560,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param orderByArgs
@@ -600,7 +600,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 29.        박준홍         최초 작성
+     * 2022. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <E>
@@ -627,7 +627,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 29.        박준홍         최초 작성
+     * 2022. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <E>
@@ -660,7 +660,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 28.        박준홍         최초 작성
+     * 2021. 12. 28.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param selectQuery
@@ -700,8 +700,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 2. 10.     박준홍         최초 작성
-     * 2023. 8. 7.      박준홍         메소드 거리값 증가 누락 버그 수정
+     * 2022. 2. 10.     parkjunhong77@gmail.com         최초 작성
+     * 2023. 8. 7.      parkjunhong77@gmail.com         메소드 거리값 증가 누락 버그 수정
      * </pre>
      * 
      * @param distance
@@ -743,7 +743,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryForSelect
@@ -786,7 +786,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 2. 11.     박준홍         최초 작성
+     * 2022. 2. 11.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param clmnParams
@@ -809,7 +809,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param query
@@ -847,7 +847,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param selectQuery
@@ -885,7 +885,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param selectQuery
@@ -926,8 +926,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
-     * 2023. 10. 19.        박준홍     파라미터에서 
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
+     * 2023. 10. 19.        parkjunhong77@gmail.com     파라미터에서 
      *                                  - {@link JdbcVariableBinder} 제거.
      *                                  - {@link Parameter} 추가
      *                                 이에 따라 {@link Parameter}을 이용하여 내부 로직 변경.
@@ -1021,7 +1021,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 1.     박준홍         최초 작성
+     * 2021. 12. 1.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param vb
@@ -1113,7 +1113,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1157,8 +1157,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
-     * 2025. 4. 2           박준홍         DBMS Reserved Keyword 검증 적용
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
+     * 2025. 4. 2           parkjunhong77@gmail.com         DBMS Reserved Keyword 검증 적용
      * </pre>
      *
      * @return
@@ -1183,7 +1183,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 7. 14.     박준홍         최초 작성
+     * 2022. 7. 14.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1205,7 +1205,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 7. 14.     박준홍         최초 작성
+     * 2022. 7. 14.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1225,7 +1225,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 7. 14.     박준홍         최초 작성
+     * 2022. 7. 14.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param data
@@ -1284,7 +1284,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 7. 14.     박준홍         최초 작성
+     * 2022. 7. 14.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param data
@@ -1311,7 +1311,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param parameterTypes
@@ -1335,7 +1335,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param distance
@@ -1369,7 +1369,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param distance
@@ -1401,7 +1401,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param parameterTypes
@@ -1427,7 +1427,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 1.     박준홍         최초 작성
+     * 2021. 12. 1.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1462,7 +1462,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 1.      박준홍         최초 작성
+     * 2025. 4. 1.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1494,7 +1494,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 2.      박준홍         최초 작성
+     * 2025. 4. 2.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return 예약어로 사용되는 단어 목록.
@@ -1512,7 +1512,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 2.      박준홍         최초 작성
+     * 2025. 4. 2.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1545,7 +1545,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 1.     박준홍         최초 작성
+     * 2021. 12. 1.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -1572,8 +1572,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
-     * 2023. 10. 19.        박준홍     {@link JdbcVariableBinder#name()} 값이 빈 문자열일 경우 {@link Parameter#getName()} 값을 제공.
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
+     * 2023. 10. 19.        parkjunhong77@gmail.com     {@link JdbcVariableBinder#name()} 값이 빈 문자열일 경우 {@link Parameter#getName()} 값을 제공.
      * </pre>
      *
      * @param method
@@ -1600,7 +1600,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -1622,7 +1622,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 14.        박준홍         최초 작성
+     * 2021. 12. 14.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -1644,7 +1644,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1667,7 +1667,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 2.      박준홍         최초 작성
+     * 2025. 4. 2.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param tblAlias
@@ -1695,7 +1695,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param offset
@@ -1718,7 +1718,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1740,7 +1740,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param tableName
@@ -1769,7 +1769,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -1803,8 +1803,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 2.      박준홍         최초 작성
-     * 2025. 4. 8.      박준홍         clmnUppserCase 항목 추가. H2 DB에서 "? AS {column}" 구문파싱시 {column}을 타입으로 처리하는 오류에 대응.
+     * 2025. 4. 2.      parkjunhong77@gmail.com         최초 작성
+     * 2025. 4. 8.      parkjunhong77@gmail.com         clmnUppserCase 항목 추가. H2 DB에서 "? AS {column}" 구문파싱시 {column}을 타입으로 처리하는 오류에 대응.
      * </pre>
      * 
      * @param castByClmnRealType
@@ -2046,7 +2046,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2074,7 +2074,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 30.        박준홍         최초 작성
+     * 2021. 11. 30.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2104,7 +2104,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param whereArgs
@@ -2127,7 +2127,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param whereArgs
@@ -2154,7 +2154,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2183,7 +2183,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2216,7 +2216,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryForSelect
@@ -2249,7 +2249,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryForSelect
@@ -2286,7 +2286,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2310,7 +2310,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2337,7 +2337,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2372,7 +2372,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2410,7 +2410,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2443,7 +2443,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2477,7 +2477,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param whereArgs
@@ -2508,7 +2508,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param whereArgs
@@ -2543,7 +2543,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2577,7 +2577,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param method
@@ -2625,7 +2625,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 2. 10.     박준홍         최초 작성
+     * 2022. 2. 10.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param whereArgs
@@ -2670,7 +2670,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 2. 10.     박준홍         최초 작성
+     * 2022. 2. 10.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param whereArgs
@@ -2710,7 +2710,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2746,7 +2746,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2785,7 +2785,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2817,7 +2817,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2852,7 +2852,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2895,7 +2895,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2949,7 +2949,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -2996,7 +2996,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -3038,7 +3038,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 29.        박준홍         최초 작성
+     * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param required
@@ -3071,7 +3071,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 30.        박준홍         최초 작성
+     * 2021. 11. 30.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param required
@@ -3112,7 +3112,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param required
@@ -3147,7 +3147,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 3.     박준홍         최초 작성
+     * 2021. 12. 3.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param required
@@ -3181,7 +3181,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -3215,7 +3215,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -3257,7 +3257,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -3293,7 +3293,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -3327,7 +3327,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 2.      박준홍         최초 작성
+     * 2025. 4. 2.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param clmnName
@@ -3357,7 +3357,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 2.      박준홍         최초 작성
+     * 2025. 4. 2.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param clmns
@@ -3383,7 +3383,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 15.        박준홍         최초 작성
+     * 2021. 12. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param binders
@@ -3411,7 +3411,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 15.        박준홍         최초 작성
+     * 2021. 12. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param binders
@@ -3440,7 +3440,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 2.      박준홍         최초 작성
+     * 2025. 4. 2.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param reservedKeywordString

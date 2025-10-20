@@ -66,7 +66,7 @@ public class DefaultH2Server {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 4. 28.		박준홍			최초 작성
+     * 2025. 4. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param serverArgs
@@ -90,7 +90,7 @@ public class DefaultH2Server {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 4. 28.		박준홍			최초 작성
+     * 2025. 4. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @throws SQLException

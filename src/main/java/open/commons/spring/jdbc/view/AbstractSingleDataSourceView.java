@@ -53,7 +53,7 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 5. 13.		박준홍			최초 작성
+     * 2025. 5. 13.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -74,7 +74,7 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 5. 13.		박준홍			최초 작성
+     * 2025. 5. 13.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -97,7 +97,7 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 5. 13.		박준홍			최초 작성
+     * 2025. 5. 13.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -122,8 +122,8 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 5. 13.		박준홍			코드 복제. {@link AbstractSingleDataSourceRepository}
-     * 2025. 6. 11.     박준홍         {@link Transactional}을 이용하여 {@link Repository} 계층 클래스의 메소드를 관리하기 위해서 DataSource를 TransactionAwareDataSourceProxy로 감싸는 걸 적용.
+     * 2025. 5. 13.		parkjunhong77@gmail.com			코드 복제. {@link AbstractSingleDataSourceRepository}
+     * 2025. 6. 11.     parkjunhong77@gmail.com         {@link Transactional}을 이용하여 {@link Repository} 계층 클래스의 메소드를 관리하기 위해서 DataSource를 TransactionAwareDataSourceProxy로 감싸는 걸 적용.
      * </pre>
      *
      * @return
@@ -147,7 +147,7 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 5. 13.		박준홍			코드 복제. {@link AbstractSingleDataSourceRepository}
+     * 2025. 5. 13.		parkjunhong77@gmail.com			코드 복제. {@link AbstractSingleDataSourceRepository}
      * </pre>
      *
      * @return
@@ -172,7 +172,7 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 5. 13.		박준홍			코드 복제. {@link AbstractSingleDataSourceRepository}
+     * 2025. 5. 13.		parkjunhong77@gmail.com			코드 복제. {@link AbstractSingleDataSourceRepository}
      * </pre>
      *
      * @param dataSource

@@ -135,8 +135,8 @@ import open.commons.spring.jdbc.dao.dto.CountDTO;
  * [개정이력]
  *      날짜      | 작성자   |	내용
  * ------------------------------------------
- * 2019. 3. 28.     박준홍     최초 작성
- * 2020. 4. 15.     박준홍     여러 개의 DataSource 지원.
+ * 2019. 3. 28.     parkjunhong77@gmail.com     최초 작성
+ * 2020. 4. 15.     parkjunhong77@gmail.com     여러 개의 DataSource 지원.
  * </pre>
  * 
  * @since 2019. 3. 28.
@@ -200,7 +200,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @since 2019. 3. 28.
@@ -217,7 +217,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 28.		박준홍			최초 작성
+     * 2022. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param queryTpl
@@ -250,7 +250,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2019. 6. 12.     박준홍         최초 작성
+     * 2019. 6. 12.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param sqlBuffer
@@ -285,7 +285,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 6. 12.		박준홍			최초 작성
+     * 2019. 6. 12.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param sqlBuffer
@@ -354,7 +354,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 21.		박준홍			최초 작성
+     * 2020. 7. 21.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -414,7 +414,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 21.		박준홍			최초 작성
+     * 2020. 7. 21.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -480,7 +480,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 3. 28.     박준홍         최초 작성
+     * 2022. 3. 28.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryName
@@ -512,7 +512,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 28.		박준홍			최초 작성
+     * 2022. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param queryName
@@ -557,9 +557,9 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
-     * 2019. 6. 5.		박준홍			작업용 Connection 객체 생성 로직 수직
-     * 2025. 6. 11.     박준홍         {@link Transactional}을 이용하여 {@link Repository} 메소드를 관리하기 위해서 통합.
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
+     * 2019. 6. 5.		parkjunhong77@gmail.com			작업용 Connection 객체 생성 로직 수직
+     * 2025. 6. 11.     parkjunhong77@gmail.com         {@link Transactional}을 이용하여 {@link Repository} 메소드를 관리하기 위해서 통합.
      * 
      * </pre>
      *
@@ -593,7 +593,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 28.		박준홍			최초 작성
+     * 2021. 12. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param countQuery
@@ -627,7 +627,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param broker
@@ -691,7 +691,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2019. 3. 28.     박준홍         최초 작성
+     * 2019. 3. 28.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <S>
@@ -722,7 +722,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 4. 23.		박준홍			최초 작성
+     * 2021. 4. 23.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <S>
@@ -776,8 +776,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
-     * 2020. 6. 12.     박준홍         조회 결과를 java.util.Map 형태로 받는 경우 지원
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
+     * 2020. 6. 12.     parkjunhong77@gmail.com         조회 결과를 java.util.Map 형태로 받는 경우 지원
      * </pre>
      *
      * @param entity
@@ -843,10 +843,10 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 6. 5.		박준홍			최초 작성
-     * 2020. 2. 13.		박준홍			springframework 5.1.13 >= 대응
-     * 2020. 4. 15.		박준홍			private -> protected
-     * 2025. 6. 11.     박준홍         {@link #getDataSource()}에서 {@link TransactionAwareDataSourceProxy} 객체를 제공하는 것을 강제함에 따라 사용하지 않음.
+     * 2019. 6. 5.		parkjunhong77@gmail.com			최초 작성
+     * 2020. 2. 13.		parkjunhong77@gmail.com			springframework 5.1.13 >= 대응
+     * 2020. 4. 15.		parkjunhong77@gmail.com			private -> protected
+     * 2025. 6. 11.     parkjunhong77@gmail.com         {@link #getDataSource()}에서 {@link TransactionAwareDataSourceProxy} 객체를 제공하는 것을 강제함에 따라 사용하지 않음.
      * </pre>
      *
      * @param con
@@ -882,7 +882,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 22.		박준홍			최초 작성
+     * 2020. 1. 22.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param selectQuery
@@ -907,7 +907,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 6. 11.		박준홍			최초 작성
+     * 2025. 6. 11.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param dataSource
@@ -933,7 +933,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -963,7 +963,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -1008,7 +1008,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 22.		박준홍			최초 작성
+     * 2020. 7. 22.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -1053,7 +1053,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1095,7 +1095,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 4. 23.		박준홍			최초 작성
+     * 2021. 4. 23.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1136,7 +1136,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 4. 23.		박준홍			최초 작성
+     * 2021. 4. 23.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -1174,7 +1174,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 22.		박준홍			최초 작성
+     * 2020. 7. 22.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1207,7 +1207,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 6. 12.		박준홍			최초 작성
+     * 2020. 6. 12.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1236,7 +1236,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1274,7 +1274,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1307,7 +1307,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1371,7 +1371,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1406,7 +1406,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1435,7 +1435,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1466,7 +1466,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1493,7 +1493,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -1553,8 +1553,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
-     * 2020. 8. 13.     박준홍         required == false 인 경우 Map<> 데이터 검증 추가.
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
+     * 2020. 8. 13.     parkjunhong77@gmail.com         required == false 인 경우 Map<> 데이터 검증 추가.
      * </pre>
      *
      * @param <T>
@@ -1582,7 +1582,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 2.		박준홍			최초 작성
+     * 2022. 3. 2.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1639,7 +1639,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 28.		박준홍			최초 작성
+     * 2022. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1668,7 +1668,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1694,7 +1694,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1721,7 +1721,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 2.		박준홍			최초 작성
+     * 2022. 3. 2.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1751,7 +1751,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 2.		박준홍			최초 작성
+     * 2022. 3. 2.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1780,8 +1780,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
-     * 2020. 11. 21.    박준홍			내부 버그 수정. getListAsMap(String, SQLConsumer<PreparedStatement>, String...)에 SQLConsumer<PreparedStatement> 전달 누락 수정
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
+     * 2020. 11. 21.    parkjunhong77@gmail.com			내부 버그 수정. getListAsMap(String, SQLConsumer<PreparedStatement>, String...)에 SQLConsumer<PreparedStatement> 전달 누락 수정
      * </pre>
      *
      * @param <T>
@@ -1807,7 +1807,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 2.		박준홍			최초 작성
+     * 2022. 3. 2.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1857,7 +1857,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 30.		박준홍			최초 작성
+     * 2020. 7. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1881,7 +1881,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2022. 3. 2.		박준홍			최초 작성
+     * 2022. 3. 2.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <T>
@@ -1908,7 +1908,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 11. 30.		박준홍			최초 작성
+     * 2021. 11. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param parameters
@@ -1930,7 +1930,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param querySource
@@ -1948,8 +1948,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 22.		박준홍			최초 작성
-     * 2022. 8. 2.      박준홍     테이블 동적 alias 생성시 오류 수정
+     * 2020. 1. 22.		parkjunhong77@gmail.com			최초 작성
+     * 2022. 8. 2.      parkjunhong77@gmail.com     테이블 동적 alias 생성시 오류 수정
      * </pre>
      *
      * @param query

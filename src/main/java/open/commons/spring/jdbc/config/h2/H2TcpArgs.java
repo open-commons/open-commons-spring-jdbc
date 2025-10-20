@@ -78,7 +78,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @since 2025. 4. 3.
@@ -96,7 +96,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return 서버 정지용 비밀번호
@@ -119,7 +119,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return 서버 정지용 URL
@@ -142,7 +142,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return SSL 연결 암호화 여부
@@ -165,7 +165,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return 서버 강제 종료 여부
@@ -188,7 +188,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param enableSSL
@@ -211,7 +211,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param password
@@ -235,7 +235,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param shutdownUrl
@@ -259,7 +259,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param shutdownForce

@@ -65,7 +65,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 4. 15.		박준홍			최초 작성
+     * 2020. 4. 15.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @since 2020. 4. 15.
@@ -169,7 +169,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 4. 15.     박준홍         최초 작성
+     * 2020. 4. 15.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param dataSource
@@ -190,7 +190,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 4. 15.     박준홍         최초 작성
+     * 2020. 4. 15.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param dataSources

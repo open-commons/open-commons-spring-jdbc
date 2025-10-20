@@ -122,7 +122,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 4. 1.		박준홍			최초 작성
+     * 2025. 4. 1.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -143,7 +143,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 4. 1.		박준홍			최초 작성
+     * 2025. 4. 1.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -166,7 +166,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 4. 1.		박준홍			최초 작성
+     * 2025. 4. 1.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType

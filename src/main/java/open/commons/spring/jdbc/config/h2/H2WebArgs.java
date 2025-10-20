@@ -74,7 +74,7 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @since 2025. 4. 3.
@@ -92,7 +92,7 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the webExternalNames
@@ -117,7 +117,7 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return Web 접속시 연결페이지 제공 여부
@@ -140,7 +140,7 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return HTTPS 연결 암호화 여부
@@ -163,7 +163,7 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param browser
@@ -186,7 +186,7 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param enableSSL
@@ -209,7 +209,7 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param externalNames

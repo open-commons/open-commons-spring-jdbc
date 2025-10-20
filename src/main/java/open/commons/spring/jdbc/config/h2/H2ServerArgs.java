@@ -111,7 +111,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -131,7 +131,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the baseDir
@@ -154,7 +154,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the key
@@ -190,7 +190,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the pg
@@ -212,7 +212,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the properties
@@ -234,7 +234,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param server
@@ -264,7 +264,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the tcp
@@ -286,7 +286,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the web
@@ -308,7 +308,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the exists
@@ -331,7 +331,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the notExists
@@ -354,7 +354,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the trace
@@ -377,7 +377,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param baseDir
@@ -401,7 +401,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param exists
@@ -424,7 +424,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param key
@@ -447,7 +447,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param notExists
@@ -470,7 +470,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param pg
@@ -493,7 +493,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param properties
@@ -516,7 +516,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param tcp
@@ -539,7 +539,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param trace
@@ -562,7 +562,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param web

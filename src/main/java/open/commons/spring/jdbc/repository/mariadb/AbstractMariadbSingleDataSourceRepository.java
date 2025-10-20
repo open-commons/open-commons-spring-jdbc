@@ -61,7 +61,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 24.		박준홍			최초 작성
+     * 2021. 12. 24.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -82,8 +82,8 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 24.    박준홍     최초 작성
-     * 2022. 11. 2.     박준홍     'INSERT IGNORE' 추가.
+     * 2021. 12. 24.    parkjunhong77@gmail.com     최초 작성
+     * 2022. 11. 2.     parkjunhong77@gmail.com     'INSERT IGNORE' 추가.
      * </pre>
      *
      * @param entityType
@@ -106,7 +106,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2023. 8. 28.		박준홍			최초 작성
+     * 2023. 8. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -169,8 +169,8 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 7. 14.     박준홍         최초 작성
-     * 2022. 11. 29.    박준홍     메소드 이관.
+     * 2022. 7. 14.     parkjunhong77@gmail.com         최초 작성
+     * 2022. 11. 29.    parkjunhong77@gmail.com     메소드 이관.
      * </pre>
      * 
      * 

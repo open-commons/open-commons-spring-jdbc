@@ -46,7 +46,7 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 14.		박준홍			최초 작성
+     * 2021. 12. 14.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      *
@@ -64,7 +64,7 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 14.		박준홍			최초 작성
+     * 2021. 12. 14.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param message
@@ -84,7 +84,7 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 14.		박준홍			최초 작성
+     * 2021. 12. 14.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param message
@@ -105,7 +105,7 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 14.		박준홍			최초 작성
+     * 2021. 12. 14.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param message
@@ -128,7 +128,7 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 14.		박준홍			최초 작성
+     * 2021. 12. 14.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param cause

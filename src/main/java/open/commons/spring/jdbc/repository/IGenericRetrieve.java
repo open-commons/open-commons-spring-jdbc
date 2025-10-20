@@ -53,7 +53,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 28.        박준홍         최초 작성
+     * 2021. 12. 28.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -71,7 +71,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 2. 11.     박준홍         최초 작성
+     * 2022. 2. 11.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param clmnParams
@@ -91,7 +91,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 28.        박준홍         최초 작성
+     * 2021. 12. 28.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -110,7 +110,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -128,7 +128,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @return
@@ -146,7 +146,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 11. 26.        박준홍         최초 작성
+     * 2021. 11. 26.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param offset
@@ -168,7 +168,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param offset
@@ -195,7 +195,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2021. 12. 9.     박준홍         최초 작성
+     * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param orderByArgs
@@ -221,7 +221,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -244,7 +244,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -271,7 +271,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryForSelect
@@ -304,7 +304,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryForSelect
@@ -330,7 +330,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 2. 11.     박준홍         최초 작성
+     * 2022. 2. 11.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param clmnParams
@@ -359,7 +359,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 2. 11.     박준홍         최초 작성
+     * 2022. 2. 11.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param clmnParams
@@ -387,7 +387,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param queryForSelect
@@ -421,7 +421,7 @@ public interface IGenericRetrieve<T> {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 15.        박준홍         최초 작성
+     * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @param queryForSelect

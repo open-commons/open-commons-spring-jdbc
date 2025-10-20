@@ -99,8 +99,8 @@ import open.commons.core.test.StopWatch;
  * [개정이력]
  *      날짜      | 작성자   |	내용
  * ------------------------------------------
- * 2019. 3. 28.     박준홍     최초 작성
- * 2020. 4. 15.     박준홍     여러 개의 DataSource 지원.
+ * 2019. 3. 28.     parkjunhong77@gmail.com     최초 작성
+ * 2020. 4. 15.     parkjunhong77@gmail.com     여러 개의 DataSource 지원.
  * </pre>
  * 
  * @since 2019. 3. 28.
@@ -117,7 +117,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @since 2019. 3. 28.
@@ -133,7 +133,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param brokers
@@ -157,7 +157,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param brokers
@@ -225,7 +225,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param brokers
@@ -278,7 +278,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 21.		박준홍			최초 작성
+     * 2020. 1. 21.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -316,7 +316,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 6. 15.		박준홍			최초 작성
+     * 2020. 6. 15.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -362,7 +362,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 1. 17.     박준홍         최초 작성
+     * 2020. 1. 17.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <E>
@@ -396,7 +396,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 11. 11.		박준홍			최초 작성
+     * 2021. 11. 11.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -432,7 +432,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 20.		박준홍			최초 작성
+     * 2020. 1. 20.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -472,7 +472,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 6. 15.		박준홍			최초 작성
+     * 2020. 6. 15.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -514,7 +514,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 28.		박준홍			최초 작성
+     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -540,7 +540,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2019. 3. 29.		박준홍			최초 작성
+     * 2019. 3. 29.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query

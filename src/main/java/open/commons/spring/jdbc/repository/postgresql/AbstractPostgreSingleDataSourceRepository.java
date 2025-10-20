@@ -54,7 +54,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 6.		박준홍			최초 작성
+     * 2021. 12. 6.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -75,7 +75,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 11. 26.		박준홍			최초 작성
+     * 2021. 11. 26.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -99,7 +99,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2023. 8. 28.     박준홍         최초 작성
+     * 2023. 8. 28.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param entityType
@@ -154,8 +154,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 11. 2.     박준홍         최초 작성
-     * 2022. 11. 29.    박준홍         메소드 이관.
+     * 2022. 11. 2.     parkjunhong77@gmail.com         최초 작성
+     * 2022. 11. 29.    parkjunhong77@gmail.com         메소드 이관.
      * </pre>
      * 
      * @since 2022. 11. 29.
@@ -233,9 +233,9 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2022. 7. 14.     박준홍         최초 작성
-     * 2022. 11. 1.     박준홍         실제 구현
-     * 2022. 11. 29.    박준홍         메소드 이관
+     * 2022. 7. 14.     parkjunhong77@gmail.com         최초 작성
+     * 2022. 11. 1.     parkjunhong77@gmail.com         실제 구현
+     * 2022. 11. 29.    parkjunhong77@gmail.com         메소드 이관
      * </pre>
      * 
      * @since 2022. 11. 29.

@@ -88,7 +88,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param 서버
@@ -111,7 +111,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param type
@@ -136,7 +136,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the port
@@ -159,7 +159,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the type
@@ -181,7 +181,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the allowOthers
@@ -204,7 +204,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
      * @return the isDaemon
@@ -227,7 +227,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param allowOthers
@@ -250,7 +250,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param isDaemon
@@ -273,7 +273,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 3. 27.     박준홍         최초 작성
+     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param port

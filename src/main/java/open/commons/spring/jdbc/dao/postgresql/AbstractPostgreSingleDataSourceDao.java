@@ -49,7 +49,7 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 28.		박준홍			최초 작성
+     * 2020. 7. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @since 2020. 7. 28.
@@ -65,7 +65,7 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 28.		박준홍			최초 작성
+     * 2020. 7. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -101,7 +101,7 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 7. 28.		박준홍			최초 작성
+     * 2020. 7. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query

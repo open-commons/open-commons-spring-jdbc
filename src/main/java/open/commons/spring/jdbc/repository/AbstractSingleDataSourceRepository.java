@@ -57,7 +57,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 12. 6.		박준홍			최초 작성
+     * 2021. 12. 6.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -80,7 +80,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2021. 11. 30.		박준홍			최초 작성
+     * 2021. 11. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -104,7 +104,7 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2023. 8. 28.		박준홍			최초 작성
+     * 2023. 8. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param entityType
@@ -143,10 +143,10 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2019. 3. 28.     박준홍         최초 작성
-     * 2020. 4. 15.     박준홍        클래스 분리로 메소드 이동
-     * 2021. 11. 30.    박준홍     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
-     * 2025. 6. 11.     박준홍         {@link Transactional}을 이용하여 {@link Repository} 계층 클래스의 메소드를 관리하기 위해서 DataSource를 TransactionAwareDataSourceProxy로 감싸는 걸 적용.
+     * 2019. 3. 28.     parkjunhong77@gmail.com         최초 작성
+     * 2020. 4. 15.     parkjunhong77@gmail.com        클래스 분리로 메소드 이동
+     * 2021. 11. 30.    parkjunhong77@gmail.com     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
+     * 2025. 6. 11.     parkjunhong77@gmail.com         {@link Transactional}을 이용하여 {@link Repository} 계층 클래스의 메소드를 관리하기 위해서 DataSource를 TransactionAwareDataSourceProxy로 감싸는 걸 적용.
      * </pre>
      *
      * @return
@@ -170,9 +170,9 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2019. 3. 28.     박준홍         최초 작성
-     * 2020. 4. 15.     박준홍        클래스 분리로 메소드 이동
-     * 2021. 11. 30.    박준홍     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
+     * 2019. 3. 28.     parkjunhong77@gmail.com         최초 작성
+     * 2020. 4. 15.     parkjunhong77@gmail.com        클래스 분리로 메소드 이동
+     * 2021. 11. 30.    parkjunhong77@gmail.com     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
      * </pre>
      *
      * @return
@@ -196,9 +196,9 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2019. 3. 28.     박준홍         최초 작성
-     * 2020. 4. 15.     박준홍        클래스 분리로 메소드 이동
-     * 2021. 11. 30.    박준홍     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
+     * 2019. 3. 28.     parkjunhong77@gmail.com         최초 작성
+     * 2020. 4. 15.     parkjunhong77@gmail.com        클래스 분리로 메소드 이동
+     * 2021. 11. 30.    parkjunhong77@gmail.com     코드 복제. (open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao)
      * </pre>
      *
      * @param dataSource

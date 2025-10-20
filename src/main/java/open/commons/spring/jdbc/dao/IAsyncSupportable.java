@@ -67,7 +67,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 1. 21.     박준홍         최초 작성
+     * 2020. 1. 21.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <E>
@@ -121,7 +121,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 30.		박준홍			최초 작성
+     * 2020. 1. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -200,7 +200,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 1. 21.     박준홍         최초 작성
+     * 2020. 1. 21.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <E>
@@ -222,7 +222,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 1. 22.     박준홍         최초 작성
+     * 2020. 1. 22.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param selectQuery
@@ -244,7 +244,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 1. 21.     박준홍         최초 작성
+     * 2020. 1. 21.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <P>
@@ -269,7 +269,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 1. 21.     박준홍         최초 작성
+     * 2020. 1. 21.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <P>
@@ -294,7 +294,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 22.		박준홍			최초 작성
+     * 2020. 1. 22.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -326,7 +326,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 30.		박준홍			최초 작성
+     * 2020. 1. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -358,7 +358,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 30.		박준홍			최초 작성
+     * 2020. 1. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param <E>
@@ -400,7 +400,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 30.		박준홍			최초 작성
+     * 2020. 1. 30.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @param query
@@ -435,7 +435,7 @@ public interface IAsyncSupportable {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2020. 1. 22.		박준홍			최초 작성
+     * 2020. 1. 22.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      * @return
@@ -471,7 +471,7 @@ public interface IAsyncSupportable {
          * [개정이력]
          *      날짜      | 작성자   |   내용
          * ------------------------------------------
-         * 2020. 1. 21.     박준홍         최초 작성
+         * 2020. 1. 21.     parkjunhong77@gmail.com         최초 작성
          * </pre>
          * 
          * @param m

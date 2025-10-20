@@ -70,7 +70,7 @@ public class JdbcConfigHelper {
      * [개정이력]
      *      날짜    	| 작성자	|	내용
      * ------------------------------------------
-     * 2025. 4. 28.		박준홍			최초 작성
+     * 2025. 4. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
      *
@@ -88,7 +88,7 @@ public class JdbcConfigHelper {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 28.     박준홍         최초 작성
+     * 2025. 4. 28.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <D>
@@ -111,7 +111,7 @@ public class JdbcConfigHelper {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 28.     박준홍         최초 작성
+     * 2025. 4. 28.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param <D>
@@ -132,8 +132,8 @@ public class JdbcConfigHelper {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2020. 12. 3.     박준홍         최초 작성
-     * 2025. 4. 28.     박준홍         {@link ConfigUtils#getMultipleDataSource(MultipleDataSourceConfig)} 에서 이관함.
+     * 2020. 12. 3.     parkjunhong77@gmail.com         최초 작성
+     * 2025. 4. 28.     parkjunhong77@gmail.com         {@link ConfigUtils#getMultipleDataSource(MultipleDataSourceConfig)} 에서 이관함.
      * </pre>
      *
      * @param config
@@ -173,7 +173,7 @@ public class JdbcConfigHelper {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 28.     박준홍         최초 작성
+     * 2025. 4. 28.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param dataSource
@@ -222,7 +222,7 @@ public class JdbcConfigHelper {
      * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
-     * 2025. 4. 28.     박준홍         최초 작성
+     * 2025. 4. 28.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
      * @param resource
