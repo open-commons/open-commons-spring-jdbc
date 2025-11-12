@@ -34,6 +34,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.annotation.Nonnull;
 import javax.sql.DataSource;
 import javax.validation.constraints.NotNull;
 
@@ -171,6 +172,31 @@ public class JdbcConfigHelper {
      * 
      * <pre>
      * [개정이력]
+     *      날짜    	| 작성자	|	내용
+     * ------------------------------------------
+     * 2025. 11. 12.		parkjunhong77@gmail.com			최초 작성
+     * </pre>
+     *
+     * @param dataSource
+     *            DBMS 연결 정보
+     * @param initResources
+     *            DB 테이블 초기화 정보 (schema, sql, ...)
+     * @return
+     * @throws IOException
+     *
+     * @since 2025. 11. 12.
+     * @version 2.1.0
+     * @author Park Jun-Hong (parkjunhong77@gmail.com)
+     */
+    public static DataSourceInitializer initializeDbmsDefaultData(@Nonnull DataSource dataSource, @Nonnull DatabaseInitResources initResources) throws IOException {
+        return initializeDbmsDefaultData(dataSource, initResources, null);
+    }
+
+    /**
+     * 주어진 정보를 이용하여 DBMS 초기 구성을 진행합니다. <br>
+     * 
+     * <pre>
+     * [개정이력]
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
      * 2025. 4. 28.     parkjunhong77@gmail.com         최초 작성
@@ -189,7 +215,8 @@ public class JdbcConfigHelper {
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    public static DataSourceInitializer initializeDbmsDefaultData(DataSource dataSource, DatabaseInitResources initResources, Map<String, Object> properties) throws IOException {
+    public static DataSourceInitializer initializeDbmsDefaultData(@Nonnull DataSource dataSource, @Nonnull DatabaseInitResources initResources, Map<String, Object> properties)
+            throws IOException {
 
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 
@@ -223,6 +250,7 @@ public class JdbcConfigHelper {
      *      날짜      | 작성자   |   내용
      * ------------------------------------------
      * 2025. 4. 28.     parkjunhong77@gmail.com         최초 작성
+     * 2025. 11. 12.    parkjunhong77@gmail.com         'properties' 변수 nullable 허용.
      * </pre>
      *
      * @param resource
@@ -236,17 +264,22 @@ public class JdbcConfigHelper {
      * @version 0.5.0
      * @author parkjunhong77@gmail.com
      */
-    private static Resource updateInitResource(@NotNull Resource resource, @NotNull Map<String, Object> properties) throws IOException {
+    private static Resource updateInitResource(@NotNull Resource resource, Map<String, Object> properties) throws IOException {
 
         String sqlResource;
         try (InputStream in = resource.getInputStream()) {
             sqlResource = IOUtils.toString(in, StandardCharsets.UTF_8);
         }
 
-        final NamedTemplate sqlTemplate = new NamedTemplate(sqlResource);
-        properties.forEach((k, v) -> sqlTemplate.addValue(k, v));
+        String sql = null;
+        if (properties != null) {
+            final NamedTemplate sqlTemplate = new NamedTemplate(sqlResource);
+            properties.forEach((k, v) -> sqlTemplate.addValue(k, v));
 
-        String sql = sqlTemplate.format();
+            sql = sqlTemplate.format();
+        } else {
+            sql = sqlResource;
+        }
 
         logger.trace("sql=\n{}", sql);
 
