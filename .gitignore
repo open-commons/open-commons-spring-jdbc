@@ -111,7 +111,8 @@ local.properties
 .scala_dependencies
 .worksheet
 
+# VSCode 환경설정
+.vscode
 
-
-mvn-deploy.sh
-
+# Development
+/src/test
