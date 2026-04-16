@@ -35,6 +35,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.ConnectionCallback;
 
 import open.commons.core.database.ConnectionCallbackBroker2;
+import open.commons.core.utils.AssertUtils2;
 
 /**
  * DBMS 연결 후 쿼리를 수행하는 객체.
@@ -64,6 +65,8 @@ public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer
      * @version 0.1.0
      */
     public DefaultConnectionCallback2(ConnectionCallbackBroker2<T> broker) {
+        AssertUtils2.notNull(broker);
+
         this.broker = broker;
     }
 
@@ -72,12 +75,10 @@ public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer
      */
     @Override
     public Integer doInConnection(Connection con) throws SQLException, DataAccessException {
+        AssertUtils2.notNull(con);
 
         int count = 0;
-        PreparedStatement stmt = null;
-        try {
-            stmt = this.broker.getStatement(con);
-
+        try (PreparedStatement stmt = this.broker.getStatement(con);) {
             broker.set(stmt);
 
             count = stmt.executeUpdate();
@@ -86,9 +87,6 @@ public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer
             logger.warn(e.getLocalizedMessage(), e);
             throw e;
         } finally {
-            if (stmt != null) {
-                stmt.close();
-            }
         }
 
         return count;
@@ -107,7 +105,6 @@ public class DefaultConnectionCallback2<T> implements ConnectionCallback<Integer
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     public ConnectionCallbackBroker2<T> getBroker() {

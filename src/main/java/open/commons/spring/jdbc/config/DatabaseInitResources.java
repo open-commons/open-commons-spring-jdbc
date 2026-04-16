@@ -34,17 +34,17 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
+import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.ExceptionUtils;
 
 /**
  * 프로그램 구동시 DB 테이블 및 데이터를 초기 정보 생성을 위한 정보.
- * 
  * 
  * <br>
  * 
@@ -86,10 +86,8 @@ public class DatabaseInitResources {
      * 2025. 4. 25.      parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
-     *
      * @since 2025. 4. 25.
      * @version 0.8.0
-     * @author parkjunhong77@gmail.com
      */
     public DatabaseInitResources() {
     }
@@ -111,7 +109,6 @@ public class DatabaseInitResources {
      *
      * @since 2025. 4. 25.
      * @version 0.8.0
-     * @author Park, Jun-Hong parkjunhong77@gmail.com
      */
     private List<Resource> getAsResources(List<String> sqlList) {
 
@@ -159,7 +156,6 @@ public class DatabaseInitResources {
      *
      * @since 2025. 4. 25.
      * @version 0.8.0
-     * @author Park, Jun-Hong parkjunhong77@gmail.com
      */
     public List<Resource> getDataResources() {
         return getAsResources(this.data);
@@ -179,7 +175,6 @@ public class DatabaseInitResources {
      *
      * @since 2025. 4. 25.
      * @version 0.8.0
-     * @author Park, Jun-Hong parkjunhong77@gmail.com
      */
     public List<Resource> getSchemaResources() {
         return getAsResources(this.schema);
@@ -215,14 +210,12 @@ public class DatabaseInitResources {
      *
      * @since 2025. 4. 25.
      * @version 0.8.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #data
      */
     public void setData(@NotNull List<String> data) {
-        if (data == null) {
-            throw ExceptionUtils.newException(NullPointerException.class, "데이터 생성을 위한 쿼리 파일이 존재하지 않습니다.");
-        }
+        AssertUtils2.notNull(data, "데이터 생성을 위한 쿼리 파일이 존재하지 않습니다.");
+        
         this.data = data;
     }
 
@@ -256,14 +249,12 @@ public class DatabaseInitResources {
      *
      * @since 2025. 4. 25.
      * @version 0.8.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #schema
      */
     public void setSchema(@NotNull List<String> schema) {
-        if (schema == null) {
-            throw ExceptionUtils.newException(NullPointerException.class, "테이블 생성을 위한 쿼리 파일이 존재하지 않습니다.");
-        }
+        AssertUtils2.notNull(schema, "테이블 생성을 위한 쿼리 파일이 존재하지 않습니다.");
+
         this.schema = schema;
     }
 
@@ -271,7 +262,6 @@ public class DatabaseInitResources {
      *
      * @since 2025. 4. 25.
      * @version 0.8.0
-     * @author parkjunhong77@gmail.com
      *
      * @see java.lang.Object#toString()
      */

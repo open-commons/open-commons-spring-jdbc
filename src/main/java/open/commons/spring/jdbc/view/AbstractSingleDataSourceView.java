@@ -27,7 +27,8 @@
 package open.commons.spring.jdbc.view;
 
 import javax.sql.DataSource;
-import javax.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -61,7 +62,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractSingleDataSourceView(@NotNull Class<T> entityType) {
         this(entityType, true, true);
@@ -84,7 +84,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractSingleDataSourceView(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
@@ -109,7 +108,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractSingleDataSourceView(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
@@ -130,7 +128,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.dao.IGenericDao#getDataSource()
      */
@@ -154,7 +151,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public JdbcTemplate getJdbcTemplate() {
         if (this.jdbcTemplate == null) {
@@ -179,7 +175,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public abstract void setDataSource(@NotNull DataSource dataSource);
 

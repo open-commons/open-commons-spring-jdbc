@@ -26,6 +26,7 @@
 
 package open.commons.spring.jdbc.exception;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.dao.DataAccessException;
 
 /**
@@ -52,9 +53,8 @@ public class RuntimeDataAccessException extends DataAccessException {
      *
      * @since 2025. 6. 11.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    public RuntimeDataAccessException(String msg) {
+    public RuntimeDataAccessException(@Nullable String msg) {
         super(msg);
     }
 
@@ -73,9 +73,8 @@ public class RuntimeDataAccessException extends DataAccessException {
      *
      * @since 2025. 6. 11.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    public RuntimeDataAccessException(String msg, Throwable cause) {
+    public RuntimeDataAccessException(@Nullable String msg, @Nullable Throwable cause) {
         super(msg, cause);
     }
 }

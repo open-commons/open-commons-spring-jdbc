@@ -45,10 +45,8 @@ public class H2PgArgs extends AbstractH2ServerTypeArgs {
      * 2025. 4. 3.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
-     *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public H2PgArgs() {
         super(H2ServerType.PG, 5435 /* 기본값 */);
@@ -58,7 +56,6 @@ public class H2PgArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see java.lang.Object#toString()
      */

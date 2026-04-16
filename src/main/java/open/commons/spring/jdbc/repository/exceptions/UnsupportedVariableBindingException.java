@@ -49,10 +49,8 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      * 2021. 12. 14.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
-     *
      * @since 2021. 12. 14.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public UnsupportedVariableBindingException() {
     }
@@ -71,7 +69,6 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      *
      * @since 2021. 12. 14.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public UnsupportedVariableBindingException(String message) {
         super(message);
@@ -92,7 +89,6 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      *
      * @since 2021. 12. 14.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public UnsupportedVariableBindingException(String message, Throwable cause) {
         super(message, cause);
@@ -115,7 +111,6 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      *
      * @since 2021. 12. 14.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public UnsupportedVariableBindingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
@@ -135,7 +130,6 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      *
      * @since 2021. 12. 14.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public UnsupportedVariableBindingException(Throwable cause) {
         super(cause);

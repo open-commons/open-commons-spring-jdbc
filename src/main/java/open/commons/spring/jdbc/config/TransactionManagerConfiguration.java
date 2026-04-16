@@ -63,10 +63,8 @@ public class TransactionManagerConfiguration {
      * 2025. 6. 11.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
-     *
      * @since 2025. 6. 11.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public TransactionManagerConfiguration() {
     }
@@ -86,7 +84,6 @@ public class TransactionManagerConfiguration {
      *
      * @since 2025. 6. 11.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     @Bean
     @ConditionalOnSingleCandidate(DataSource.class)

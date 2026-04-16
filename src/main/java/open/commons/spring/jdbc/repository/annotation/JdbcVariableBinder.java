@@ -62,7 +62,6 @@ public @interface JdbcVariableBinder {
      *
      * @since 2023. 1. 11.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     ColumnLocation at() default ColumnLocation.WHERE;
 
@@ -81,7 +80,6 @@ public @interface JdbcVariableBinder {
      * @return
      *
      * @since 2020. 1. 16.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see ColumnNameType
      */
@@ -101,7 +99,6 @@ public @interface JdbcVariableBinder {
      *
      * @since 2021. 12. 13.
      * @version 0.3.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see ColumnValue#name()
      */
@@ -121,7 +118,6 @@ public @interface JdbcVariableBinder {
      *
      * @since 2021. 12. 13.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     WhereCompare operator() default WhereCompare.EQ;
 
@@ -140,7 +136,6 @@ public @interface JdbcVariableBinder {
      *
      * @since 2021. 12. 13.
      * @version 0.3.0
-     * @author Park Jun-Hong (parkjunhong77@gmail.com)
      * 
      * @see ColumnValue#variableBinding()
      */
@@ -151,7 +146,6 @@ public @interface JdbcVariableBinder {
      * 
      * @since 2023. 1. 11.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public static enum ColumnLocation {
         /**
@@ -185,7 +179,6 @@ public @interface JdbcVariableBinder {
      * 
      * @since 2021. 12. 13.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public static enum WhereCompare {
         EQ("="), //

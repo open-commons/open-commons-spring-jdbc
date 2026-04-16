@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 import open.commons.spring.jdbc.view.mariadb.MariadbCommons;
@@ -69,7 +69,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 24.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType) {
         this(entityType, true);
@@ -93,7 +92,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 24.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
@@ -118,7 +116,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2023. 8. 28.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
@@ -141,7 +138,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrNothing(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
@@ -173,10 +169,8 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * 2022. 11. 29.    parkjunhong77@gmail.com     메소드 이관.
      * </pre>
      * 
-     * 
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrUpdate(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
@@ -209,7 +203,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywords()
      */
@@ -222,7 +215,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywordWrappingCharacter()
      */
@@ -235,7 +227,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 24.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */
@@ -248,7 +239,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 24.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionConcatValue()
      */
@@ -261,7 +251,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 24.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionHeader()
      */
@@ -284,7 +273,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 24.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionTail()
      */
@@ -297,7 +285,6 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 24.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionValue()
      */

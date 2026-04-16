@@ -29,7 +29,7 @@ package open.commons.spring.jdbc.utils;
 import java.util.Collections;
 import java.util.Set;
 
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 import open.commons.core.utils.StringUtils;
 
@@ -59,7 +59,6 @@ public class CommonUtils {
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public static final Set<String> loadReservedKeywords(@NotNull String reservedKeywordString) {
         return Collections.unmodifiableSet(StringUtils.splitAsSet(reservedKeywordString, ",", kw -> kw != null ? kw.trim().toUpperCase() : null));

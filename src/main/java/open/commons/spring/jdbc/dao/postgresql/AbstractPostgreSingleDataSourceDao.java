@@ -31,6 +31,7 @@ import java.util.List;
 import open.commons.core.Result;
 import open.commons.core.function.SQLConsumer;
 import open.commons.core.utils.ArrayUtils;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.spring.jdbc.dao.AbstractSingleDataSourceDao;
 
 /**
@@ -84,9 +85,10 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      * @return
      *
      * @since 2020. 7. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     public <E> Result<List<E>> getList(String query, Object[] parameters, int begin, int count, Class<E> entity, String... columns) {
+        AssertUtils2.notNulls(query, parameters, entity, columns);
+
         String partQuery = wrapQueryForPartition(query);
         Object[] newParams = ArrayUtils.add(parameters, begin, count);
 
@@ -109,9 +111,10 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      * @return
      *
      * @since 2020. 7. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     protected final String wrapQueryForPartition(String query) {
+        AssertUtils2.notNull(query);
+        
         StringBuffer queryBuffer = new StringBuffer("SELECT * FROM ( ");
         queryBuffer.append(query);
         queryBuffer.append(" ) tbl OFFSET ? LIMIT ?");

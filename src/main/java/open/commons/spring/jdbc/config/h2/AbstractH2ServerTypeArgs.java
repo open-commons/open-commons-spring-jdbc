@@ -28,8 +28,8 @@ package open.commons.spring.jdbc.config.h2;
 
 import java.util.List;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.util.Assert;
 
@@ -84,26 +84,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
     protected boolean daemon = false;
 
     /**
-     * <pre>
-     * [개정이력]
-     *      날짜      | 작성자   |   내용
-     * ------------------------------------------
-     * 2025. 3. 27.     parkjunhong77@gmail.com         최초 작성
-     * </pre>
-     *
-     * @param 서버
-     *            유형
-     *
-     * @since 2025. 4. 3.
-     * @version 0.5.0
-     * @author parkjunhong77@gmail.com
-     */
-    public AbstractH2ServerTypeArgs(@NotNull H2ServerType type) {
-        Assert.notNull(type, "서버 구동방식은 반드시 설정되어야 합니다.");
-        this.type = type;
-    }
-
-    /**
      * 
      * <br>
      * 
@@ -121,10 +101,10 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractH2ServerTypeArgs(@NotNull H2ServerType type, @Min(1) int port) {
         Assert.notNull(type, "서버 구동방식은 반드시 설정되어야 합니다.");
+        
         this.type = type;
         this.port = port;
     }
@@ -143,7 +123,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #port
      */
@@ -166,7 +145,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #type
      */
@@ -188,7 +166,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #allowOthers
      */
@@ -211,7 +188,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #daemon
      */
@@ -235,7 +211,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #allowOthers
      */
@@ -258,7 +233,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #daemon
      */
@@ -281,7 +255,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #port
      */
@@ -296,7 +269,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see kr.co.ymtech.gis.config.h2.IH2ServerArgs#toArguments()
      */
@@ -311,7 +283,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see java.lang.Object#toString()
      */
@@ -336,7 +307,6 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      * 
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public static enum H2ServerType {
         WEB("web"), TCP("tcp"), PG("pg");

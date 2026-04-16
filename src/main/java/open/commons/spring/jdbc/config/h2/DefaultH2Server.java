@@ -30,14 +30,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.stream.Stream;
 
-import javax.annotation.PreDestroy;
-import javax.validation.constraints.NotNull;
+import jakarta.annotation.PreDestroy;
 
 import org.h2.tools.Server;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import open.commons.core.function.SQLFunction;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.ExceptionUtils;
 import open.commons.spring.jdbc.config.h2.AbstractH2ServerTypeArgs.H2ServerType;
 
@@ -76,9 +76,10 @@ public class DefaultH2Server {
      *
      * @since 2025. 4. 28.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    public DefaultH2Server(@NotNull H2ServerArgs serverArgs, @NotNull H2ServerType serverType) {
+    public DefaultH2Server(H2ServerArgs serverArgs, H2ServerType serverType) {
+        AssertUtils2.notNulls(serverArgs, serverType);
+
         this.serverArgs = serverArgs;
         this.serverType = serverType;
     }
@@ -97,7 +98,6 @@ public class DefaultH2Server {
      *
      * @since 2025. 4. 28.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public void startServer() throws SQLException {
 

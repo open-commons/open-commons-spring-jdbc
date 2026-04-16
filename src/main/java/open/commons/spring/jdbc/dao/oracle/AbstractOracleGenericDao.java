@@ -29,8 +29,7 @@ package open.commons.spring.jdbc.dao.oracle;
 import java.sql.PreparedStatement;
 import java.util.List;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 
 import open.commons.core.Result;
 import open.commons.core.function.SQLTripleFunction;
@@ -68,8 +67,7 @@ public abstract class AbstractOracleGenericDao extends AbstractSingleDataSourceD
      *      open.commons.function.SQLTripleFunction, int, java.lang.String)
      */
     @Override
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
         return super.executeUpdate(data, dataSetter, partitionSize, "INSERT ALL ", valueQuery, " SELECT 1 FROM DUAL");
     }
 }

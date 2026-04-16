@@ -33,8 +33,9 @@ import java.util.Collection;
 import java.util.stream.Collectors;
 
 import javax.sql.DataSource;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -45,6 +46,7 @@ import org.springframework.validation.annotation.Validated;
 
 import open.commons.core.TwoValueObject;
 import open.commons.core.function.SQLFunction;
+import open.commons.core.utils.AssertUtils2;
 
 /**
  * 여러 개의 DBMS에 동일한 작업(SQL)를 수행하는 기능을 지원.
@@ -88,6 +90,7 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      */
     @Override
     protected <R> R execute(@NotNull SQLFunction<Connection, R> act) throws SQLException {
+        AssertUtils2.notNull(act);
 
         Collection<DataSource> colDataSources = getDataSource();
         ArrayList<TwoValueObject<Connection, DataSource>> cons = new ArrayList<>();
@@ -148,7 +151,6 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      *
      * @since 2025. 6. 11.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.dao.IGenericDao#getDataSource()
      */
@@ -177,9 +179,8 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      *
      * @since 2020. 4. 15.
      * @version
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    private JdbcTemplate getJdbcTemplate(@NotNull DataSource dataSource) {
+    private JdbcTemplate getJdbcTemplate(DataSource dataSource) {
         return new JdbcTemplate(dataSource);
     }
 
@@ -197,8 +198,6 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
      * 
      * @since 2020. 4. 15.
      * @version
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
-     * 
      */
-    public abstract void setDataSources(@NotNull @NotEmpty Collection<DataSource> dataSources);
+    public abstract void setDataSources(@NotEmpty Collection<DataSource> dataSources);
 }

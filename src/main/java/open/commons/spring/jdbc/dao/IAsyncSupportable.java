@@ -38,14 +38,14 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import javax.validation.constraints.NotNull;
-
+import org.jspecify.annotations.Nullable;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.stereotype.Repository;
 import org.springframework.validation.annotation.Validated;
 
 import open.commons.core.Result;
 import open.commons.core.function.HexaFunction;
+import open.commons.core.utils.AssertUtils2;
 
 /**
  * {@link ThreadPoolTaskExecutor}를 기반으로
@@ -89,10 +89,10 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <E> List<Future<Result<List<E>>>> callAsync(@NotNull HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
-            , @NotNull String query, int totalCount, int partitionSize, @NotNull Class<E> type, @NotNull Supplier<Object[]> params, @NotNull Supplier<String[]> columns) {
+    default <E> List<Future<Result<List<E>>>> callAsync(HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
+            , String query, int totalCount, int partitionSize, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+        AssertUtils2.notNulls(m, query, type, params, columns);
 
         ThreadPoolTaskExecutor threadPool = getThreadPoolExecutor();
 
@@ -142,10 +142,9 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <E> Result<List<E>> executeParallel(@NotNull String query, int totalCount, int partitionSize, @NotNull Class<E> type, @NotNull Supplier<Object[]> params,
-            @NotNull Supplier<String[]> columns) {
+    default <E> Result<List<E>> executeParallel(String query, int totalCount, int partitionSize, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+        AssertUtils2.notNulls(query, type, params, columns);
 
         List<E> data = new ArrayList<>();
         Consumer<Result<List<E>>> dataCollector = getCollector(data);
@@ -209,9 +208,10 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <E> Consumer<Result<List<E>>> getCollector(@NotNull final List<E> collector) {
+    default <E> Consumer<Result<List<E>>> getCollector(final List<E> collector) {
+        AssertUtils2.notNull(collector);
+
         return t -> collector.addAll(t.getData());
     }
 
@@ -233,9 +233,8 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public Result<Integer> getCount(@NotNull String selectQuery, Object... params);
+    public Result<Integer> getCount(String selectQuery, Object... params);
 
     /**
      * 데이터 개수를 제공한다. <br>
@@ -256,9 +255,10 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <P> Result<Integer> getCount(@NotNull Supplier<Result<Integer>> m, @NotNull P parameters) {
+    default Result<Integer> getCount(Supplier<Result<Integer>> m) {
+        AssertUtils2.notNull(m);
+
         return m.get();
     }
 
@@ -281,9 +281,10 @@ public interface IAsyncSupportable {
      * @return
      *
      * @since 2020. 1. 21.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <P> Result<Integer> getCountBy(@NotNull Function<P, Result<Integer>> m, @NotNull P parameters) {
+    default <P extends @Nullable Object> Result<Integer> getCountBy(Function<P, Result<Integer>> m, P parameters) {
+        AssertUtils2.notNull(m);
+
         return m.apply(parameters);
     }
 
@@ -313,9 +314,8 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <E, P> Result<List<E>> getList(@NotNull String query, int partitionSize, @NotNull Class<E> type, Object... params) {
+    default <E, P> Result<List<E>> getList(String query, int partitionSize, Class<E> type, Object... params) {
         return getList(query, partitionSize, type, () -> params, SUPPLIER_STRING_ARR);
     }
 
@@ -345,9 +345,8 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <E, P> Result<List<E>> getList(@NotNull String query, int partitionSize, @NotNull Class<E> type, String... columns) {
+    default <E, P> Result<List<E>> getList(String query, int partitionSize, Class<E> type, String... columns) {
         return getList(query, partitionSize, type, SUPPLIER_OBJECT_ARR, () -> columns);
     }
 
@@ -379,10 +378,10 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    default <E, P> Result<List<E>> getList(@NotNull String query, int partitionSize, @NotNull Class<E> type, @NotNull Supplier<Object[]> params,
-            @NotNull Supplier<String[]> columns) {
+    default <E, P> Result<List<E>> getList(String query, int partitionSize, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+        AssertUtils2.notNulls(query, type, params, columns);
+
         // #1. 조회 데이터 개수
         Result<Integer> resultCount = getCount(query, params.get());
         if (!resultCount.getResult()) {
@@ -421,10 +420,9 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 30.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public <E> Result<List<E>> getList(@NotNull String query, int offset, int fetch, @NotNull Class<E> dataType, @NotNull Supplier<Object[]> params,
-            @NotNull Supplier<String[]> columns) throws NullPointerException, IllegalArgumentException;
+    public <E> Result<List<E>> getList(String query, int offset, int fetch, Class<E> dataType, Supplier<Object[]> params, Supplier<String[]> columns)
+            throws NullPointerException, IllegalArgumentException;
 
     /**
      * {@link ThreadPoolTaskExecutor} 를 제공한다.
@@ -442,11 +440,9 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 22.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public @NotNull ThreadPoolTaskExecutor getThreadPoolExecutor();
+    public ThreadPoolTaskExecutor getThreadPoolExecutor();
 
-    @Validated
     public static class AsyncSelectorBy<E> implements Callable<Result<List<E>>> {
 
         /** 데이터 개수 제공 {@link Repository} Bean 메소드. */
@@ -487,8 +483,8 @@ public interface IAsyncSupportable {
          * @since 2020. 1. 21.
          * @version
          */
-        public AsyncSelectorBy(@NotNull HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
-                , String query, Integer offset, Integer count, @NotNull Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+        public AsyncSelectorBy(HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
+                , String query, Integer offset, Integer count, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
             this.m = m;
             this.query = query;
             this.offset = offset;

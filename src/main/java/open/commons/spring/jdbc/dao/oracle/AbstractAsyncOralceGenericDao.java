@@ -30,12 +30,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Supplier;
 
-import javax.validation.constraints.NotNull;
-
 import open.commons.core.Result;
 import open.commons.core.function.SQLConsumer;
 import open.commons.core.test.StopWatch;
 import open.commons.core.utils.ArrayUtils;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.spring.jdbc.dao.IAsyncSupportable;
 
 /**
@@ -67,8 +66,11 @@ public abstract class AbstractAsyncOralceGenericDao extends AbstractOracleGeneri
      *      java.util.function.Supplier, java.util.function.Supplier)
      */
     @Override
-    public <E> Result<List<E>> getList(@NotNull String query, int offset, int fetch, @NotNull Class<E> dataType, @NotNull Supplier<Object[]> params,
-            @NotNull Supplier<String[]> columns) throws NullPointerException, IllegalArgumentException {
+    public <E> Result<List<E>> getList(String query, int offset, int fetch, Class<E> dataType, Supplier<Object[]> params, Supplier<String[]> columns)
+            throws NullPointerException, IllegalArgumentException {
+
+        AssertUtils2.notNulls(query, dataType, params, columns);
+
         StringBuffer extendedQuery = new StringBuffer(query);
         extendedQuery.append(' ');
         extendedQuery.append(" OFFSET ? ROWS FETCH NEXT ? ROWS ONLY");

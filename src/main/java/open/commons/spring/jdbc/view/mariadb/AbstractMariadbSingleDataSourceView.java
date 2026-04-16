@@ -28,8 +28,8 @@ package open.commons.spring.jdbc.view.mariadb;
 
 import java.util.Set;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import open.commons.spring.jdbc.view.AbstractSingleDataSourceView;
 
@@ -57,7 +57,6 @@ public abstract class AbstractMariadbSingleDataSourceView<T> extends AbstractSin
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbSingleDataSourceView(@NotNull Class<T> entityType) {
         this(entityType, true);
@@ -80,7 +79,6 @@ public abstract class AbstractMariadbSingleDataSourceView<T> extends AbstractSin
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbSingleDataSourceView(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
@@ -105,7 +103,6 @@ public abstract class AbstractMariadbSingleDataSourceView<T> extends AbstractSin
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbSingleDataSourceView(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
@@ -115,7 +112,6 @@ public abstract class AbstractMariadbSingleDataSourceView<T> extends AbstractSin
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywords()
      */
@@ -128,7 +124,6 @@ public abstract class AbstractMariadbSingleDataSourceView<T> extends AbstractSin
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywordWrappingCharacter()
      */
@@ -141,7 +136,6 @@ public abstract class AbstractMariadbSingleDataSourceView<T> extends AbstractSin
      *
      * @since 2025. 5. 13.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */

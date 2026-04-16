@@ -26,23 +26,19 @@
 package open.commons.spring.jdbc.dao;
 
 import java.sql.PreparedStatement;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import open.commons.core.Result;
-import open.commons.core.database.ConnectionCallbackBroker;
 import open.commons.core.database.ConnectionCallbackBroker2;
 import open.commons.core.database.DefaultConCallbackBroker2;
-import open.commons.core.database.IConnectionCallbackSetter;
 import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.test.StopWatch;
+import open.commons.core.utils.AssertUtils2;
 
 /**
  * DAO 공통 기능 제공 클래스.<br>
@@ -92,7 +88,6 @@ import open.commons.core.test.StopWatch;
  * }
  * </pre>
  * 
- * 
  * <br>
  * 
  * <pre>
@@ -107,7 +102,6 @@ import open.commons.core.test.StopWatch;
  * @version 0.1.0
  * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
  */
-@SuppressWarnings("deprecation")
 public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
 
     /**
@@ -138,30 +132,6 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      *
      * @param brokers
      *            요청쿼리 처리 객체
-     * @return 쿼리 처리결과.
-     *
-     * @since 2019. 3. 28.
-     * @version 0.1.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
-     * 
-     * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
-     */
-    public Result<Integer> executeUpdate(ConnectionCallbackBroker... brokers) {
-        return executeUpdate(Arrays.asList(brokers));
-    }
-
-    /**
-     * 단일/다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
-     * </pre>
-     *
-     * @param brokers
-     *            요청쿼리 처리 객체
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -169,10 +139,10 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * 
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SafeVarargs
-    public final <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
+    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
+        AssertUtils2.notNulls((Object[]) brokers);
 
         Result<Integer> result = new Result<>();
 
@@ -219,143 +189,6 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
     }
 
     /**
-     * 다중 (Insert/Update/Delete) 쿼리 요청을 처리합니다.<br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
-     * </pre>
-     *
-     * @param brokers
-     *            요청쿼리 처리 객체
-     * @return 쿼리 처리결과
-     *
-     * @since 2019. 3. 28.
-     * @version 0.1.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
-     * 
-     * @deprecated Use {@link #executeUpdate(ConnectionCallbackBroker2...)}. Not support any more.
-     */
-    public Result<Integer> executeUpdate(@NotNull List<ConnectionCallbackBroker> brokers) {
-
-        Result<Integer> result = new Result<>();
-
-        StopWatch watch = new StopWatch();
-        watch.start();
-
-        Integer updated = 0;
-        try {
-            updated = execute(con -> {
-                DefaultConnectionCallback action = null;
-                int inserted = 0;
-                for (ConnectionCallbackBroker broker : brokers) {
-                    action = new DefaultConnectionCallback(broker);
-                    inserted += action.doInConnection(con);
-                }
-                return inserted;
-            });
-
-            result.andTrue().setData(updated);
-
-        } catch (Exception e) {
-            logger.warn(e.getMessage(), e);
-            result.setMessage(e.getMessage());
-        } finally {
-            watch.stop();
-            logger.trace("Data.count: {}, Elapsed.total: {}", updated, watch.getAsPretty());
-        }
-
-        return result;
-    }
-
-    /**
-     * 
-     * <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2020. 1. 21.		parkjunhong77@gmail.com			최초 작성
-     * </pre>
-     *
-     * @param <E>
-     * @param data
-     *            저장할 데이터
-     * @param psSetterProvider
-     *            PreparedStatement 데이터 설정
-     * @param partitionSize
-     *            분할 크기
-     * @param headerQuery
-     *            다중 데이터 추가를 위한 쿼리 헤더
-     * @param valueQuery
-     *            데이터 바인딩 쿼리
-     * @param tailQuery
-     *            추가 쿼리
-     * @return
-     *
-     * @since 2020. 1. 20.
-     * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
-     * 
-     * @deprecated Not use any more.
-     */
-    @SuppressWarnings("unused")
-    private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) {
-        return executeUpdate(data, psSetterProvider, partitionSize, headerQuery, valueQuery, "", tailQuery);
-    }
-
-    /**
-     * 
-     * <br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2020. 6. 15.		parkjunhong77@gmail.com			최초 작성
-     * </pre>
-     *
-     * @param <E>
-     * @param data
-     *            저장할 데이터
-     * @param psSetterProvider
-     *            PreparedStatement 데이터 설정
-     * @param partitionSize
-     *            분할 크기
-     * @param headerQuery
-     *            다중 데이터 추가를 위한 쿼리 헤더
-     * @param valueQuery
-     *            데이터 바인딩 쿼리
-     * @param concatForVQ
-     *            데이터 바인딩 쿼리 연결자
-     * @param tailQuery
-     *            추가 쿼리
-     * @return
-     *
-     * @since 2020. 6. 15.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
-     * 
-     * @deprecated Not use any more.
-     */
-    private final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
-
-        if (data == null || data.size() < 1) {
-            return new Result<>(0, true);
-        }
-
-        // #1. 데이터 추가 다중 실행 정보 생성.
-        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, psSetterProvider, partitionSize, headerQuery, valueQuery,
-                concatForVQ, tailQuery);
-        // #2. 데이터 추가 실행.
-        return executeUpdate(brokers);
-    }
-
-    /**
      * 다수 개의 데이터를 설정된 크기로 나누어 추가합니다. <br>
      * 
      * <pre>
@@ -379,12 +212,10 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      *
      * @since 2020. 1. 17.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -415,10 +246,9 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      *
      * @since 2021. 11. 11.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String headerQuery,
+            String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -454,12 +284,11 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) {
+    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery, String tailQuery) {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
     }
 
@@ -496,41 +325,14 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      *
      * @since 2020. 6. 15.
      * @version 0.2.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) {
+    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery, String concatForVQ, String tailQuery) {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ,
                 tailQuery);
         return executeUpdate(brokers);
-    }
-
-    /**
-     * 단일 요청쿼리를 처리합니다.<br>
-     * 
-     * <pre>
-     * [개정이력]
-     *      날짜    	| 작성자	|	내용
-     * ------------------------------------------
-     * 2019. 3. 28.		parkjunhong77@gmail.com			최초 작성
-     * </pre>
-     *
-     * @param query
-     *            요청쿼리
-     * @param setter
-     *            요청쿼리 파라미터 설정 객체
-     * @return 쿼리 처리결과
-     *
-     * @since 2019. 3. 28.
-     * @version 0.1.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
-     * 
-     * @deprecated Not support any more.
-     */
-    public Result<Integer> executeUpdate(@NotNull String query, IConnectionCallbackSetter setter) {
-        return executeUpdate(new ConnectionCallbackBroker(query, setter));
     }
 
     /**
@@ -551,13 +353,12 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      *
      * @since 2019. 3. 29.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter) {
+    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter) {
         return executeUpdate(query, setter, false);
     }
 
-    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) {
+    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) {
         return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
 }

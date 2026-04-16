@@ -34,11 +34,9 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
 import javax.sql.DataSource;
-import javax.validation.constraints.NotNull;
 
-import org.apache.commons.io.IOUtils;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -49,6 +47,8 @@ import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
 
 import open.commons.core.text.NamedTemplate;
 import open.commons.core.utils.ArrayUtils;
+import open.commons.core.utils.AssertUtils2;
+import open.commons.core.utils.CharUtils;
 import open.commons.core.utils.ExceptionUtils;
 
 import com.zaxxer.hikari.HikariDataSource;
@@ -74,10 +74,8 @@ public class JdbcConfigHelper {
      * 2025. 4. 28.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
-     *
      * @since 2025. 4. 28.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public JdbcConfigHelper() {
     }
@@ -99,9 +97,10 @@ public class JdbcConfigHelper {
      *
      * @since 2025. 4. 28.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public static <D extends DataSource> D createDataSource(Class<D> dataSourceType) {
+        AssertUtils2.notNull(dataSourceType, "데이터소스 유형은 반드시 설정되어야 합니다.");
+
         return DataSourceBuilder.create().type(dataSourceType).build();
     }
 
@@ -120,7 +119,6 @@ public class JdbcConfigHelper {
      *
      * @since 2025. 4. 28.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public static HikariDataSource createHikariDataSource() {
         return createDataSource(HikariDataSource.class);
@@ -142,10 +140,11 @@ public class JdbcConfigHelper {
      *
      * @since 2020. 12. 3.
      * @version 0.3.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @see HikariDataSource
      */
     public static Collection<DataSource> getMultipleDataSource(MultipleDataSourceConfig config) {
+        AssertUtils2.notNull(config, "데이터소스 정보는 반드시 설정되어야 합니다.");
+
         return config.getJdbcUrls().stream()//
                 .map(jdbcUrl -> {
                     HikariDataSource ds = createHikariDataSource();
@@ -186,9 +185,8 @@ public class JdbcConfigHelper {
      *
      * @since 2025. 11. 12.
      * @version 2.1.0
-     * @author Park Jun-Hong (parkjunhong77@gmail.com)
      */
-    public static DataSourceInitializer initializeDbmsDefaultData(@Nonnull DataSource dataSource, @Nonnull DatabaseInitResources initResources) throws IOException {
+    public static DataSourceInitializer initializeDbmsDefaultData(DataSource dataSource, DatabaseInitResources initResources) throws IOException {
         return initializeDbmsDefaultData(dataSource, initResources, null);
     }
 
@@ -213,10 +211,11 @@ public class JdbcConfigHelper {
      *
      * @since 2025. 4. 28.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    public static DataSourceInitializer initializeDbmsDefaultData(@Nonnull DataSource dataSource, @Nonnull DatabaseInitResources initResources, Map<String, Object> properties)
+    public static DataSourceInitializer initializeDbmsDefaultData(DataSource dataSource, DatabaseInitResources initResources, @Nullable Map<String, Object> properties)
             throws IOException {
+
+        AssertUtils2.notNulls(dataSource, initResources);
 
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
 
@@ -257,18 +256,19 @@ public class JdbcConfigHelper {
      *            SQL 정보
      * @param properties
      *            SQL에 반영할 내용.
+     * 
      * @return
+     * 
      * @throws IOException
      *
      * @since 2025. 4. 28.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    private static Resource updateInitResource(@NotNull Resource resource, Map<String, Object> properties) throws IOException {
+    private static Resource updateInitResource(Resource resource, @Nullable Map<String, Object> properties) throws IOException {
 
         String sqlResource;
         try (InputStream in = resource.getInputStream()) {
-            sqlResource = IOUtils.toString(in, StandardCharsets.UTF_8);
+            sqlResource = new String(in.readAllBytes(), CharUtils.defaultCharset());
         }
 
         String sql = null;

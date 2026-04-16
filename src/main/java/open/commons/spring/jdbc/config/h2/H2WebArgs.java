@@ -79,7 +79,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public H2WebArgs() {
         super(H2ServerType.WEB, 8082 /* 기본값 */);
@@ -99,7 +98,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #externalNames
      */
@@ -124,7 +122,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #browser
      */
@@ -147,7 +144,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #enableSSL
      */
@@ -171,7 +167,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #browser
      */
@@ -194,7 +189,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #enableSSL
      */
@@ -217,7 +211,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #externalNames
      */
@@ -229,7 +222,6 @@ public class H2WebArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see java.lang.Object#toString()
      */

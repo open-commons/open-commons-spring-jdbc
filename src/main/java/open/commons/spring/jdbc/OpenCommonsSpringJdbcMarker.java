@@ -26,9 +26,6 @@
 
 package open.commons.spring.jdbc;
 
-import org.springframework.boot.web.servlet.ServletComponentScan;
-import org.springframework.context.annotation.ComponentScan;
-
 /**
  * Open Commons Spring Jdbc for Springframework 패키지 Marker 클래스.
  * 
@@ -36,8 +33,6 @@ import org.springframework.context.annotation.ComponentScan;
  * @version 0.5.0
  * @author parkjunhong77@gmail.com
  * 
- * @see ComponentScan
- * @see ServletComponentScan
  */
 public final class OpenCommonsSpringJdbcMarker {
     private OpenCommonsSpringJdbcMarker() {

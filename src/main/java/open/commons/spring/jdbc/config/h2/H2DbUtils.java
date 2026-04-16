@@ -31,11 +31,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
-import org.springframework.util.Assert;
+import org.jspecify.annotations.Nullable;
 
 import open.commons.core.utils.AnnotationUtils;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.ExceptionUtils;
 import open.commons.spring.jdbc.config.h2.AbstractH2ServerTypeArgs.H2ServerType;
 
@@ -69,12 +68,9 @@ public class H2DbUtils {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public static void assertNullOrEmpty(String str, String title) {
-        Assert.notNull(str, String.format("'%s'(으)로 사용되는 정보는 null 을 허용하지 않습니다.", title));
-        str = str.trim();
-        Assert.hasLength(str, String.format("'%s'(으)로 사용되는 정보는 빈문자열을 허용하지 않습니다.", title));
+        AssertUtils2.notBlank(str, "'%s'(으)로 사용되는 정보는 빈문자열을 허용하지 않습니다.", title);
     }
 
     /**
@@ -96,9 +92,8 @@ public class H2DbUtils {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    public static List<String> createH2ServerArguments(@NotNull Object o, H2ServerType type) {
+    public static List<String> createH2ServerArguments(@Nullable Object o, @Nullable H2ServerType type) {
         if (o == null) {
             return null;
         }

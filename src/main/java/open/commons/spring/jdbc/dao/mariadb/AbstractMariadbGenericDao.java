@@ -29,8 +29,7 @@ package open.commons.spring.jdbc.dao.mariadb;
 import java.sql.PreparedStatement;
 import java.util.List;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
 
 import open.commons.core.Result;
 import open.commons.core.function.SQLTripleFunction;
@@ -55,10 +54,8 @@ public abstract class AbstractMariadbGenericDao extends AbstractSingleDataSource
      * 2021. 11. 11.		parkjunhong77@gmail.com			최초 작성
      * </pre>
      *
-     *
      * @since 2021. 11. 11.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractMariadbGenericDao() {
     }
@@ -67,14 +64,13 @@ public abstract class AbstractMariadbGenericDao extends AbstractSingleDataSource
      *
      * @since 2021. 11. 11.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
      *      open.commons.function.SQLTripleFunction, int, java.lang.String, java.lang.String)
      */
     @Override
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String headerQuery,
+            String valueQuery) {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, ",", "");
     }
 }

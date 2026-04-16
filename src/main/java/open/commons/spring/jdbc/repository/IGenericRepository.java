@@ -28,7 +28,7 @@ package open.commons.spring.jdbc.repository;
 
 import java.util.List;
 
-import javax.validation.constraints.Min;
+import jakarta.validation.constraints.Min;
 
 import open.commons.core.Result;
 import open.commons.core.annotation.ColumnValue;
@@ -58,7 +58,6 @@ public interface IGenericRepository<T> extends IGenericRetrieve<T> {
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<Integer> insert(List<T> data);
 
@@ -81,7 +80,6 @@ public interface IGenericRepository<T> extends IGenericRetrieve<T> {
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<Integer> insert(List<T> data, @Min(1) int partitionSize);
 
@@ -100,7 +98,6 @@ public interface IGenericRepository<T> extends IGenericRetrieve<T> {
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see ColumnValue
      */

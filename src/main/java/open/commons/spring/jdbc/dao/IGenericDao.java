@@ -30,7 +30,8 @@ package open.commons.spring.jdbc.dao;
 import java.util.Locale;
 
 import javax.sql.DataSource;
-import javax.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
@@ -59,7 +60,6 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     // JdbcTemplate getJdbcTemplate();
@@ -79,7 +79,6 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      *
      * @since 2025. 6. 11.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     <E> E getDataSource();
 
@@ -98,7 +97,6 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      * 
      * @see #getQuerySource()
@@ -125,7 +123,6 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      * 
      * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[], String, Locale)
@@ -153,7 +150,6 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     String getQuery(@NotNull String name, Object[] args, String defaultMessage, Locale locale);
@@ -171,7 +167,6 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     ReloadableResourceBundleMessageSource getQuerySource();

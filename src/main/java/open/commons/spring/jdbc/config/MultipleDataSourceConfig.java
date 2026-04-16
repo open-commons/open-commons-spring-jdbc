@@ -29,8 +29,13 @@ package open.commons.spring.jdbc.config;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import org.jspecify.annotations.Nullable;
+
+import open.commons.core.utils.AssertUtils2;
 
 /**
  * 다수 개의 DBMS에 동일한 작업을 수행하기 위한 설정을 지원하는 클래스.
@@ -42,16 +47,14 @@ import javax.validation.constraints.NotNull;
 public class MultipleDataSourceConfig {
 
     /** 접속계정명 */
-    @NotNull
-    @NotEmpty
+    @NotBlank
     private String username;
     /** 접속 비밀번호 */
-    @NotNull
+    @NotBlank
     private String password;
     private int mininumIdle;
     private int maximumPoolSize;
-    @NotNull
-    private String poolName;
+    private @Nullable String poolName;
     private int idleTimeout;
     private int connectionTimeout;
     private int validationtimeout;
@@ -262,7 +265,7 @@ public class MultipleDataSourceConfig {
      *
      * @since 2020. 12. 3.
      */
-    public void setPoolName(@NotNull String poolName) {
+    public void setPoolName(String poolName) {
         this.poolName = poolName;
     }
 
@@ -272,7 +275,9 @@ public class MultipleDataSourceConfig {
      *
      * @since 2020. 12. 3.
      */
-    public void setUsername(@NotNull @NotEmpty String username) {
+    public void setUsername(@NotBlank String username) {
+        AssertUtils2.notBlank(username, "사용자 정보는 '빈 문자열'을 허용하지 않습니다.");
+
         this.username = username;
     }
 
@@ -299,7 +304,6 @@ public class MultipleDataSourceConfig {
      * @return
      *
      * @since 2020. 12. 3.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      *
      * @see java.lang.Object#toString()
      */

@@ -31,8 +31,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 import open.commons.core.annotation.ColumnValue;
 import open.commons.core.utils.AnnotationUtils;
@@ -62,7 +62,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 12. 6.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see #AbstractPostgreSingleDataSourceRepository(Class, boolean)
      */
@@ -85,7 +84,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
@@ -111,7 +109,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2023. 8. 28.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
@@ -160,7 +157,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * 
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrNothing(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
@@ -240,7 +236,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * 
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#createQueryForInsertOrUpdate(java.lang.Object,
      *      java.lang.reflect.Method, java.lang.Object[])
@@ -284,7 +279,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywords()
      */
@@ -297,7 +291,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#getReservedKeywordWrappingCharacter()
      */
@@ -310,7 +303,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */
@@ -323,7 +315,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionConcatValue()
      */
@@ -336,7 +327,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionHeader()
      */
@@ -359,7 +349,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionTail()
      */
@@ -372,7 +361,6 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#queryForPartitionValue()
      */

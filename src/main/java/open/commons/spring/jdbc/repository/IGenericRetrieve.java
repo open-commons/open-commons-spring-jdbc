@@ -29,9 +29,9 @@ package open.commons.spring.jdbc.repository;
 import java.util.List;
 import java.util.Map;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 import open.commons.core.Result;
 
@@ -60,7 +60,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2021. 12. 28.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<Integer> countAll();
 
@@ -80,7 +79,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 2. 11.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<Integer> countBy(@NotNull Map<String, Object> clmnParams);
 
@@ -98,7 +96,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
 
     public Class<T> getEntityType();
@@ -117,7 +114,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public String getTableName();
 
@@ -135,7 +131,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAll();
 
@@ -157,7 +152,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit);
 
@@ -184,7 +178,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2021. 12. 9.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit, String... orderByArgs);
 
@@ -207,7 +200,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2021. 12. 9.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAll(String... orderByArgs);
 
@@ -230,7 +222,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect);
 
@@ -257,7 +248,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect, @Min(0) int offset, @Min(1) int limit);
 
@@ -290,7 +280,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAllByQuery(String queryForSelect, @Min(0) int offset, @Min(1) int limit, String... orderByArgs);
 
@@ -319,7 +308,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectAllByQuery(String queryForSelect, String... orderByArgs);
 
@@ -348,7 +336,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 2. 11.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs);
 
@@ -373,7 +360,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 2. 11.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs);
 
@@ -407,7 +393,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs);
 
@@ -438,7 +423,6 @@ public interface IGenericRetrieve<T> {
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams, String... orderByArgs);
 

@@ -38,9 +38,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
 
 import open.commons.core.Result;
 import open.commons.core.annotation.ColumnDef;
@@ -52,6 +51,7 @@ import open.commons.core.function.SQLConsumer;
 import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.test.StopWatch;
 import open.commons.core.utils.ArrayUtils;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.ExceptionUtils;
 import open.commons.core.utils.SQLUtils;
 import open.commons.spring.jdbc.dao.DefaultConnectionCallback2;
@@ -137,11 +137,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *            DBMS Table에 연결된 데이터 타입.
      * @since 2021. 12. 6.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see #AbstractGenericRepository(Class, boolean, boolean)
      */
-    public AbstractGenericRepository(@NotNull Class<T> entityType) {
+    public AbstractGenericRepository(Class<T> entityType) {
         this(entityType, true, true);
     }
 
@@ -159,11 +158,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *            Wrapper class인 경우 Primitive 타입으로 강제로 변환할지 여부.
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see #AbstractGenericRepository(Class, boolean, boolean)
      */
-    public AbstractGenericRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+    public AbstractGenericRepository(Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
     }
 
@@ -184,9 +182,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2023. 8. 24.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    public AbstractGenericRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractGenericRepository(Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
 
         this.QUERY_FOR_INSERT = queryForInsert();
@@ -219,9 +216,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected String attachSetClause(String queryHeader) {
+        AssertUtils2.notNull(queryHeader);
 
         List<ColumnValue> columns = getUpdatableColumnValues();
 
@@ -253,9 +250,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrNothing(T data, Method method, Object... whereArgs) {
 
         String query = createQueryForInsertOrNothing(data, method, whereArgs);
         Object params = createParametersForInsertOrNothing(data, method, whereArgs);
@@ -287,9 +283,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrUpdate(T data, Method method, Object... whereArgs) {
         String query = createQueryForInsertOrUpdate(data, method, whereArgs);
         Object params = createParametersForInsertOrUpdate(data, method, whereArgs);
         SQLConsumer<PreparedStatement> setter = SQLConsumer.setParameters(params);
@@ -321,7 +316,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @return 전달받은 쿼리 버퍼
      * @since 2021. 12. 1.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected StringBuffer createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
 
@@ -354,7 +348,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<E> data, int partitionSize) {
 
@@ -399,9 +392,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    private String createMergeAssembleColumnMatch(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other, @NotEmpty String concatenator) {
+    private String createMergeAssembleColumnMatch(Collection<String> clmns, final String one, final String other, @NotEmpty String concatenator) {
         return clmns.stream().map(clmn -> new StringBuilder().append(one).append(".").append(clmn) //
                 .append(" = ") //
                 .append(other).append(".").append(clmn).toString()) //
@@ -447,9 +439,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    protected String createMergeUpdateSetClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
+    protected String createMergeUpdateSetClause(Collection<String> clmns, final String one, final String other) {
         return createMergeAssembleColumnMatch(clmns, one, other, ", ");
     }
 
@@ -492,9 +483,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2025. 4. 2.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
-    protected String createMergeUsingOnClause(@NotNull Collection<String> clmns, @NotNull final String one, @NotNull final String other) {
+    protected String createMergeUsingOnClause(Collection<String> clmns, final String one, final String other) {
         return createMergeAssembleColumnMatch(clmns, one, other, " AND ");
     }
 
@@ -519,9 +509,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    protected Object createParametersForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrNothing(T data, Method method, Object... whereArgs) {
         return data;
     }
 
@@ -546,9 +535,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    protected Object createParametersForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrUpdate(T data, Method method, Object... whereArgs) {
         return data;
     }
 
@@ -573,9 +561,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    protected abstract String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs);
+    protected abstract String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs);
 
     /**
      * 데이터 생성에 사용될 쿼리를 제공합니다. <br>
@@ -598,9 +585,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 29.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    protected abstract String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs);
+    protected abstract String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs);
 
     /**
      * 주어진 컬럼값을 변경하는 'Set' 구문을 제공합니다. <br>
@@ -618,9 +604,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
-    protected String createSetClause(@NotNull List<ColumnValue> columns) {
+    protected String createSetClause(List<ColumnValue> columns) {
 
         StringBuffer buf = new StringBuffer();
 
@@ -654,9 +639,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> deleteBy(@NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
+    protected Result<Integer> deleteBy(Method method, Object... whereArgs) throws RuntimeDataAccessException {
         String query = attachWhereClause(QUERY_FOR_DELETE_HEADER, method, whereArgs);
 
         logger.debug("Query: {}, data={}", query, Arrays.toString(whereArgs));
@@ -682,7 +666,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 12. 3.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected Result<Integer> deleteBy(Object... whereArgs) throws RuntimeDataAccessException {
         return deleteBy(getCurrentMethod(1, whereArgs), whereArgs);
@@ -708,10 +691,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * 
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
     @SafeVarargs
-    public final <E> Result<Integer> executeUpdate(@NotNull ConnectionCallbackBroker2<E>... brokers) throws RuntimeDataAccessException {
+    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) throws RuntimeDataAccessException {
 
         Result<Integer> result = new Result<>();
 
@@ -781,12 +763,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2020. 1. 17.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -817,10 +797,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 11.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String headerQuery,
+            String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -857,12 +836,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2020. 1. 20.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String tailQuery) throws RuntimeDataAccessException {
+    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery, String tailQuery) throws RuntimeDataAccessException {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
     }
 
@@ -900,12 +878,11 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2020. 6. 15.
      * @version 0.2.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String headerQuery, @NotNull String valueQuery, String concatForVQ, String tailQuery) throws RuntimeDataAccessException {
+    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery, String concatForVQ, String tailQuery) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ,
                 tailQuery);
         return executeUpdate(brokers);
@@ -930,13 +907,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2019. 3. 29.
      * @version 0.0.6
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter) throws RuntimeDataAccessException {
+    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter) throws RuntimeDataAccessException {
         return executeUpdate(query, setter, false);
     }
 
-    public Result<Integer> executeUpdate(@NotNull String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) throws RuntimeDataAccessException {
+    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) throws RuntimeDataAccessException {
         return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
 
@@ -956,9 +932,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 12. 1.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
-    protected final String getAssignQuery(@NotNull ColumnValue cv) {
+    protected final String getAssignQuery(ColumnValue cv) {
         return String.join(" = ", getColumnName(cv), cv.variableBinding());
     }
 
@@ -978,9 +953,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 25.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    private String getColumnName(@NotNull ColumnValue clmnValue) {
+    private String getColumnName(ColumnValue clmnValue) {
 
         Optional<Method> opt = getUpdatableColumnsAsStream().filter(m -> clmnValue.equals(m.getAnnotation(ColumnValue.class))).findAny();
 
@@ -1005,7 +979,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected int getPartitionSize() {
         return 100;
@@ -1025,7 +998,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected final List<String> getUpdatableColumnNames() {
         return getUpdatableColumnsAsStream().map(m -> SQLUtils.getColumnNameByColumnValue(m)).collect(Collectors.toList());
@@ -1045,7 +1017,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected final List<Method> getUpdatableColumns() {
         return getUpdatableColumnsAsStream() //
@@ -1066,7 +1037,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 12. 14.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected final Stream<Method> getUpdatableColumnsAsStream() {
         return getColumnMethods().stream() //
@@ -1087,7 +1057,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 12. 1.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected final List<ColumnValue> getUpdatableColumnValues() {
         return getUpdatableColumnsAsStream().map(m -> m.getAnnotation(ColumnValue.class)) //
@@ -1109,7 +1078,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 12. 1.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected Object[] getUpdateParameters(T data) {
         return getUpdatableColumns().stream() //
@@ -1128,7 +1096,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.util.List)
      */
@@ -1141,7 +1108,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.util.List, int)
      */
@@ -1155,7 +1121,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.lang.Object)
      */
@@ -1188,9 +1153,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 2.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> insertOrNothingBy(T data, @NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
+    protected Result<Integer> insertOrNothingBy(T data, Method method, Object... whereArgs) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrNothing(data, method, whereArgs);
         return executeUpdate(broker);
     }
@@ -1216,7 +1180,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 2.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     protected Result<Integer> insertOrNothingBy(T data, Object... whereArgs) throws RuntimeDataAccessException {
         return insertOrNothingBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
@@ -1245,9 +1208,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 7. 13.
      * @version 2.0.0
-     * @author parkjunhong77@gmail.com
      */
-    protected Result<Integer> insertOrUpdateBy(T data, @NotNull Method method, Object... whereArgs) throws RuntimeDataAccessException {
+    protected Result<Integer> insertOrUpdateBy(T data, Method method, Object... whereArgs) throws RuntimeDataAccessException {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrUpdate(data, method, whereArgs);
         return executeUpdate(broker);
     }
@@ -1273,7 +1235,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 7. 14.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     protected Result<Integer> insertOrUpdateBy(T data, Object... whereArgs) throws RuntimeDataAccessException {
         return insertOrUpdateBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
@@ -1294,7 +1255,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see #queryForDeleteHeader(String)
      */
@@ -1318,7 +1278,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     protected String queryForDeleteHeader(String tableName) {
         return new StringBuffer() //
@@ -1344,7 +1303,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see #queryForInsert(String)
      */
@@ -1369,7 +1327,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     protected String queryForInsert(String tableName) {
         return new StringBuffer() //
@@ -1400,7 +1357,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected abstract String queryForPartitionConcatValue();
 
@@ -1418,7 +1374,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected abstract String queryForPartitionHeader();
 
@@ -1436,7 +1391,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected abstract String queryForPartitionTail();
 
@@ -1454,7 +1408,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 26.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      */
     protected abstract String queryForPartitionValue();
 
@@ -1474,7 +1427,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * @see #queryForUpdateHeader(String)
      */
     protected String queryForUpdateHeader() {
@@ -1497,7 +1449,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
-     * @author parkjunhong77@gmail.com
      */
     protected String queryForUpdateHeader(@NotEmpty String tableName) {
         return new StringBuffer() //
@@ -1528,11 +1479,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 11. 29.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see ColumnValue
      */
-    protected Result<Integer> updateBy(T data, @NotNull Method method, Object... whereArgs) {
+    protected Result<Integer> updateBy(T data, Method method, Object... whereArgs) {
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
         String query = attachWhereClause(querySet, method, whereArgs);
         Object[] params = ArrayUtils.objectArray(getUpdateParameters(data), whereArgs);
@@ -1563,7 +1513,6 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      *
      * @since 2021. 12. 3.
      * @version 0.3.0
-     * @author parkjunhong77@gmail.com
      * 
      * @see ColumnValue
      */

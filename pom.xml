@@ -3,13 +3,12 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.springframework.boot</groupId>
-    <artifactId>spring-boot-starter-parent</artifactId>
-    <version>2.7.15</version>
+    <groupId>io.github.open-commons</groupId>
+    <artifactId>open-commons-spring-web-dependencies</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
+    <relativePath /> <!-- lookup parent from repository -->
   </parent>
-  <groupId>io.github.open-commons</groupId>
   <artifactId>open-commons-spring-jdbc</artifactId>
-  <version>0.6.0-SNAPSHOT</version>
   <name>Open Commons for Spring JDBC</name>
   <description>Open Commons Spring JDBC Project</description>
   <url>https://github.com/open-commons/open-commons-spring-jdbc</url>
@@ -40,23 +39,7 @@
   </developers>
 
   <properties>
-    <!-- >>> begin: plugin dependencies -->
     <build.finalName>open-commons-spring-jdbc-${project.version}</build.finalName>
-
-    <encoding>UTF-8</encoding>
-    <java-version>1.8</java-version>
-
-    <compile.encoding-version>UTF-8</compile.encoding-version>
-    <compile.source-version>1.8</compile.source-version>
-    <compile.target-version>1.8</compile.target-version>
-    <!-- >>> end: plugin dependencies -->
-
-    <!-- >>> begin: dependencies -->
-    <commons-io.version>2.14.0</commons-io.version>
-
-    <open-commons-core.version>2.1.0-SNAPSHOT</open-commons-core.version>
-    <code-findbugs-jsr305.version>3.0.2</code-findbugs-jsr305.version>
-    <!-- <<< end: dependencies -->
   </properties>
 
   <distributionManagement>
@@ -101,26 +84,18 @@
   <dependencies>
     <!-- >>> begin: Spring -->
     <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-context</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-jdbc</artifactId>
     </dependency>
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-jdbc</artifactId>
     </dependency>
     <!-- <<< end: Spring -->
-
+    
     <!-- ********************** -->
     <!-- begin: jdbc -->
     <!-- https://mvnrepository.com/artifact/com.zaxxer/HikariCP -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-jdbc</artifactId>
-    </dependency>
     <dependency>
       <groupId>com.zaxxer</groupId>
       <artifactId>HikariCP</artifactId>
@@ -137,18 +112,28 @@
     <!-- ************** -->
     <!-- >>> begin: Validation -->
     <!--
-    https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+      https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
     <dependency>
       <groupId>jakarta.validation</groupId>
       <artifactId>jakarta.validation-api</artifactId>
     </dependency>
-    <!-- https://mvnrepository.com/artifact/com.google.code.findbugs/jsr305 -->
-    <dependency>
-      <groupId>com.google.code.findbugs</groupId>
-      <artifactId>jsr305</artifactId>
-      <version>${code-findbugs-jsr305.version}</version>
-    </dependency>
     <!-- <<< end: Validation -->
+    <!-- ************** -->
+
+    <!-- ************** -->
+    <!-- >>> begin: Annotation -->
+    <!-- Source: https://mvnrepository.com/artifact/org.jspecify/jspecify -->
+    <dependency>
+      <groupId>org.jspecify</groupId>
+      <artifactId>jspecify</artifactId>
+    </dependency>
+    <!--
+      https://mvnrepository.com/artifact/jakarta.validation/jakarta.validation-api -->
+    <dependency>
+      <groupId>jakarta.annotation</groupId>
+      <artifactId>jakarta.annotation-api</artifactId>
+    </dependency>
+    <!-- <<< end: Annotation -->
     <!-- ************** -->
 
     <!-- ********************** -->
@@ -167,41 +152,16 @@
     <dependency>
       <groupId>org.reflections</groupId>
       <artifactId>reflections</artifactId>
-      <version>0.9.11</version>
     </dependency>
     <!-- end: reflections -->
     <!-- ********************** -->
-
-    <!-- >>> begin: Apache Commons -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>${commons-io.version}</version>
-    </dependency>
-    <!-- <<< end: Apache Commons -->
 
     <!-- >>> begin: open-commons -->
     <dependency>
       <groupId>io.github.open-commons</groupId>
       <artifactId>open-commons-core</artifactId>
-      <version>${open-commons-core.version}</version>
     </dependency>
     <!-- <<< end: open-commons -->
-
-    <!-- >>> begin: junit -->
-    <!-- https://mvnrepository.com/artifact/junit/junit -->
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- https://mvnrepository.com/artifact/org.hamcrest/hamcrest-core -->
-    <dependency>
-      <groupId>org.hamcrest</groupId>
-      <artifactId>hamcrest-core</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- <<< end: junit -->
 
   </dependencies>
 
@@ -229,11 +189,10 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <!-- <version>${maven-compiler-plugin.version}</version> -->
         <configuration>
-          <encoding>${compile.encoding-version}</encoding>
-          <source>${compile.source-version}</source>
-          <target>${compile.target-version}</target>
+          <encoding>${encoding}</encoding>
+          <source>${compile.source.version}</source>
+          <target>${compile.target.version}</target>
         </configuration>
       </plugin>
       <!-- <<< end: compile -->
@@ -241,72 +200,23 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-source-plugin</artifactId>
-        <!-- <version>${maven-source-plugin.version}</version> -->
-        <configuration>
-          <encoding>UTF-8</encoding>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-sources</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <!-- <<< end: source -->
       <!-- >>> begin: javadoc -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <!-- <version>${maven-javadoc-plugin.version}</version> -->
-        <configuration>
-          <goal>deploy</goal>
-          <show>private</show>
-          <nohelp>true</nohelp>
-          <additionalOptions>
-            <additionalOption>-Xdoclint:none</additionalOption>
-          </additionalOptions>
-          <charset>${encoding}</charset>
-          <docencoding>${encoding}</docencoding>
-          <encoding>${encoding}</encoding>
-        </configuration>
-        <executions>
-          <execution>
-            <id>attach-javadocs</id>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <!-- <<< end: javadoc -->
       <!-- Maven Central Deployment plugin -->
       <plugin>
         <groupId>org.sonatype.central</groupId>
         <artifactId>central-publishing-maven-plugin</artifactId>
-        <version>0.7.0</version>
-        <extensions>true</extensions>
-        <configuration>
-          <publishingServerId>maven-central</publishingServerId>
-          <!-- autoPublish>true</autoPublish>
-             		<waitUntil>published</waitUntil -->
-        </configuration>
       </plugin>
       <!-- GPG signature plugin -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-gpg-plugin</artifactId>
-        <version>1.5</version>
-        <executions>
-          <execution>
-            <id>sign-artifacts</id>
-            <phase>verify</phase>
-            <goals>
-              <goal>sign</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

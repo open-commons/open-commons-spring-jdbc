@@ -26,7 +26,7 @@
 
 package open.commons.spring.jdbc.config.h2;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * 
@@ -83,7 +83,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public H2TcpArgs() {
         super(H2ServerType.TCP, 9092 /* 기본값 */);
@@ -103,7 +102,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #password
      */
@@ -126,7 +124,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #shutdown
      */
@@ -149,7 +146,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #enableSSL
      */
@@ -172,7 +168,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #shutdownForce
      */
@@ -196,7 +191,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #enableSSL
      */
@@ -219,7 +213,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #password
      */
@@ -243,7 +236,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #shutdown
      */
@@ -267,7 +259,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #shutdownForce
      */
@@ -279,7 +270,6 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see java.lang.Object#toString()
      */

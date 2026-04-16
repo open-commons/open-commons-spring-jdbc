@@ -27,7 +27,6 @@
 package open.commons.spring.jdbc.dao;
 
 import javax.sql.DataSource;
-import javax.validation.constraints.NotNull;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,7 +67,8 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
     @Override
     public void afterPropertiesSet() throws Exception {
         super.afterPropertiesSet();
-        AssertUtils2.notNull("DataSource MUST NOT BE null.", this.dataSource);
+
+        AssertUtils2.notNull(this.dataSource, "DataSource MUST NOT BE null.");
     }
 
     /**
@@ -87,7 +87,6 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * 
      * @see open.commons.spring.jdbc.dao.IGenericDao#getDataSource()
      */
@@ -111,7 +110,6 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      * @return
      *
      * @since 2019. 3. 28.
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      * @version 0.1.0
      */
     public JdbcTemplate getJdbcTemplate() {
@@ -137,7 +135,6 @@ public abstract class AbstractSingleDataSourceDao extends AbstractGenericDao {
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
-     * @author Park_Jun_Hong_(parkjunhong77@gmail.com)
      */
-    public abstract void setDataSource(@NotNull DataSource dataSource);
+    public abstract void setDataSource(DataSource dataSource);
 }

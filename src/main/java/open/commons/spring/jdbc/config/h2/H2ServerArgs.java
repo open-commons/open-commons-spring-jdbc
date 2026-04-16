@@ -118,7 +118,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public List<String> getBaseArguments() {
         return toArguments();
@@ -138,7 +137,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #baseDir
      */
@@ -161,7 +159,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #key
      */
@@ -197,7 +194,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #pg
      */
@@ -219,7 +215,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #properties
      */
@@ -242,7 +237,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      */
     public List<String> getServerArguments(H2ServerType server) {
         switch (server) {
@@ -271,7 +265,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #tcp
      */
@@ -293,7 +286,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #web
      */
@@ -315,7 +307,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #exists
      */
@@ -338,7 +329,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #notExists
      */
@@ -361,7 +351,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #trace
      */
@@ -385,7 +374,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #baseDir
      */
@@ -409,7 +397,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #exists
      */
@@ -432,7 +419,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #key
      */
@@ -455,7 +441,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #notExists
      */
@@ -478,7 +463,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #pg
      */
@@ -501,7 +485,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #properties
      */
@@ -524,7 +507,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #tcp
      */
@@ -547,7 +529,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #trace
      */
@@ -570,7 +551,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see #web
      */
@@ -581,7 +561,6 @@ public class H2ServerArgs implements IH2ServerArgs {
     /**
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see open.commons.spring.jdbc.config.h2.IH2ServerArgs#toArguments()
      */
@@ -594,7 +573,6 @@ public class H2ServerArgs implements IH2ServerArgs {
      *
      * @since 2025. 4. 3.
      * @version 0.5.0
-     * @author parkjunhong77@gmail.com
      *
      * @see java.lang.Object#toString()
      */
