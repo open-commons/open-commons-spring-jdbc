@@ -137,16 +137,6 @@
     <!-- ************** -->
 
     <!-- ********************** -->
-    <!-- begin: slf4j -->
-    <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-    </dependency>
-    <!-- end: slf4j -->
-    <!-- ********************** -->
-
-    <!-- ********************** -->
     <!-- begin: refletions -->
     <!-- https://mvnrepository.com/artifact/org.reflections/reflections -->
     <dependency>
