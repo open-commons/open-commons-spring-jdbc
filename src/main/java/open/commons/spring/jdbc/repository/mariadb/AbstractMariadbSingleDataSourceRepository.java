@@ -32,8 +32,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
+import open.commons.core.utils.AssertUtils2;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 import open.commons.spring.jdbc.view.mariadb.MariadbCommons;
 
@@ -70,7 +70,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * @since 2021. 12. 24.
      * @version 0.3.0
      */
-    public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType) {
+    public AbstractMariadbSingleDataSourceRepository(Class<T> entityType) {
         this(entityType, true);
     }
 
@@ -93,7 +93,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * @since 2021. 12. 24.
      * @version 0.3.0
      */
-    public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+    public AbstractMariadbSingleDataSourceRepository(Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
     }
 
@@ -117,7 +117,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      * @since 2023. 8. 28.
      * @version 0.4.0
      */
-    public AbstractMariadbSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractMariadbSingleDataSourceRepository(Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
 
         this.QUERY_FOR_INSERT_IGNORE = new StringBuffer() //
@@ -143,7 +143,7 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs) {
         return this.QUERY_FOR_INSERT_IGNORE;
     }
 
@@ -176,7 +176,10 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
+
         // #1. 데이터 변경 쿼리 생성
         String updatePart = String.join(",", //
                 getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출

@@ -1,3 +1,7 @@
+[2026/04/17]
+- Migration
+  + Spring Boot 4.0.3, Spring Framework 7.0.5 적용 완료
+
 [2025/07/24]
 - Dependencies
   + Add

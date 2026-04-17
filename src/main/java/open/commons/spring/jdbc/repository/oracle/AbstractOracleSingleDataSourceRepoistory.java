@@ -33,11 +33,11 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 import open.commons.core.Result;
 import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.text.NamedTemplate;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.spring.jdbc.repository.AbstractGenericRepository;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 import open.commons.spring.jdbc.view.oracle.OracleCommons;
@@ -114,7 +114,7 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @since 2021. 12. 16.
      * @version 0.3.0
      */
-    public AbstractOracleSingleDataSourceRepoistory(@NotNull Class<T> entityType) {
+    public AbstractOracleSingleDataSourceRepoistory(Class<T> entityType) {
         this(entityType, true);
     }
 
@@ -134,7 +134,7 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @since 2021. 12. 16.
      * @version 0.3.0
      */
-    public AbstractOracleSingleDataSourceRepoistory(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+    public AbstractOracleSingleDataSourceRepoistory(Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
     }
 
@@ -159,7 +159,7 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @since 2023. 8. 28.
      * @version 0.4.0
      */
-    public AbstractOracleSingleDataSourceRepoistory(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractOracleSingleDataSourceRepoistory(Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
     }
 
@@ -172,7 +172,7 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrNothing(T data, Method method, Object... whereArgs) {
 
         // #1. 'USING DUAL ON' 파라미터
         List<String> pkClmns = getVariableBindingColumnNames(method);
@@ -198,7 +198,9 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
 
         // #1. 'USING DUAL ON' 파라미터
         List<String> pkClmns = getVariableBindingColumnNames(method);
@@ -227,7 +229,10 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
+
         // #0. 쿼리 구문 선언
         NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_NOTHING);
 
@@ -267,7 +272,7 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs) {
 
         // #0. 쿼리 구문 선언
         NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_UPDATE);
@@ -308,14 +313,13 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @since 2021. 12. 16.
      * @version 0.4.0
      *
-     * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
-     *      open.commons.function.SQLTripleFunction, int, java.lang.String)
+     * @see open.commons.spring.jdbc.repository.AbstractGenericRepository#executeUpdate(java.util.List,
+     *      open.commons.core.function.SQLTripleFunction, int, java.lang.String)
      * 
      * @deprecated Use {@link AbstractGenericRepository#insert(List, int)}
      */
     @Override
-    public <E> Result<Integer> executeUpdate(@NotNull List<E> data, @NotNull SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            @NotNull String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
         throw new UnsupportedOperationException("#insert(List<T>, int) 를 사용하세요.");
     }
 

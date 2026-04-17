@@ -44,6 +44,7 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
+import org.jspecify.annotations.Nullable;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.dao.IncorrectResultSizeDataAccessException;
 
@@ -300,7 +301,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      */
     protected void addOrderByClause(StringBuffer queryBuf, String... orderByArgs) {
-        AssertUtils2.notNulls(queryBuf, orderByArgs);
+        AssertUtils2.notNull(queryBuf);
+        AssertUtils2.notBlanks(orderByArgs);
 
         queryBuf.append(" ");
         queryBuf.append(createOrderByClause(orderByArgs));
@@ -354,7 +356,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * 2021. 12. 9.     parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
-     * @param queryHeader
+     * @param queryForSelect
      *            데이터 조회 쿼리.
      * @param offset
      *            데이터 시작 위치. ( '0'부터 시작)
@@ -365,11 +367,11 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2021. 12. 9.
      * @version 0.3.0
      */
-    protected String attachOffsetClause(String queryHeader, @Min(0) int offset, @Min(1) int limit) {
-        AssertUtils2.notNull(queryHeader);
+    protected String attachOffsetClause(String queryForSelect, @Min(0) int offset, @Min(1) int limit) {
+        AssertUtils2.notBlank(queryForSelect);
 
         StringBuffer queryBuf = new StringBuffer();
-        queryBuf.append(queryHeader);
+        queryBuf.append(queryForSelect);
         queryBuf.append(" ");
         queryBuf.append(queryForOffset(offset, limit));
 
@@ -420,7 +422,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * 2021. 11. 29.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      * 
-     * @param queryHeader
+     * @param queruHeader
      *            중요 쿼리
      * @param method
      *            사용자 정의 메소드 정보
@@ -432,8 +434,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2021. 11. 29.
      * @version 0.3.0
      */
-    protected String attachWhereClause(String queryHeader, Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(queryHeader, method, whereArgs);
+    protected String attachWhereClause(@NotBlank String queruHeader, Method method, Object... whereArgs) {
+        AssertUtils2.notBlank(queruHeader);
+        AssertUtils2.notNull(method);
+        AssertUtils2.notNulls(whereArgs);
 
         List<JdbcVariableBinder> columns = getVariableBinders(method);
         if (hasNoWhereCompares(columns, WhereCompare.IN, WhereCompare.NOT_IN) && columns.size() != whereArgs.length) {
@@ -442,7 +446,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
 
         List<Parameter> parameters = getVariableBindingParameters(method);
 
-        return String.join(" ", queryHeader, createWhereClause(parameters, "AND", whereArgs));
+        return String.join(" ", queruHeader, createWhereClause(parameters, "AND", whereArgs));
     }
 
     /**
@@ -568,7 +572,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      */
     protected String createOrderByClause(String... orderByArgs) {
-        AssertUtils2.notNulls((Object[]) orderByArgs);
+        AssertUtils2.notBlanks(orderByArgs);
 
         if (orderByArgs.length < 1) {
             return "";
@@ -760,8 +764,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected String createQueryForOrderByQueryForPagination(String queryForSelect, int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
+    protected String createQueryForOrderByQueryForPagination(@NotBlank String queryForSelect, int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
         AssertUtils2.notBlank(queryForSelect, "'쿼리'는 '빈 문자열'을 허용하지 않습니다.");
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(orderByArgs);
 
         @SuppressWarnings("unchecked")
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), int.class, int.class, String[].class);
@@ -805,7 +811,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * 2022. 11. 15.        parkjunhong77@gmail.com         최초 작성
      * </pre>
      *
-     * @param query
+     * @param queryForSelect
      * @param clmnParams
      *            검색조건(컬럼이름과 데이터, 모두 'AND' 연산 처리됨).
      * @return
@@ -813,8 +819,11 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    private StringBuffer createQueryForSelectBy(String query, Map<String, Object> clmnParams) {
-        StringBuffer queryBuf = new StringBuffer(query);
+    private StringBuffer createQueryForSelectBy(@NotBlank String queryForSelect, Map<String, Object> clmnParams) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNulls(clmnParams);
+
+        StringBuffer queryBuf = new StringBuffer(queryForSelect);
 
         if (clmnParams.size() > 0) {
             // 컬럼
@@ -860,7 +869,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      */
     protected String createQueryForSelectForPagination(@NotBlank String selectQuery, Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
         AssertUtils2.notBlank(selectQuery, "'쿼리'는 '빈 문자열'을 허용하지 않습니다.");
-        AssertUtils2.notNulls(method, whereArgs);
+        AssertUtils2.notNull(method);
+        AssertUtils2.notNulls(whereArgs);
 
         StringBuffer queryBuf = new StringBuffer();
         queryBuf.append(selectQuery);
@@ -900,7 +910,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      */
     protected String createQueryForSelectOrderBy(@NotBlank String selectQuery, Method method, Object[] whereArgs, String... orderByArgs) {
         AssertUtils2.notBlank(selectQuery, "'쿼리'는 '빈 문자열'을 허용하지 않습니다.");
-        AssertUtils2.notNulls(method, whereArgs, orderByArgs);
+        AssertUtils2.notNull(method);
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(orderByArgs);
 
         StringBuffer queryBuf = new StringBuffer();
         queryBuf.append(selectQuery);
@@ -1029,7 +1041,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      */
     protected final String getAssignQuery(JdbcVariableBinder vb, int posParam, Object... whereArgs) {
-        AssertUtils2.notNulls(vb, whereArgs);
+        AssertUtils2.notNull(vb);
+        AssertUtils2.notNulls(whereArgs);
 
         StringBuffer buf = new StringBuffer();
 
@@ -1231,7 +1244,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see SQLUtils#isSortedColumns(Class)
      */
     protected Object[] getColumnValues(T data, List<String> clmns) {
-        AssertUtils2.notNulls(data, clmns);
+        AssertUtils2.notNull(data);
+        AssertUtils2.notBlanks(clmns);
 
         // 설정된 컬럼이 없는 경우
         if (clmns.isEmpty()) {
@@ -1291,7 +1305,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see SQLUtils#isSortedColumns(Class)
      */
     protected Object[] getColumnValues(T data, String... clmns) {
-        AssertUtils2.notNulls(data, clmns);
+        AssertUtils2.notNull(data);
+        AssertUtils2.notBlanks(clmns);
 
         return getColumnValues(data, Arrays.asList(clmns));
     }
@@ -1316,8 +1331,6 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see #getCurrentMethod(int, Class...)
      */
     protected final Method getCurrentMethod(@NotEmpty Class<?>... parameterTypes) {
-        AssertUtils2.notEmpty((Object[]) parameterTypes);
-
         return getCurrentMethod(1, parameterTypes);
     }
 
@@ -1340,6 +1353,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      */
     protected final Method getCurrentMethod(int distance, @NotEmpty Class<?>... parameterTypes) {
+        AssertUtils2.notNulls((Object[]) parameterTypes);
 
         String name = ThreadUtils.getMethodName(distance + 1);
 
@@ -1613,6 +1627,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      */
     protected Stream<Parameter> getVariableBindingParametersAsStream(Method method) {
+        AssertUtils2.notNull(method);
+
         return Arrays.stream(method.getParameters()) //
                 .filter(param -> param.isAnnotationPresent(JdbcVariableBinder.class));
     }
@@ -1656,8 +1672,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2025. 4. 2.
      * @version 0.5.0
      */
-    protected String queryForColumnNames(String tblAlias) {
-        if (tblAlias == null || tblAlias.trim().isEmpty()) {
+    protected String queryForColumnNames(@Nullable String tblAlias) {
+        if (StringUtils.isNullOrEmptyString(tblAlias)) {
             return queryForColumnNames();
         } else {
             final String trimTblAlias = tblAlias.trim();
@@ -1726,6 +1742,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      */
     protected String queryForSelect(@NotBlank String tableName) {
+        AssertUtils2.notBlank(tableName);
+
         return new StringBuffer() //
                 .append("SELECT") //
                 .append(" ") //
@@ -1867,10 +1885,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      */
     @Override
     public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect) {
+        AssertUtils2.notBlank(queryForSelect);
 
-        logger.debug("Query: {}", queryForSelect);
-
-        return getList(QUERY_FOR_SELECT, SQLConsumer.DO_NOTHING, this.entityType);
+        return getList(queryForSelect, SQLConsumer.DO_NOTHING, this.entityType);
     }
 
     /**
@@ -1899,7 +1916,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *      java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectAllByQuery(String queryForSelect, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
+    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notBlanks(orderByArgs);
 
         StringBuffer queryBuf = new StringBuffer();
 
@@ -1920,7 +1939,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String, java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectAllByQuery(String queryForSelect, String... orderByArgs) {
+    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, String... orderByArgs) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notBlanks(orderByArgs);
 
         StringBuffer queryBuf = new StringBuffer();
         queryBuf.append(queryForSelect);
@@ -1940,6 +1961,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      */
     @Override
     public Result<List<T>> selectBy(Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
+        AssertUtils2.notNulls(clmnParams);
+        AssertUtils2.notBlanks(orderByArgs);
+
         return selectByQuery(queryForSelect(), clmnParams, offset, limit, orderByArgs);
     }
 
@@ -1952,6 +1976,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      */
     @Override
     public Result<List<T>> selectBy(Map<String, Object> clmnParams, String... orderByArgs) {
+        AssertUtils2.notNulls(clmnParams);
+        AssertUtils2.notBlanks(orderByArgs);
+
         return selectByQuery(queryForSelect(), clmnParams, orderByArgs);
     }
 
@@ -1964,7 +1991,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *      int, java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectByQuery(String queryForSelect, Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
+    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
 
         StringBuffer queryBuf = createQueryForSelectBy(queryForSelect, clmnParams);
 
@@ -1987,7 +2014,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *      java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectByQuery(String queryForSelect, Map<String, Object> clmnParams, String... orderByArgs) {
+    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams, String... orderByArgs) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNulls(clmnParams);
+        AssertUtils2.notBlanks(orderByArgs);
 
         StringBuffer queryBuf = createQueryForSelectBy(queryForSelect, clmnParams);
 
@@ -2224,6 +2254,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiByQuery(@NotBlank String queryForSelect, Method method, Object[] whereArgs, String... columnNames) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNull(method);
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(columnNames);
 
         String query = attachWhereClause(queryForSelect, method, whereArgs);
 
@@ -2252,6 +2286,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      */
     protected Result<List<T>> selectMultiByQuery(@NotBlank String queryForSelect, Object... whereArgs) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNulls(whereArgs);
+
         return selectMultiByQuery(queryForSelect, getCurrentMethod(1, whereArgs), whereArgs);
     }
 
@@ -2278,6 +2315,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      */
     protected Result<List<T>> selectMultiByQuery(@NotBlank String queryForSelect, Object[] whereArgs, String... columnNames) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(columnNames);
+
         return selectMultiBy(queryForSelect, getCurrentMethod(1, whereArgs), whereArgs, columnNames);
     }
 
@@ -2344,6 +2385,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      */
     protected Result<List<T>> selectMultiByQueryForPagination(@NotBlank String queryForSelect, Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs,
             String... columnNames) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNull(method);
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(columnNames);
 
         String query = createQueryForSelectForPagination(queryForSelect, method, offset, limit, whereArgs);
 
@@ -2441,6 +2486,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiOrderBy(Object[] whereArgs, String... orderByArgs) {
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(orderByArgs);
 
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
 
@@ -2475,6 +2522,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see ColumnValue
      */
     protected Result<List<T>> selectMultiOrderBy(Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(orderByArgs, columnNames);
 
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
 
@@ -2742,6 +2791,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      */
     protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Object[] whereArgs, String... orderByArgs) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(orderByArgs);
 
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
 
@@ -2776,6 +2828,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      */
     protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(orderByArgs, columnNames);
 
         Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
 
@@ -3100,6 +3155,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @see ColumnValue
      */
     protected Result<T> selectSingleBy(boolean required, Object[] whereArgs, String... columnNames) {
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(columnNames);
+
         return selectSingleBy(required, getCurrentMethod(1, whereArgs), whereArgs, columnNames);
     }
 
@@ -3132,7 +3190,6 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      */
     protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(queryForSelect, method, whereArgs);
 
         String query = attachWhereClause(queryForSelect, method, whereArgs);
         return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
@@ -3170,7 +3227,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.4.0
      */
     protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Method method, Object[] whereArgs, String... columnNames) {
-        AssertUtils2.notNulls(queryForSelect, method, whereArgs, columnNames);
+        AssertUtils2.notBlank(queryForSelect);
+        AssertUtils2.notNull(method);
+        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notBlanks(columnNames);
 
         String query = attachWhereClause(queryForSelect, method, whereArgs);
         return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required, columnNames);
@@ -3267,6 +3327,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.5.0
      */
     protected String validateColumnName(@NotBlank String clmnName) {
+        AssertUtils2.notBlank(clmnName);
+
         Set<String> rkw = getReservedKeywords();
         CharSequence kwrc = getReservedKeywordWrappingCharacter();
         if (rkw == null || rkw.isEmpty() || !rkw.contains(clmnName.trim().toUpperCase())) {
@@ -3296,10 +3358,12 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.5.0
      */
     protected List<String> validateColumnNames(List<String> clmns) {
+        AssertUtils2.notBlanks(clmns);
+
         return clmns.stream().map(clmn -> validateColumnName(clmn)).collect(Collectors.toList());
     }
 
-    protected static Object[] array(Object... any) {
+    protected static Object[] array(Object @Nullable... any) {
         return any != null ? any : new Object[0];
     }
 
@@ -3354,8 +3418,17 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      */
     protected static boolean hasWhereCompares(Collection<JdbcVariableBinder> binders, WhereCompare... compares) {
+        AssertUtils2.notNulls(binders);
+        AssertUtils2.notNulls((Object[]) compares);
+
         List<WhereCompare> list = Arrays.asList(compares);
-        return binders.stream().filter(c -> list.contains(c.operator())).findAny().isPresent();
+        for (JdbcVariableBinder binder : binders) {
+            if (list.contains(binder.operator())) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**

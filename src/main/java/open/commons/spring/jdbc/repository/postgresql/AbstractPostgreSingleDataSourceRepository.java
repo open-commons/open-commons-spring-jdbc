@@ -36,6 +36,7 @@ import jakarta.validation.constraints.NotNull;
 
 import open.commons.core.annotation.ColumnValue;
 import open.commons.core.utils.AnnotationUtils;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.SQLUtils;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 import open.commons.spring.jdbc.view.postgresql.PgSqlCommons;
@@ -163,6 +164,9 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      */
     @Override
     protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
+
         // #1. 데이터 변경 쿼리 생성
         List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
                 .collect(Collectors.toList()) //
@@ -242,6 +246,9 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      */
     @Override
     protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
+
         // #1. 데이터 변경 쿼리 생성
         List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
                 .collect(Collectors.toList()) //

@@ -218,7 +218,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected String attachSetClause(String queryHeader) {
-        AssertUtils2.notNull(queryHeader);
+        AssertUtils2.notBlank(queryHeader);
 
         List<ColumnValue> columns = getUpdatableColumnValues();
 
@@ -252,6 +252,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.4.0
      */
     protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrNothing(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
 
         String query = createQueryForInsertOrNothing(data, method, whereArgs);
         Object params = createParametersForInsertOrNothing(data, method, whereArgs);
@@ -285,6 +287,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.4.0
      */
     protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
+
         String query = createQueryForInsertOrUpdate(data, method, whereArgs);
         Object params = createParametersForInsertOrUpdate(data, method, whereArgs);
         SQLConsumer<PreparedStatement> setter = SQLConsumer.setParameters(params);
@@ -318,6 +323,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected StringBuffer createColumnAssignQueries(StringBuffer buf, String concat, List<ColumnValue> columns) {
+        AssertUtils2.notNulls(buf, concat);
+        AssertUtils2.notNulls(columns);
 
         // variable binding
         Iterator<ColumnValue> itr = columns.iterator();
@@ -350,6 +357,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<E> data, int partitionSize) {
+        AssertUtils2.notNulls(data);
 
         logger.debug("query.header={}, query.value={}, query.tail={}, data.size={}", QUERY_FOR_PARTITION_HEADER, QUERY_FOR_PARTITION_VALUE, QUERY_FOR_PARTITION_TAIL, data.size());
 
@@ -394,6 +402,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.5.0
      */
     private String createMergeAssembleColumnMatch(Collection<String> clmns, final String one, final String other, @NotEmpty String concatenator) {
+        AssertUtils2.notNulls(clmns);
+        AssertUtils2.notNulls(one, other, concatenator);
+
         return clmns.stream().map(clmn -> new StringBuilder().append(one).append(".").append(clmn) //
                 .append(" = ") //
                 .append(other).append(".").append(clmn).toString()) //
@@ -606,6 +617,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected String createSetClause(List<ColumnValue> columns) {
+        AssertUtils2.notNulls(columns);
 
         StringBuffer buf = new StringBuffer();
 
@@ -641,6 +653,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected Result<Integer> deleteBy(Method method, Object... whereArgs) throws RuntimeDataAccessException {
+        AssertUtils2.notNull(method);
+        AssertUtils2.notNulls(whereArgs);
+
         String query = attachWhereClause(QUERY_FOR_DELETE_HEADER, method, whereArgs);
 
         logger.debug("Query: {}, data={}", query, Arrays.toString(whereArgs));
@@ -694,6 +709,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      */
     @SafeVarargs
     public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) throws RuntimeDataAccessException {
+        AssertUtils2.notNulls((Object[]) brokers);
 
         Result<Integer> result = new Result<>();
 
@@ -934,6 +950,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected final String getAssignQuery(ColumnValue cv) {
+        AssertUtils2.notNull(cv);
+
         return String.join(" = ", getColumnName(cv), cv.variableBinding());
     }
 
@@ -1080,6 +1098,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected Object[] getUpdateParameters(T data) {
+        AssertUtils2.notNull(data);
+
         return getUpdatableColumns().stream() //
                 .map(m -> {
                     try {
@@ -1113,6 +1133,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      */
     @Override
     public Result<Integer> insert(List<T> data, @Min(1) int partitionSize) {
+        AssertUtils2.notNulls(data);
+
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createInsertBrokers(data, partitionSize);
         return executeUpdate(brokers);
     }
@@ -1126,8 +1148,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      */
     @Override
     public Result<Integer> insert(T data) {
-
-        logger.debug("query={}, data={}", QUERY_FOR_INSERT, data);
+        AssertUtils2.notNulls(data);
 
         return executeUpdate(QUERY_FOR_INSERT, SQLConsumer.setParameters(data));
     }
@@ -1280,6 +1301,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.4.0
      */
     protected String queryForDeleteHeader(String tableName) {
+        AssertUtils2.notNull(tableName);
+
         return new StringBuffer() //
                 .append("DELETE FROM") //
                 .append(" ") //
@@ -1329,6 +1352,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.4.0
      */
     protected String queryForInsert(String tableName) {
+        AssertUtils2.notNull(tableName);
+
         return new StringBuffer() //
                 .append("INSERT INTO") //
                 .append(" ") //
@@ -1451,6 +1476,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.4.0
      */
     protected String queryForUpdateHeader(@NotEmpty String tableName) {
+        AssertUtils2.notNull(tableName);
+
         return new StringBuffer() //
                 .append("UPDATE") //
                 .append(" ") //
@@ -1483,6 +1510,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @see ColumnValue
      */
     protected Result<Integer> updateBy(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
+
         String querySet = attachSetClause(QUERY_FOR_UPDATE_HEADER);
         String query = attachWhereClause(querySet, method, whereArgs);
         Object[] params = ArrayUtils.objectArray(getUpdateParameters(data), whereArgs);
@@ -1517,6 +1547,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @see ColumnValue
      */
     protected Result<Integer> updateBy(T data, Object... whereArgs) throws RuntimeDataAccessException {
+        AssertUtils2.notNull(data);
+        AssertUtils2.notNulls(whereArgs);
+
         return updateBy(data, getCurrentMethod(1, ArrayUtils.objectArray(data, whereArgs)), whereArgs);
     }
 

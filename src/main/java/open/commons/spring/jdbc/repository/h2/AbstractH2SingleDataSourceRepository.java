@@ -31,9 +31,9 @@ import java.util.List;
 import java.util.Set;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotNull;
 
 import open.commons.core.text.NamedTemplate;
+import open.commons.core.utils.AssertUtils2;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 import open.commons.spring.jdbc.view.h2.H2Commons;
 
@@ -131,7 +131,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @since 2025. 4. 1.
      * @version 0.5.0
      */
-    public AbstractH2SingleDataSourceRepository(@NotNull Class<T> entityType) {
+    public AbstractH2SingleDataSourceRepository(Class<T> entityType) {
         this(entityType, true);
     }
 
@@ -153,7 +153,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @since 2025. 4. 1.
      * @version 0.5.0
      */
-    public AbstractH2SingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive) {
+    public AbstractH2SingleDataSourceRepository(Class<T> entityType, boolean forceToPrimitive) {
         this(entityType, forceToPrimitive, true);
     }
 
@@ -177,7 +177,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @since 2025. 4. 1.
      * @version 0.5.0
      */
-    public AbstractH2SingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractH2SingleDataSourceRepository(Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
 
         this.QUERY_FOR_INSERT_OR_NOTHING = createQueryForInsertOrNothing(null, null, (Object[]) null);
@@ -193,7 +193,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrNothing(T data, Method method, Object... whereArgs) {
         // #1. 'SELECT' 파라미터
         List<String> clmnSelect = getColumnNames();
         return getColumnValues(data, clmnSelect);
@@ -208,7 +208,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrUpdate(T data, Method method, Object... whereArgs) {
         return super.createParametersForInsertOrUpdate(data, method, whereArgs);
     }
 
@@ -221,7 +221,10 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method );
+        AssertUtils2.notNulls(whereArgs);
+        
         if (this.QUERY_FOR_INSERT_OR_NOTHING != null) {
             return this.QUERY_FOR_INSERT_OR_NOTHING;
         } else {
@@ -271,7 +274,10 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+        AssertUtils2.notNulls(data, method);
+        AssertUtils2.notNulls(whereArgs);
+        
         if (this.QUERY_FOR_INSERT_OR_UPDATE != null) {
             return this.QUERY_FOR_INSERT_OR_UPDATE;
         } else {

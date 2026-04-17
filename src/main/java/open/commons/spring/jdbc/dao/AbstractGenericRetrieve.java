@@ -403,7 +403,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers( //
             List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter //
             , @Min(1) int partitionSize, String headerQuery, String valueQuery, String concatForVQ, String tailQuery) {
-        AssertUtils2.notNulls(data, headerQuery, valueQuery, concatForVQ, tailQuery);
+        AssertUtils2.notNulls(data);
+        AssertUtils2.notNulls(headerQuery, valueQuery, concatForVQ, tailQuery);
 
         Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider = params -> {
             SQLConsumer<PreparedStatement> con = stmt -> {
