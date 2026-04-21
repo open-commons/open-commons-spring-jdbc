@@ -177,7 +177,8 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @since 2025. 4. 1.
      * @version 0.5.0
      */
-    public AbstractH2SingleDataSourceRepository(Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractH2SingleDataSourceRepository(Class<T> entityType, boolean forceToPrimitive,
+            boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
 
         this.QUERY_FOR_INSERT_OR_NOTHING = createQueryForInsertOrNothing(null, null, (Object[]) null);
@@ -222,9 +223,9 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      */
     @Override
     protected String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(data, method );
+        AssertUtils2.notNulls(data, method);
         AssertUtils2.notNulls(whereArgs);
-        
+
         if (this.QUERY_FOR_INSERT_OR_NOTHING != null) {
             return this.QUERY_FOR_INSERT_OR_NOTHING;
         } else {
@@ -256,7 +257,8 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
                 queryTpl.addValue(TN_TABLE_ALIAS, ALIAS_TABLE);
                 queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingAliasingColumnName(true));
                 queryTpl.addValue(TN_DATA_ALIAS, ALIAS_DATA);
-                queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE, createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
+                queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE,
+                        createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
                 queryTpl.addValue(TN_INSERT_COLUMN_CLAUSE, queryForColumnNames());
                 queryTpl.addValue(TN_INSERT_VALUE_BINDING_CLAUSE, queryForColumnNames(ALIAS_DATA));
 
@@ -277,7 +279,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
     protected String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs) {
         AssertUtils2.notNulls(data, method);
         AssertUtils2.notNulls(whereArgs);
-        
+
         if (this.QUERY_FOR_INSERT_OR_UPDATE != null) {
             return this.QUERY_FOR_INSERT_OR_UPDATE;
         } else {
@@ -309,8 +311,10 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
                 queryTpl.addValue(TN_TABLE_ALIAS, ALIAS_TABLE);
                 queryTpl.addValue(TN_DATA_BINDING_QUERY, queryForVariableBindingAliasingColumnName(true));
                 queryTpl.addValue(TN_DATA_ALIAS, ALIAS_DATA);
-                queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE, createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
-                queryTpl.addValue(TN_UPDATE_SET_CLAUSE, createMergeUpdateSetClause(validateColumnNames(getUpdatableColumnNames()), ALIAS_TABLE, ALIAS_DATA));
+                queryTpl.addValue(TN_USING_ON_COMPARE_CLAUSE,
+                        createMergeUsingOnClause(pkColumns, ALIAS_TABLE, ALIAS_DATA));
+                queryTpl.addValue(TN_UPDATE_SET_CLAUSE, createMergeUpdateSetClause(
+                        validateColumnNames(getUpdatableColumnNames()), ALIAS_TABLE, ALIAS_DATA));
                 queryTpl.addValue(TN_INSERT_COLUMN_CLAUSE, queryForColumnNames());
                 queryTpl.addValue(TN_INSERT_VALUE_BINDING_CLAUSE, queryForColumnNames(ALIAS_DATA));
 
@@ -348,7 +352,8 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @since 2025. 4. 1.
      * @version 0.5.0
      *
-     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int,
+     *      int)
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {

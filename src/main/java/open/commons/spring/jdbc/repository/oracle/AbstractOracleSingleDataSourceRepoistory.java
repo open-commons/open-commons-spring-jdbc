@@ -159,7 +159,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @since 2023. 8. 28.
      * @version 0.4.0
      */
-    public AbstractOracleSingleDataSourceRepoistory(Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractOracleSingleDataSourceRepoistory(Class<T> entityType, boolean forceToPrimitive,
+            boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
     }
 
@@ -215,7 +216,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
         Object[] params = new Object[paramsUsingDualOn.length + paramsUpdateSet.length + paramsInsert.length];
         System.arraycopy(paramsUsingDualOn, 0, params, 0, paramsUsingDualOn.length);
         System.arraycopy(paramsUpdateSet, 0, params, paramsUsingDualOn.length, paramsUpdateSet.length);
-        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length + paramsUpdateSet.length, paramsInsert.length);
+        System.arraycopy(paramsInsert, 0, params, paramsUsingDualOn.length + paramsUpdateSet.length,
+                paramsInsert.length);
 
         return params;
     }
@@ -286,7 +288,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
         );
 
         // #2. 'UPDATE SET' 쿼리
-        String clauseUpdateSet = createColumnAssignQueries(new StringBuffer(), ",", getUpdatableColumnValues()).toString();
+        String clauseUpdateSet = createColumnAssignQueries(new StringBuffer(), ",", getUpdatableColumnValues())
+                .toString();
 
         // #3. 'INSERT' 쿼리
         String clauseInsert = new StringBuffer() //
@@ -319,7 +322,9 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @deprecated Use {@link AbstractGenericRepository#insert(List, int)}
      */
     @Override
-    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String valueQuery) {
         throw new UnsupportedOperationException("#insert(List<T>, int) 를 사용하세요.");
     }
 
@@ -352,7 +357,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      * @since 2021. 12. 16.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int,
+     *      int)
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {

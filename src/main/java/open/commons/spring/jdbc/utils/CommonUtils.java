@@ -66,7 +66,8 @@ public class CommonUtils {
             return new HashSet<>();
         }
 
-        return Collections.unmodifiableSet(StringUtils.splitAsSet(reservedKeywordString, ",", kw -> kw != null ? kw.trim().toUpperCase() : null));
+        return Collections.unmodifiableSet(
+                StringUtils.splitAsSet(reservedKeywordString, ",", kw -> kw != null ? kw.trim().toUpperCase() : null));
     }
 
 }

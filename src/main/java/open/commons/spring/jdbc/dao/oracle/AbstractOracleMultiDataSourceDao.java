@@ -65,7 +65,9 @@ public abstract class AbstractOracleMultiDataSourceDao extends AbstractMultiData
      *      open.commons.function.SQLTripleFunction, int, java.lang.String)
      */
     @Override
-    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String valueQuery) {
         return super.executeUpdate(data, dataSetter, partitionSize, "INSERT ALL ", valueQuery, " SELECT 1 FROM DUAL");
     }
 }

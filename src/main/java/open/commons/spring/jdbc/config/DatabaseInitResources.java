@@ -118,7 +118,8 @@ public class DatabaseInitResources {
 
         return sqlList.stream().map(sql -> {
             if (sql == null) {
-                throw ExceptionUtils.newException(IllegalArgumentException.class, "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
+                throw ExceptionUtils.newException(IllegalArgumentException.class,
+                        "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
             }
 
             sql = sql.trim();
@@ -134,10 +135,12 @@ public class DatabaseInitResources {
                             .map(path -> new FileSystemResource(path)) //
                             .collect(Collectors.toList());
                 } catch (IOException e) {
-                    throw ExceptionUtils.newException(IllegalArgumentException.class, "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
+                    throw ExceptionUtils.newException(IllegalArgumentException.class,
+                            "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
                 }
             } else {
-                throw ExceptionUtils.newException(IllegalArgumentException.class, "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
+                throw ExceptionUtils.newException(IllegalArgumentException.class,
+                        "DB 초기화에 사용되는 SQL 파일 경로가 올바르지 않습니다. sql=%s", sql);
             }
         }).flatMap(List::stream).collect(Collectors.toList());
     }
@@ -192,8 +195,8 @@ public class DatabaseInitResources {
      * <li>예) file:./resources/queries/user-info.sql
      * </ul>
      * <li>dir: 디렉토리 내의 파일들을 의미.<br>
-     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른
-     * 디렉토리에 설정하기 바랍니다.
+     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는
+     * 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른 디렉토리에 설정하기 바랍니다.
      * <ul>
      * <li>예) dir:./resources/queries
      * </ul>
@@ -215,7 +218,7 @@ public class DatabaseInitResources {
      */
     public void setData(@NotNull List<String> data) {
         AssertUtils2.notNull(data, "데이터 생성을 위한 쿼리 파일이 존재하지 않습니다.");
-        
+
         this.data = data;
     }
 
@@ -231,8 +234,8 @@ public class DatabaseInitResources {
      * <li>예) file:./resources/queries/user-table.sql
      * </ul>
      * <li>dir: 디렉토리 내의 파일들을 의미.<br>
-     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른
-     * 디렉토리에 설정하기 바랍니다.
+     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는
+     * 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른 디렉토리에 설정하기 바랍니다.
      * <ul>
      * <li>예) dir:./resources/queries
      * </ul>

@@ -141,7 +141,8 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * @version 0.1.0
      */
     @SafeVarargs
-    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
+    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers)
+            throws NullPointerException {
         AssertUtils2.notNulls((Object[]) brokers);
 
         Result<Integer> result = new Result<>();
@@ -163,7 +164,8 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
                         total += inserted;
 
                         watch.record("inserted");
-                        logger.trace("Data.count: {}, Elapsed.{}: {}", inserted, inserted, watch.getAsPretty("inserted"));
+                        logger.trace("Data.count: {}, Elapsed.{}: {}", inserted, inserted,
+                                watch.getAsPretty("inserted"));
 
                         pos++;
                     }
@@ -215,7 +217,9 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -247,8 +251,9 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * @since 2021. 11. 11.
      * @version 0.3.0
      */
-    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String headerQuery,
-            String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -287,7 +292,8 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+    public final <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String headerQuery, String valueQuery, String tailQuery) {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
     }
@@ -328,10 +334,11 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+    public final <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String headerQuery, String valueQuery, String concatForVQ, String tailQuery) {
-        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ,
-                tailQuery);
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data,
+                dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ, tailQuery);
         return executeUpdate(brokers);
     }
 
@@ -358,7 +365,8 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
         return executeUpdate(query, setter, false);
     }
 
-    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) {
+    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter,
+            boolean forStoredProcedure) {
         return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
 }

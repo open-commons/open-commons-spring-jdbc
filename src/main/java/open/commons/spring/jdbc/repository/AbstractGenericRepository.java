@@ -200,7 +200,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
 
     /**
      * 주어진 파라미터를 이용하여 생성한 데이터 변경 쿼리를 제공합니다. <br>
-     * 패턴: <code>{query} SET {column} = {variable-binding-query} (, {column} = {variable-binding-query})*</code>
+     * 패턴:
+     * <code>{query} SET {column} = {variable-binding-query} (, {column} = {variable-binding-query})*</code>
      * 
      * <pre>
      * [개정이력]
@@ -251,7 +252,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 29.
      * @version 0.4.0
      */
-    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrNothing(T data, Method method, Object... whereArgs) {
+    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrNothing(T data,
+            Method method, Object... whereArgs) {
         AssertUtils2.notNulls(data, method);
         AssertUtils2.notNulls(whereArgs);
 
@@ -286,7 +288,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 29.
      * @version 0.4.0
      */
-    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+    protected final ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBrokerForInsertOrUpdate(T data,
+            Method method, Object... whereArgs) {
         AssertUtils2.notNulls(data, method);
         AssertUtils2.notNulls(whereArgs);
 
@@ -301,7 +304,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
 
     /**
      * 컬럼에 값을 설정하는 쿼리를 제공합니다. <br>
-     * 패턴: <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
+     * 패턴:
+     * <code>{column} = {variable-binding-query} ( AND {column} = {variable-binding-query} )*</code>
      * 
      * <pre>
      * [개정이력]
@@ -356,10 +360,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2021. 11. 26.
      * @version 0.3.0
      */
-    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<E> data, int partitionSize) {
+    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createInsertBrokers(List<E> data,
+            int partitionSize) {
         AssertUtils2.notNulls(data);
 
-        logger.debug("query.header={}, query.value={}, query.tail={}, data.size={}", QUERY_FOR_PARTITION_HEADER, QUERY_FOR_PARTITION_VALUE, QUERY_FOR_PARTITION_TAIL, data.size());
+        logger.debug("query.header={}, query.value={}, query.tail={}, data.size={}", QUERY_FOR_PARTITION_HEADER,
+                QUERY_FOR_PARTITION_VALUE, QUERY_FOR_PARTITION_TAIL, data.size());
 
         return createConnectionCallbackBrokers(data, SQLTripleFunction.setParameters(), partitionSize //
                 , QUERY_FOR_PARTITION_HEADER //
@@ -401,7 +407,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2025. 4. 3.
      * @version 0.5.0
      */
-    private String createMergeAssembleColumnMatch(Collection<String> clmns, final String one, final String other, @NotEmpty String concatenator) {
+    private String createMergeAssembleColumnMatch(Collection<String> clmns, final String one, final String other,
+            @NotEmpty String concatenator) {
         AssertUtils2.notNulls(clmns);
         AssertUtils2.notNulls(one, other, concatenator);
 
@@ -708,7 +715,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.1.0
      */
     @SafeVarargs
-    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) throws RuntimeDataAccessException {
+    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers)
+            throws RuntimeDataAccessException {
         AssertUtils2.notNulls((Object[]) brokers);
 
         Result<Integer> result = new Result<>();
@@ -730,7 +738,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
                         total += inserted;
 
                         watch.record("inserted");
-                        logger.trace("Data.count: {}, Elapsed.{}: {}", inserted, inserted, watch.getAsPretty("inserted"));
+                        logger.trace("Data.count: {}, Elapsed.{}: {}", inserted, inserted,
+                                watch.getAsPretty("inserted"));
 
                         pos++;
                     }
@@ -782,7 +791,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -814,8 +825,9 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2021. 11. 11.
      * @version 0.3.0
      */
-    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String headerQuery,
-            String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery) {
         // !!! 세부 기능을 구현해야 합니다. !!!
         throw new UnsupportedOperationException("세부 기능을 구현해야 합니다.");
     }
@@ -855,7 +867,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+    public final <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String headerQuery, String valueQuery, String tailQuery) throws RuntimeDataAccessException {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
     }
@@ -897,10 +910,12 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
-            String headerQuery, String valueQuery, String concatForVQ, String tailQuery) throws RuntimeDataAccessException {
-        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data, dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ,
-                tailQuery);
+    public final <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery, String concatForVQ, String tailQuery)
+            throws RuntimeDataAccessException {
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data,
+                dataSetter, partitionSize, headerQuery, valueQuery, concatForVQ, tailQuery);
         return executeUpdate(brokers);
     }
 
@@ -924,11 +939,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2019. 3. 29.
      * @version 0.0.6
      */
-    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter) throws RuntimeDataAccessException {
+    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter)
+            throws RuntimeDataAccessException {
         return executeUpdate(query, setter, false);
     }
 
-    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter, boolean forStoredProcedure) throws RuntimeDataAccessException {
+    public Result<Integer> executeUpdate(String query, SQLConsumer<PreparedStatement> setter,
+            boolean forStoredProcedure) throws RuntimeDataAccessException {
         return executeUpdate(new DefaultConCallbackBroker2(query, setter, forStoredProcedure));
     }
 
@@ -956,7 +973,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
     }
 
     /**
-     * {@link ColumnValue#name()}이 기본값 (빈 문자열)일 경우를 {@link Method#getName()}값을 이용하여 컬럼명을 제공합니다.<br>
+     * {@link ColumnValue#name()}이 기본값 (빈 문자열)일 경우를 {@link Method#getName()}값을
+     * 이용하여 컬럼명을 제공합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -974,12 +992,14 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      */
     private String getColumnName(ColumnValue clmnValue) {
 
-        Optional<Method> opt = getUpdatableColumnsAsStream().filter(m -> clmnValue.equals(m.getAnnotation(ColumnValue.class))).findAny();
+        Optional<Method> opt = getUpdatableColumnsAsStream()
+                .filter(m -> clmnValue.equals(m.getAnnotation(ColumnValue.class))).findAny();
 
         if (opt.isPresent()) {
             return SQLUtils.getColumnName(clmnValue, opt.get());
         } else {
-            throw ExceptionUtils.newException(IllegalArgumentException.class, "'%s'에 해당하는 Method가 존재하지 않습닏.", clmnValue);
+            throw ExceptionUtils.newException(IllegalArgumentException.class, "'%s'에 해당하는 Method가 존재하지 않습닏.",
+                    clmnValue);
         }
     }
 
@@ -1018,7 +1038,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.3.0
      */
     protected final List<String> getUpdatableColumnNames() {
-        return getUpdatableColumnsAsStream().map(m -> SQLUtils.getColumnNameByColumnValue(m)).collect(Collectors.toList());
+        return getUpdatableColumnsAsStream().map(m -> SQLUtils.getColumnNameByColumnValue(m))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -1105,7 +1126,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
                     try {
                         return m.invoke(data);
                     } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                        String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s", data.getClass(), e.getMessage());
+                        String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s", data.getClass(),
+                                e.getMessage());
                         logger.error(errMsg, e);
                         throw new UnsupportedOperationException(errMsg, e);
                     }
@@ -1129,7 +1151,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2021. 11. 26.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.util.List, int)
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.util.List,
+     *      int)
      */
     @Override
     public Result<Integer> insert(List<T> data, @Min(1) int partitionSize) {
@@ -1175,8 +1198,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 2.
      * @version 0.4.0
      */
-    protected Result<Integer> insertOrNothingBy(T data, Method method, Object... whereArgs) throws RuntimeDataAccessException {
-        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrNothing(data, method, whereArgs);
+    protected Result<Integer> insertOrNothingBy(T data, Method method, Object... whereArgs)
+            throws RuntimeDataAccessException {
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrNothing(data, method,
+                whereArgs);
         return executeUpdate(broker);
     }
 
@@ -1209,7 +1234,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
     /**
      * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
      * 
-     * 파라미터 중에 2번째({@link Method}), 3번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지 않을 수도 있습니다.
+     * 파라미터 중에 2번째({@link Method}), 3번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지
+     * 않을 수도 있습니다.
      * 
      * <pre>
      * [개정이력]
@@ -1230,8 +1256,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 7. 13.
      * @version 2.0.0
      */
-    protected Result<Integer> insertOrUpdateBy(T data, Method method, Object... whereArgs) throws RuntimeDataAccessException {
-        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrUpdate(data, method, whereArgs);
+    protected Result<Integer> insertOrUpdateBy(T data, Method method, Object... whereArgs)
+            throws RuntimeDataAccessException {
+        ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> broker = createBrokerForInsertOrUpdate(data, method,
+                whereArgs);
         return executeUpdate(broker);
     }
 
@@ -1524,7 +1552,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
 
     /**
      * 주어진 조건에 맞는 데이터를 갱신합니다. <br>
-     * 이 메소드({@link #updateBy(Object, Object...)})를 호출하는 메소드의 파라미터는 이 메소드의 파라미터 순서와 동일한 순서(갱신할 데이터, Where ...)이어야 합니다.
+     * 이 메소드({@link #updateBy(Object, Object...)})를 호출하는 메소드의 파라미터는 이 메소드의 파라미터
+     * 순서와 동일한 순서(갱신할 데이터, Where ...)이어야 합니다.
      * 
      * <pre>
      * [개정이력]

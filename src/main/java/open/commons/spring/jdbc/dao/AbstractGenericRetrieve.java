@@ -263,7 +263,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2019. 6. 12.
      * @version 0.0.6
      */
-    protected void addQueryForInClause(StringBuffer sqlBuffer, String concatenator, String columnName, int inParamCount) {
+    protected void addQueryForInClause(StringBuffer sqlBuffer, String concatenator, String columnName,
+            int inParamCount) {
         AssertUtils2.notNulls(sqlBuffer, concatenator, columnName);
 
         if (inParamCount < 1) {
@@ -286,8 +287,9 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     public void afterPropertiesSet() throws Exception {
     }
 
-    private <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBroker(@NotEmpty List<E> data, Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider,
-            String headerQuery, String valueQuery, String concatForVQ, String tailQuery) {
+    private <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>> createBroker(@NotEmpty List<E> data,
+            Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, String headerQuery, String valueQuery,
+            String concatForVQ, String tailQuery) {
 
         StringBuffer query = new StringBuffer();
 
@@ -338,9 +340,9 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 21.
      */
-    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(List<E> data,
-            Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize, String headerQuery, String valueQuery, String concatForVQ,
-            String tailQuery) {
+    protected final <E> ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] createConnectionCallbackBrokers(
+            List<E> data, Function<List<E>, SQLConsumer<PreparedStatement>> psSetterProvider, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery, String concatForVQ, String tailQuery) {
         AssertUtils2.notNulls(data, psSetterProvider, headerQuery, valueQuery, concatForVQ, tailQuery);
 
         if (data.size() < 1) {
@@ -413,7 +415,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
                     i = dataSetter.apply(stmt, i, param);
                 }
 
-                // begin - PATCH [2020. 8. 12.]: 데이터 바인딩 직후 Collection 해제 | Park_Jun_Hong_(parkjunhong77@gmail.com)
+                // begin - PATCH [2020. 8. 12.]: 데이터 바인딩 직후 Collection 해제 |
+                // Park_Jun_Hong_(parkjunhong77@gmail.com)
                 params.clear();
                 // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 8. 12.
             };
@@ -421,7 +424,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
             return con;
         };
 
-        return createConnectionCallbackBrokers(data, psSetterProvider, partitionSize, headerQuery, valueQuery, concatForVQ, tailQuery);
+        return createConnectionCallbackBrokers(data, psSetterProvider, partitionSize, headerQuery, valueQuery,
+                concatForVQ, tailQuery);
     }
 
     private <E> List<E> createObject(ResultSet rs, Class<E> entity, String... columns) throws SQLException {
@@ -608,14 +612,16 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            요청쿼리 처리 결과 데이타 모델
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과.
      * @throws SQLException
      *
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    private <S, E> List<E> executeQuery(ConnectionCallbackBroker2<S> broker, Class<E> entity, String... columns) throws SQLException {
+    private <S, E> List<E> executeQuery(ConnectionCallbackBroker2<S> broker, Class<E> entity, String... columns)
+            throws SQLException {
         return executeQuery(broker, rs -> createObject(rs, entity, columns));
     }
 
@@ -642,7 +648,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2021. 4. 23.
      * @version 0.3.0
      */
-    private <S, E> List<E> executeQuery(ConnectionCallbackBroker2<S> broker, SQLFunction<ResultSet, List<E>> creator) throws SQLException {
+    private <S, E> List<E> executeQuery(ConnectionCallbackBroker2<S> broker, SQLFunction<ResultSet, List<E>> creator)
+            throws SQLException {
         List<E> data = null;
         StopWatch watch = new StopWatch();
         watch.start();
@@ -668,7 +675,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
             return data;
         } finally {
             watch.stop();
-            logger.trace("Data.count: {}, Elapsed.total: {}", data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
+            logger.trace("Data.count: {}, Elapsed.total: {}",
+                    data != null ? NumberUtils.INT_TO_STR.apply(data.size()) : 0, watch.getAsPretty());
         }
     }
 
@@ -687,7 +695,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            쿼리처리 결과 데이타 타입
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -703,9 +712,11 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
         SQLBiFunction<ResultSet, Integer, R> creator = (SQLBiFunction<ResultSet, Integer, R>) CREATORS.get(key);
 
         if (creator == null) {
-            // begin - PATCH [2020. 6. 12.]: 조회 결과를 java.util.Map 형태로 받는 경우 지원.| Park_Jun_Hong_(parkjunhong77@gmail.com)
+            // begin - PATCH [2020. 6. 12.]: 조회 결과를 java.util.Map 형태로 받는 경우 지원.|
+            // Park_Jun_Hong_(parkjunhong77@gmail.com)
             if (Map.class.isAssignableFrom(entity)) {
-                // DAO Entity가 Map.class 인 경우는 Map.class 가 여러 가지의 데이터 타입을 대신하는 것이기 때문에,
+                // DAO Entity가 Map.class 인 경우는 Map.class 가 여러 가지의 데이터 타입을 대신하는
+                // 것이기 때문에,
                 // Entity 생성 함수를 별도로 저장하지 않는다.
                 creator = (rs, _) -> {
                     try {
@@ -715,8 +726,10 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
                         }
 
                         return (R) data;
-                    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException e) {
-                        throw new SQLException(String.format("%s 객체 생성시 에러가 발생하였습니다. 원인=%s", entity, e.getMessage()), e);
+                    } catch (InstantiationException | IllegalAccessException | IllegalArgumentException
+                            | InvocationTargetException | NoSuchMethodException e) {
+                        throw new SQLException(String.format("%s 객체 생성시 에러가 발생하였습니다. 원인=%s", entity, e.getMessage()),
+                                e);
                     }
                 };
                 // end - Park_Jun_Hong_(parkjunhong77@gmail.com), 2020. 6. 12.
@@ -756,7 +769,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     }
 
     /**
-     * {@link DataSource}를 {@link TransactionAwareDataSourceProxy}로 감싸서 제공합니다. <br>
+     * {@link DataSource}를 {@link TransactionAwareDataSourceProxy}로 감싸서 제공합니다.
+     * <br>
      * 
      * <pre>
      * [개정이력]
@@ -796,7 +810,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이타 타입
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *          {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -833,7 +848,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이타 타입
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *          {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -842,7 +858,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 22.
      */
-    public <E> Result<List<E>> getList(String query, int size, SQLConsumer<PreparedStatement> setter, Class<E> entity, String... columns) {
+    public <E> Result<List<E>> getList(String query, int size, SQLConsumer<PreparedStatement> setter, Class<E> entity,
+            String... columns) {
 
         Result<List<E>> result = new Result<>();
 
@@ -873,7 +890,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이타 타입
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *          {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -883,7 +901,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    public <E> Result<List<E>> getList(String query, SQLConsumer<PreparedStatement> setter, Class<E> entity, String... columns) {
+    public <E> Result<List<E>> getList(String query, SQLConsumer<PreparedStatement> setter, Class<E> entity,
+            String... columns) {
 
         Result<List<E>> result = new Result<>();
 
@@ -922,7 +941,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2032. 4. 23.
      * @version 0.3.0
      */
-    public <E> Result<List<E>> getList(String query, SQLConsumer<PreparedStatement> setter, SQLFunction<ResultSet, List<E>> creator) {
+    public <E> Result<List<E>> getList(String query, SQLConsumer<PreparedStatement> setter,
+            SQLFunction<ResultSet, List<E>> creator) {
 
         Result<List<E>> result = new Result<>();
 
@@ -991,7 +1011,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이터 타입.
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *          {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -1001,7 +1022,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2020. 7. 22.
      */
     @SuppressWarnings({ "unchecked", "rawtypes" })
-    public Result<List<Map<String, Object>>> getListAsMap(String query, SQLConsumer<PreparedStatement> setter, String... columns) {
+    public Result<List<Map<String, Object>>> getListAsMap(String query, SQLConsumer<PreparedStatement> setter,
+            String... columns) {
         Class<Map<String, Object>> entity = (Class<Map<String, Object>>) (Class) ConcurrentLinkedHashMap.class;
         return getList(query, setter, entity, columns);
     }
@@ -1021,7 +1043,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이터 타입.
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *          {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -1053,7 +1076,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param columns
      * 
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1087,7 +1111,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            결과 데이타 타입
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1098,7 +1123,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    public <T> Result<T> getObject(String query, Class<T> entity, String... columns) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
+    public <T> Result<T> getObject(String query, Class<T> entity, String... columns)
+            throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         return getObject(query, SQLConsumer.DO_NOTHING, entity, false, columns);
     }
 
@@ -1122,7 +1148,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            필수 여부
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1135,7 +1162,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    public <T> Result<T> getObject(String query, SQLConsumer<PreparedStatement> setter, Class<T> entity, boolean required, String... columns)
+    public <T> Result<T> getObject(String query, SQLConsumer<PreparedStatement> setter, Class<T> entity,
+            boolean required, String... columns)
             throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         AssertUtils2.notNulls(query, setter, entity, columns);
 
@@ -1152,7 +1180,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
                     result.andTrue();
                     break;
                 case 1:
-                    // (start) [BUG-FIX]: Result#result 설정 누락 수정 / Park_Jun_Hong_(parkjunhong77@gmail.com): 2019. 6. 12.
+                    // (start) [BUG-FIX]: Result#result 설정 누락 수정 /
+                    // Park_Jun_Hong_(parkjunhong77@gmail.com): 2019. 6. 12.
                     // 오후 4:15:28
                     result.andTrue().setData(list.get(0));
                     // (end): 2019. 6. 12. 오후 4:15:28
@@ -1185,7 +1214,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            결과 데이타 타입.
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1196,8 +1226,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    public <T> Result<T> getObject(String query, SQLConsumer<PreparedStatement> setter, Class<T> entity, String... columns)
-            throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
+    public <T> Result<T> getObject(String query, SQLConsumer<PreparedStatement> setter, Class<T> entity,
+            String... columns) throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         return getObject(query, setter, entity, false, columns);
     }
 
@@ -1254,7 +1284,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public Result<Map<String, Object>> getObjectAsMap(String query, SQLConsumer<PreparedStatement> setter, boolean required, String... columns)
+    public Result<Map<String, Object>> getObjectAsMap(String query, SQLConsumer<PreparedStatement> setter,
+            boolean required, String... columns)
             throws EmptyResultDataAccessException, IncorrectResultSizeDataAccessException {
         return getObject(query, setter, ENTITY_DTO_MAP, required, columns);
     }
@@ -1281,7 +1312,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public Result<Map<String, Object>> getObjectAsMap(String query, SQLConsumer<PreparedStatement> setter, String... columns) {
+    public Result<Map<String, Object>> getObjectAsMap(String query, SQLConsumer<PreparedStatement> setter,
+            String... columns) {
         return getObjectAsMap(query, setter, false, columns);
     }
 
@@ -1318,7 +1350,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String, java.lang.Object[], java.util.Locale)
+     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String,
+     *      java.lang.Object[], java.util.Locale)
      */
     @Override
     public String getQuery(String name, Object[] args, Locale locale) {
@@ -1326,8 +1359,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String, java.lang.Object[], java.lang.String,
-     *      java.util.Locale)
+     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String,
+     *      java.lang.Object[], java.lang.String, java.util.Locale)
      */
     @Override
     public String getQuery(String name, Object[] args, String defaultMessage, Locale locale) {
@@ -1345,7 +1378,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
      * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
-     * {@link #getValue(String, SQLConsumer, boolean, String, Function)}을 사용하기 바랍니다.</b></font>
+     * {@link #getValue(String, SQLConsumer, boolean, String, Function)}을 사용하기
+     * 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1368,7 +1402,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public <T> Result<T> getValue(String query, SQLConsumer<PreparedStatement> setter, boolean required, String column) {
+    public <T> Result<T> getValue(String query, SQLConsumer<PreparedStatement> setter, boolean required,
+            String column) {
         return getValue(query, setter, required, column, null);
     }
 
@@ -1403,7 +1438,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @version 1.8.0
      */
     @SuppressWarnings("unchecked")
-    public <T> Result<T> getValue(String query, SQLConsumer<PreparedStatement> setter, boolean required, String column, Function<Object, T> converter) {
+    public <T> Result<T> getValue(String query, SQLConsumer<PreparedStatement> setter, boolean required, String column,
+            Function<Object, T> converter) {
         Result<Map<String, Object>> mapResult = getObjectAsMap(query, setter, required, column);
 
         if (!mapResult.getResult()) {
@@ -1482,7 +1518,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
      * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
-     * {@link #getValue(String, String, boolean, Function)}을 사용하기 바랍니다.</b></font>
+     * {@link #getValue(String, String, boolean, Function)}을 사용하기
+     * 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1532,7 +1569,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2022. 3. 2.
      * @version 1.8.0
      */
-    public <T> Result<T> getValue(@NotEmpty String query, @NotEmpty String column, boolean required, Function<Object, T> converter) {
+    public <T> Result<T> getValue(@NotEmpty String query, @NotEmpty String column, boolean required,
+            Function<Object, T> converter) {
         return getValue(query, SQLConsumer.DO_NOTHING, required, column, converter);
     }
 
@@ -1565,7 +1603,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
      * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
-     * {@link #getValues(String, SQLConsumer, String, Function)} 를 사용하기 바랍니다.</b></font>
+     * {@link #getValues(String, SQLConsumer, String, Function)} 를 사용하기
+     * 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1586,7 +1625,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public <T> Result<List<T>> getValues(@NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotEmpty String column) {
+    public <T> Result<List<T>> getValues(@NotEmpty String query, SQLConsumer<PreparedStatement> setter,
+            @NotEmpty String column) {
         return getValues(query, setter, column, null);
     }
 
@@ -1615,7 +1655,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @version 1.8.0
      */
     @SuppressWarnings("unchecked")
-    public <T> Result<List<T>> getValues(@NotEmpty String query, SQLConsumer<PreparedStatement> setter, @NotEmpty String column, Function<Object, T> converter) {
+    public <T> Result<List<T>> getValues(@NotEmpty String query, SQLConsumer<PreparedStatement> setter,
+            @NotEmpty String column, Function<Object, T> converter) {
         Result<List<Map<String, Object>>> mapResult = getListAsMap(query, setter, column);
 
         if (!mapResult.getResult()) {
@@ -1684,7 +1725,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2022. 3. 2.
      * @version 1.8.0
      */
-    public <T> Result<List<T>> getValues(@NotEmpty String query, @NotEmpty String column, Function<Object, T> converter) {
+    public <T> Result<List<T>> getValues(@NotEmpty String query, @NotEmpty String column,
+            Function<Object, T> converter) {
         return getValues(query, SQLConsumer.DO_NOTHING, column, converter);
     }
 

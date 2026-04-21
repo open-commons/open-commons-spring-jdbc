@@ -86,7 +86,8 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      *
      * @since 2020. 7. 28.
      */
-    public <E> Result<List<E>> getList(String query, Object[] parameters, int begin, int count, Class<E> entity, String... columns) {
+    public <E> Result<List<E>> getList(String query, Object[] parameters, int begin, int count, Class<E> entity,
+            String... columns) {
         AssertUtils2.notNulls(query, parameters, entity, columns);
 
         String partQuery = wrapQueryForPartition(query);
@@ -114,7 +115,7 @@ public abstract class AbstractPostgreSingleDataSourceDao extends AbstractSingleD
      */
     protected final String wrapQueryForPartition(String query) {
         AssertUtils2.notNull(query);
-        
+
         StringBuffer queryBuffer = new StringBuffer("SELECT * FROM ( ");
         queryBuffer.append(query);
         queryBuffer.append(" ) tbl OFFSET ? LIMIT ?");

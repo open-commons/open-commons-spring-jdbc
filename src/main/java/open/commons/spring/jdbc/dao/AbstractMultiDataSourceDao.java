@@ -130,7 +130,8 @@ public abstract class AbstractMultiDataSourceDao extends AbstractGenericDao {
             msg.append("con=");
             msg.append(con.toString());
 
-            DataAccessException dae = jdbcTemplate.getExceptionTranslator().translate("ConnectionCallback", msg.toString(), e);
+            DataAccessException dae = jdbcTemplate.getExceptionTranslator().translate("ConnectionCallback",
+                    msg.toString(), e);
             throw new SQLException(dae.getMessage(), dae);
         } finally {
             cons.forEach(c -> {

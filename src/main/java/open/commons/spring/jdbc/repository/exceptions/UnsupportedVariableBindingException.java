@@ -112,7 +112,8 @@ public class UnsupportedVariableBindingException extends RuntimeException {
      * @since 2021. 12. 14.
      * @version 0.3.0
      */
-    public UnsupportedVariableBindingException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public UnsupportedVariableBindingException(String message, Throwable cause, boolean enableSuppression,
+            boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 

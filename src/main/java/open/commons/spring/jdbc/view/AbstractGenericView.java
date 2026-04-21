@@ -99,7 +99,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
 
     /**
      * {@link Parameter}에 설정된 {@link JdbcVariableBinder#name()} 값을 제공합니다.<br>
-     * 단, {@link JdbcVariableBinder#name()}값이 빈 문자열인 경우, {@link Parameter#getName()}값을 제공합니다.
+     * 단, {@link JdbcVariableBinder#name()}값이 빈 문자열인 경우,
+     * {@link Parameter#getName()}값을 제공합니다.
      * 
      * @param p
      *            메소드 파라미터
@@ -124,7 +125,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2025. 4. 8.
      * @version 0.5.0
      */
-    private static final TripleFunction<String, ColumnValue, Boolean, String> VARIABLE_BINDER_ON_SELECT = (clmnName, clmnValue, castByClmnRealType) -> {
+    private static final TripleFunction<String, ColumnValue, Boolean, String> VARIABLE_BINDER_ON_SELECT = (clmnName,
+            clmnValue, castByClmnRealType) -> {
         StringBuilder buf = new StringBuilder();
 
         String clmnRealType = clmnValue.columnType() != null ? clmnValue.columnType().trim() : null;
@@ -310,7 +312,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
 
     /**
      * 주어진 파라미터를 이용하여 생성한 데이터 조회 쿼리를 제공합니다. <br>
-     * 패턴: <code>{query} WHERE {column} = {variable-binding-query} (AND {column} = {variable-binding-query})*</code>
+     * 패턴:
+     * <code>{query} WHERE {column} = {variable-binding-query} (AND {column} = {variable-binding-query})*</code>
      * 
      * <pre>
      * [개정이력]
@@ -413,7 +416,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
 
     /**
      * 주어진 파라미터를 이용하여 생성한 데이터 조회 쿼리를 제공합니다. <br>
-     * 패턴: <code>{query} WHERE {column} = {variable-binding-query} (AND {column} = {variable-binding-query})*</code>
+     * 패턴:
+     * <code>{query} WHERE {column} = {variable-binding-query} (AND {column} = {variable-binding-query})*</code>
      * 
      * <pre>
      * [개정이력]
@@ -721,8 +725,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 2. 10.
      * @version 0.3.0
      */
-    protected String createQueryForOrderByForPagination(int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
-        return createQueryForOrderByQueryForPagination(QUERY_FOR_SELECT, distance + 1, whereArgs, offset, limit, orderByArgs);
+    protected String createQueryForOrderByForPagination(int distance, Object[] whereArgs, int offset, int limit,
+            String... orderByArgs) {
+        return createQueryForOrderByQueryForPagination(QUERY_FOR_SELECT, distance + 1, whereArgs, offset, limit,
+                orderByArgs);
     }
 
     /**
@@ -764,13 +770,15 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected String createQueryForOrderByQueryForPagination(@NotBlank String queryForSelect, int distance, Object[] whereArgs, int offset, int limit, String... orderByArgs) {
+    protected String createQueryForOrderByQueryForPagination(@NotBlank String queryForSelect, int distance,
+            Object[] whereArgs, int offset, int limit, String... orderByArgs) {
         AssertUtils2.notBlank(queryForSelect, "'쿼리'는 '빈 문자열'을 허용하지 않습니다.");
         AssertUtils2.notNulls(whereArgs);
         AssertUtils2.notBlanks(orderByArgs);
 
         @SuppressWarnings("unchecked")
-        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), int.class, int.class, String[].class);
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), int.class,
+                int.class, String[].class);
 
         Method method = getCurrentMethod(distance + 1, parameterTypes);
 
@@ -867,7 +875,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2021. 12. 9.
      * @version 0.3.0
      */
-    protected String createQueryForSelectForPagination(@NotBlank String selectQuery, Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
+    protected String createQueryForSelectForPagination(@NotBlank String selectQuery, Method method, @Min(0) int offset,
+            @Min(1) int limit, Object... whereArgs) {
         AssertUtils2.notBlank(selectQuery, "'쿼리'는 '빈 문자열'을 허용하지 않습니다.");
         AssertUtils2.notNull(method);
         AssertUtils2.notNulls(whereArgs);
@@ -908,7 +917,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2021. 12. 9.
      * @version 0.3.0
      */
-    protected String createQueryForSelectOrderBy(@NotBlank String selectQuery, Method method, Object[] whereArgs, String... orderByArgs) {
+    protected String createQueryForSelectOrderBy(@NotBlank String selectQuery, Method method, Object[] whereArgs,
+            String... orderByArgs) {
         AssertUtils2.notBlank(selectQuery, "'쿼리'는 '빈 문자열'을 허용하지 않습니다.");
         AssertUtils2.notNull(method);
         AssertUtils2.notNulls(whereArgs);
@@ -985,8 +995,10 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
                 case IN:
                 case NOT_IN:
                     if (itrParams.hasNext()) {
-                        throw new UnsupportedVariableBindingException(String.format("'IN' 구문 이후에 다른 연산자가 오는 경우는 지원하지 않습니다. 연산자=%s",
-                                parameters.stream().map(p -> p.getAnnotation(JdbcVariableBinder.class)).map(c -> c.operator().get()).collect(Collectors.toList())));
+                        throw new UnsupportedVariableBindingException(
+                                String.format("'IN' 구문 이후에 다른 연산자가 오는 경우는 지원하지 않습니다. 연산자=%s",
+                                        parameters.stream().map(p -> p.getAnnotation(JdbcVariableBinder.class))
+                                                .map(c -> c.operator().get()).collect(Collectors.toList())));
                     }
                     for (int i = 0; i < paramCount; i++) {
                         buf.append(", ");
@@ -1130,12 +1142,16 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      */
     protected final List<Method> getColumnMethods() {
 
-        List<Method> methods = Arrays.stream(this.entityType.getMethods()) // create methods stream
+        List<Method> methods = Arrays.stream(this.entityType.getMethods()) // create
+                                                                           // methods
+                                                                           // stream
                 .filter(m -> {
                     ColumnValue annoCv = m.getAnnotation(ColumnValue.class);
-                    // start - 컬럼 생성시 정의된 'default' 속성에 따라서 생성되는 컬럼을 제외 : 2022. 11. 1. 오후 2:28:00
+                    // start - 컬럼 생성시 정의된 'default' 속성에 따라서 생성되는 컬럼을 제외 : 2022.
+                    // 11. 1. 오후 2:28:00
                     return annoCv != null && !annoCv.defaultColumn();
-                    // end - 컬럼 생성시 정의된 'default' 속성에 따라서 생성되는 컬럼을 제외 : 2022. 11. 1. 오후 2:28:00
+                    // end - 컬럼 생성시 정의된 'default' 속성에 따라서 생성되는 컬럼을 제외 : 2022.
+                    // 11. 1. 오후 2:28:00
 
                 }) // check annotation
                 .collect(Collectors.toList());
@@ -1150,7 +1166,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
         }
         // end - 데이터 제공 메소드 미정의 허용 : 2022. 3. 23. 오후 2:54:34
 
-        // DB Entity 객체의 컬럼 정렬 여부 적용 - 2022. 1. 7. 오전 11:44:06 / Park_Jun_Hong (parkjunhong77@gmail.com)
+        // DB Entity 객체의 컬럼 정렬 여부 적용 - 2022. 1. 7. 오전 11:44:06 / Park_Jun_Hong
+        // (parkjunhong77@gmail.com)
         SQLUtils.sortColumns(this.entityType, methods);
 
         return methods;
@@ -1254,7 +1271,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
                         try {
                             return m.invoke(data);
                         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                            String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s", data.getClass(), e.getMessage());
+                            String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s",
+                                    data.getClass(), e.getMessage());
                             logger.error(errMsg, e);
                             throw new UnsupportedOperationException(errMsg, e);
                         }
@@ -1262,9 +1280,11 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
         } else {
             Map<String, Method> clmnMethods = getColumnsAsStream() //
                     .collect(Collectors.toMap(m ->
-                    // start - ColumnValue#name() 기본값 (빈 문자열 ("")) 지원 : 2022. 11. 25. 오후 6:12:34
+                    // start - ColumnValue#name() 기본값 (빈 문자열 ("")) 지원 : 2022.
+                    // 11. 25. 오후 6:12:34
                     SQLUtils.getColumnNameByColumnValue(m)
-                    // end - ColumnValue#name() 기본값 (빈 문자열 ("")) 지원 : 2022. 11. 25. 오후 6:12:34
+                    // end - ColumnValue#name() 기본값 (빈 문자열 ("")) 지원 : 2022. 11.
+                    // 25. 오후 6:12:34
                             , m -> m));
 
             return clmns.stream() //
@@ -1273,7 +1293,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
                         try {
                             return clmnMethods.get(clmn).invoke(data);
                         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                            String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s", data.getClass(), e.getMessage());
+                            String errMsg = String.format("'%s' 정보를 변경하기 위한 정보를 생성 도중 에러가 발생하였습니다. 원인=%s",
+                                    data.getClass(), e.getMessage());
                             logger.error(errMsg, e);
                             throw new UnsupportedOperationException(errMsg, e);
                         }
@@ -1360,16 +1381,19 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
         try {
             return getClass().getMethod(name, parameterTypes);
         } catch (NoSuchMethodException | SecurityException e) {
-            String errMsg = String.format("메소드 정보 추출 중 에러가 발생하였습니다. 이름=%s, 파라미터=%s, 원인=%s", name, Arrays.toString(parameterTypes), e.getMessage());
+            String errMsg = String.format("메소드 정보 추출 중 에러가 발생하였습니다. 이름=%s, 파라미터=%s, 원인=%s", name,
+                    Arrays.toString(parameterTypes), e.getMessage());
             logger.error(errMsg, e);
             throw new InternalError(errMsg, e);
         }
     }
 
     /**
-     * 이 메소드({@link #getCurrentMethod(int, Object...)})를 호출하는 메소드 정보를 제공합니다. <br>
-     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
-     * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
+     * 이 메소드({@link #getCurrentMethod(int, Object...)})를 호출하는 메소드 정보를 제공합니다.
+     * <br>
+     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는
+     * {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다. <code>null</code>이
+     * 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -1391,7 +1415,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * 
      * @see #getCurrentMethod(int, Class...)
      */
-    protected final Method getCurrentMethod(int distance, @NotEmpty Object... parameters) throws IllegalArgumentException {
+    protected final Method getCurrentMethod(int distance, @NotEmpty Object... parameters)
+            throws IllegalArgumentException {
         AssertUtils2.notNulls("Class 정보를 추출하기 위한 데이터에 'null'이 포함될 수 없습니다.", IllegalArgumentException.class, parameters);
 
         return getCurrentMethod(distance + 1, ObjectUtils.readClasses(this.forceToPrimitive, parameters));
@@ -1399,8 +1424,9 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
 
     /**
      * 이 메소드({@link #getCurrentMethod(Object...)})를 호출하는 메소드 정보를 제공합니다. <br>
-     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는 {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다.
-     * <code>null</code>이 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
+     * 파라미터에 <code>null</code>이 포함된 경우 예외를 발생시키며, 포함 여부는
+     * {@link #containsNull(Object...)} 을 이용해서 확인할 수 있습니다. <code>null</code>이
+     * 포함된 경우에는 {@link #getCurrentMethod(Class...)} 를 사용해야 합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -1590,7 +1616,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
     }
 
     /**
-     * 주어진 메소드 파라미터 중에 {@link JdbcVariableBinder} 어노테이션이 설정되어 있는 파라미터를 제공합니다. <br>
+     * 주어진 메소드 파라미터 중에 {@link JdbcVariableBinder} 어노테이션이 설정되어 있는 파라미터를 제공합니다.
+     * <br>
      * 
      * <pre>
      * [개정이력]
@@ -1611,7 +1638,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
     }
 
     /**
-     * 주어진 메소드 파라미터 중에 {@link JdbcVariableBinder} 어노테이션이 설정되어 있는 파라미터를 {@link Stream} 형태로 제공합니다.<br>
+     * 주어진 메소드 파라미터 중에 {@link JdbcVariableBinder} 어노테이션이 설정되어 있는 파라미터를
+     * {@link Stream} 형태로 제공합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -1818,7 +1846,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
             queryBuf.append(VARIABLE_BINDER_ON_SELECT.apply(clmnNames.next(), clmnValues.next(), castByClmnRealType));
             while (clmnValues.hasNext()) {
                 queryBuf.append(", ");
-                queryBuf.append(VARIABLE_BINDER_ON_SELECT.apply(clmnNames.next(), clmnValues.next(), castByClmnRealType));
+                queryBuf.append(
+                        VARIABLE_BINDER_ON_SELECT.apply(clmnNames.next(), clmnValues.next(), castByClmnRealType));
             }
         }
 
@@ -1845,7 +1874,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2021. 11. 26.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll(int, int)
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll(int,
+     *      int)
      */
     @Override
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit) {
@@ -1857,7 +1887,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2021. 12. 9.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll(int, int, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAll(int,
+     *      int, java.lang.String[])
      */
     @Override
     public Result<List<T>> selectAll(@Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
@@ -1895,7 +1926,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String, int, int)
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String,
+     *      int, int)
      */
     @Override
     public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, @Min(0) int offset, @Min(1) int limit) {
@@ -1912,11 +1944,12 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String, int, int,
-     *      java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String,
+     *      int, int, java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
+    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, @Min(0) int offset, @Min(1) int limit,
+            String... orderByArgs) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notBlanks(orderByArgs);
 
@@ -1936,7 +1969,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectAllByQuery(java.lang.String,
+     *      java.lang.String[])
      */
     @Override
     public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, String... orderByArgs) {
@@ -1957,7 +1991,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 2. 11.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectBy(java.util.Map, int, int, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectBy(java.util.Map,
+     *      int, int, java.lang.String[])
      */
     @Override
     public Result<List<T>> selectBy(Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
@@ -1972,7 +2007,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 2. 11.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectBy(java.util.Map, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectBy(java.util.Map,
+     *      java.lang.String[])
      */
     @Override
     public Result<List<T>> selectBy(Map<String, Object> clmnParams, String... orderByArgs) {
@@ -1987,11 +2023,12 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectByQuery(java.lang.String, java.util.Map, int,
-     *      int, java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectByQuery(java.lang.String,
+     *      java.util.Map, int, int, java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs) {
+    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams, int offset,
+            int limit, String... orderByArgs) {
 
         StringBuffer queryBuf = createQueryForSelectBy(queryForSelect, clmnParams);
 
@@ -2010,11 +2047,12 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectByQuery(java.lang.String, java.util.Map,
-     *      java.lang.String[])
+     * @see open.commons.spring.jdbc.repository.IGenericRetrieve#selectByQuery(java.lang.String,
+     *      java.util.Map, java.lang.String[])
      */
     @Override
-    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams, String... orderByArgs) {
+    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams,
+            String... orderByArgs) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notNulls(clmnParams);
         AssertUtils2.notBlanks(orderByArgs);
@@ -2073,7 +2111,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 11. 30.
@@ -2122,7 +2161,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 3.
@@ -2158,7 +2198,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiByForPagination(Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
+    protected Result<List<T>> selectMultiByForPagination(Method method, @Min(0) int offset, @Min(1) int limit,
+            Object... whereArgs) {
         return selectMultiByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs);
     }
 
@@ -2182,14 +2223,16 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 3.
      * @version 0.3.0
      * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiByForPagination(Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiByForPagination(Method method, @Min(0) int offset, @Min(1) int limit,
+            Object[] whereArgs, String... columnNames) {
         return selectMultiByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs, columnNames);
 
     }
@@ -2244,7 +2287,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      *
      * @return
      *
@@ -2253,7 +2297,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * 
      * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiByQuery(@NotBlank String queryForSelect, Method method, Object[] whereArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiByQuery(@NotBlank String queryForSelect, Method method, Object[] whereArgs,
+            String... columnNames) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notNull(method);
         AssertUtils2.notNulls(whereArgs);
@@ -2308,13 +2353,15 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiByQuery(@NotBlank String queryForSelect, Object[] whereArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiByQuery(@NotBlank String queryForSelect, Object[] whereArgs,
+            String... columnNames) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notNulls(whereArgs);
         AssertUtils2.notBlanks(columnNames);
@@ -2347,13 +2394,15 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiByQueryForPagination(@NotBlank String queryForSelect, Method method, @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
+    protected Result<List<T>> selectMultiByQueryForPagination(@NotBlank String queryForSelect, Method method,
+            @Min(0) int offset, @Min(1) int limit, Object... whereArgs) {
 
         String query = createQueryForSelectForPagination(queryForSelect, method, offset, limit, whereArgs);
 
         logger.debug("Query: {}", query);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType);
     }
 
     /**
@@ -2377,14 +2426,15 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiByQueryForPagination(@NotBlank String queryForSelect, Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs,
-            String... columnNames) {
+    protected Result<List<T>> selectMultiByQueryForPagination(@NotBlank String queryForSelect, Method method,
+            @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... columnNames) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notNull(method);
         AssertUtils2.notNulls(whereArgs);
@@ -2394,7 +2444,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType, columnNames);
     }
 
     /**
@@ -2450,7 +2501,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 9.
@@ -2458,7 +2510,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * 
      * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiOrderBy(Method method, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiOrderBy(Method method, Object[] whereArgs, String[] orderByArgs,
+            String... columnNames) {
         return selectMultiOrderByQuery(QUERY_FOR_SELECT, method, whereArgs, orderByArgs, columnNames);
     }
 
@@ -2489,7 +2542,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
         AssertUtils2.notNulls(whereArgs);
         AssertUtils2.notBlanks(orderByArgs);
 
-        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs),
+                String[].class);
 
         return selectMultiOrderBy(getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs);
     }
@@ -2513,7 +2567,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 3.
@@ -2525,7 +2580,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
         AssertUtils2.notNulls(whereArgs);
         AssertUtils2.notBlanks(orderByArgs, columnNames);
 
-        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs),
+                String[].class);
 
         return selectMultiOrderBy(getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs, columnNames);
     }
@@ -2559,7 +2615,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.3.0
      * @see ColumnValue
      */
-    protected Result<List<T>> selectMultiOrderByForPagination(Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... orderByArgs) {
+    protected Result<List<T>> selectMultiOrderByForPagination(Method method, @Min(0) int offset, @Min(1) int limit,
+            Object[] whereArgs, String... orderByArgs) {
         return selectMultiOrderByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs, orderByArgs);
     }
 
@@ -2588,18 +2645,21 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2021. 12. 9.
      * @version 0.3.0
      * @see ColumnValue
      * 
-     * @see #selectMultiOrderByQueryForPagination(String, Method, int, int, Object[], String[], String...)
+     * @see #selectMultiOrderByQueryForPagination(String, Method, int, int,
+     *      Object[], String[], String...)
      */
-    protected Result<List<T>> selectMultiOrderByForPagination(Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String[] orderByArgs,
-            String... columnNames) {
-        return selectMultiOrderByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs, orderByArgs, columnNames);
+    protected Result<List<T>> selectMultiOrderByForPagination(Method method, @Min(0) int offset, @Min(1) int limit,
+            Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+        return selectMultiOrderByQueryForPagination(QUERY_FOR_SELECT, method, offset, limit, whereArgs, orderByArgs,
+                columnNames);
     }
 
     /**
@@ -2637,13 +2697,16 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 2. 10.
      * @version 0.3.0
      */
-    protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
+    protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit,
+            String... orderByArgs) {
 
         String query = createQueryForOrderByForPagination(1, whereArgs, offset, limit, orderByArgs);
 
-        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
+        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset,
+                limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType);
     }
 
     /**
@@ -2677,20 +2740,23 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      *
      * @return
      *
      * @since 2022. 2. 10.
      * @version 0.3.0
      */
-    protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String[] orderByArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiOrderByForPagination(Object[] whereArgs, @Min(0) int offset, @Min(1) int limit,
+            String[] orderByArgs, String... columnNames) {
 
         String query = createQueryForOrderByForPagination(1, whereArgs, offset, limit, orderByArgs);
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType, columnNames);
     }
 
     /**
@@ -2719,7 +2785,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Method method, Object[] whereArgs, String... orderByArgs) {
+    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Method method,
+            Object[] whereArgs, String... orderByArgs) {
 
         String query = createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs);
 
@@ -2751,13 +2818,15 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Method method, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Method method,
+            Object[] whereArgs, String[] orderByArgs, String... columnNames) {
 
         String query = createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs);
 
@@ -2790,12 +2859,14 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Object[] whereArgs, String... orderByArgs) {
+    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Object[] whereArgs,
+            String... orderByArgs) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notNulls(whereArgs);
         AssertUtils2.notBlanks(orderByArgs);
 
-        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs),
+                String[].class);
 
         return selectMultiOrderByQuery(queryForSelect, getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs);
     }
@@ -2821,20 +2892,24 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiOrderByQuery(@NotBlank String queryForSelect, Object[] whereArgs,
+            String[] orderByArgs, String... columnNames) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notNulls(whereArgs);
         AssertUtils2.notBlanks(orderByArgs, columnNames);
 
-        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs), String[].class);
+        Class<?>[] parameterTypes = ArrayUtils.add(ObjectUtils.readClasses(this.forceToPrimitive, whereArgs),
+                String[].class);
 
-        return selectMultiOrderByQuery(queryForSelect, getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs, columnNames);
+        return selectMultiOrderByQuery(queryForSelect, getCurrentMethod(1, parameterTypes), whereArgs, orderByArgs,
+                columnNames);
     }
 
     /**
@@ -2867,16 +2942,18 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs,
-            String... orderByArgs) {
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Method method,
+            @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String... orderByArgs) {
 
         String query = attachOffsetClause( //
                 createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs) //
                 , offset, limit);
 
-        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
+        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset,
+                limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType);
     }
 
     /**
@@ -2906,14 +2983,15 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Method method, @Min(0) int offset, @Min(1) int limit, Object[] whereArgs,
-            String[] orderByArgs, String... columnNames) {
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Method method,
+            @Min(0) int offset, @Min(1) int limit, Object[] whereArgs, String[] orderByArgs, String... columnNames) {
 
         String query = attachOffsetClause( //
                 createQueryForSelectOrderBy(queryForSelect, method, whereArgs, orderByArgs) //
@@ -2921,7 +2999,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType, columnNames);
     }
 
     /**
@@ -2960,14 +3039,17 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Object[] whereArgs, @Min(0) int offset, @Min(1) int limit,
-            String... orderByArgs) {
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Object[] whereArgs,
+            @Min(0) int offset, @Min(1) int limit, String... orderByArgs) {
 
-        String query = createQueryForOrderByQueryForPagination(queryForSelect, 1, whereArgs, offset, limit, orderByArgs);
+        String query = createQueryForOrderByQueryForPagination(queryForSelect, 1, whereArgs, offset, limit,
+                orderByArgs);
 
-        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset, limit);
+        logger.debug("Query: {}, where.columns={}, offset={}, limit={}", query, Arrays.toString(whereArgs), offset,
+                limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType);
     }
 
     /**
@@ -3003,20 +3085,23 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            <li>예: name asc
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      * @return
      *
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Object[] whereArgs, @Min(0) int offset, @Min(1) int limit, String[] orderByArgs,
-            String... columnNames) {
+    protected Result<List<T>> selectMultiOrderByQueryForPagination(@NotBlank String queryForSelect, Object[] whereArgs,
+            @Min(0) int offset, @Min(1) int limit, String[] orderByArgs, String... columnNames) {
 
-        String query = createQueryForOrderByQueryForPagination(queryForSelect, 1, whereArgs, offset, limit, orderByArgs);
+        String query = createQueryForOrderByQueryForPagination(queryForSelect, 1, whereArgs, offset, limit,
+                orderByArgs);
 
         logger.debug("Query: {}, offset={}, limit={}", query, offset, limit);
 
-        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)), this.entityType, columnNames);
+        return getList(query, SQLConsumer.setParameters(ArrayUtils.objectArray(whereArgs, offset, limit)),
+                this.entityType, columnNames);
     }
 
     /**
@@ -3069,7 +3154,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
@@ -3141,7 +3227,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
@@ -3189,7 +3276,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Method method, Object... whereArgs) {
+    protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Method method,
+            Object... whereArgs) {
 
         String query = attachWhereClause(queryForSelect, method, whereArgs);
         return getObject(query, SQLConsumer.setParameters(whereArgs), this.entityType, required);
@@ -3215,7 +3303,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
@@ -3226,7 +3315,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Method method, Object[] whereArgs, String... columnNames) {
+    protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Method method,
+            Object[] whereArgs, String... columnNames) {
         AssertUtils2.notBlank(queryForSelect);
         AssertUtils2.notNull(method);
         AssertUtils2.notNulls(whereArgs);
@@ -3294,7 +3384,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      *            'WHERE' 절에 사용될 파라미터.
      * @param columnNames
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
+     *            {@link ColumnDef#name()} 값들.
      *
      * @return
      * @throws EmptyResultDataAccessException
@@ -3305,7 +3396,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Object[] whereArgs, String... columnNames) {
+    protected Result<T> selectSingleByQuery(@NotBlank String queryForSelect, boolean required, Object[] whereArgs,
+            String... columnNames) {
         return selectSingleByQuery(queryForSelect, required, getCurrentMethod(1, whereArgs), whereArgs, columnNames);
     }
 
@@ -3334,7 +3426,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
         if (rkw == null || rkw.isEmpty() || !rkw.contains(clmnName.trim().toUpperCase())) {
             return clmnName;
         } else if (kwrc == null) {
-            throw ExceptionUtils.newException(IllegalStateException.class, "예약어가 설정되었으나, 예약어를 감싸는 문자가 설정되지 않았습니다. 컬럼명=%s, 예약어=%s", clmnName, CollectionUtils.toString(rkw));
+            throw ExceptionUtils.newException(IllegalStateException.class,
+                    "예약어가 설정되었으나, 예약어를 감싸는 문자가 설정되지 않았습니다. 컬럼명=%s, 예약어=%s", clmnName, CollectionUtils.toString(rkw));
         } else {
             return String.join("", kwrc, clmnName, kwrc);
         }
@@ -3368,7 +3461,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
     }
 
     /**
-     * 주어진 JDBC Variable Binding 정보에 확인하려는 {@link WhereCompare}이 없는지 여부를 제공합니다. <br>
+     * 주어진 JDBC Variable Binding 정보에 확인하려는 {@link WhereCompare}이 없는지 여부를 제공합니다.
+     * <br>
      * 
      * <pre>
      * [개정이력]
@@ -3395,7 +3489,8 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
     }
 
     /**
-     * 주어진 JDBC Variable Binding 정보에 확인하려는 {@link WhereCompare}이 있는지 여부를 제공합니다. <br>
+     * 주어진 JDBC Variable Binding 정보에 확인하려는 {@link WhereCompare}이 있는지 여부를 제공합니다.
+     * <br>
      * 
      * <pre>
      * [개정이력]
@@ -3449,6 +3544,7 @@ public abstract class AbstractGenericView<T> extends AbstractGenericRetrieve imp
      * @version 0.5.0
      */
     protected static final Set<String> loadReservedKeywords(String reservedKeywordString) {
-        return Collections.unmodifiableSet(StringUtils.splitAsSet(reservedKeywordString, ",", kw -> kw != null ? kw.trim().toUpperCase() : null));
+        return Collections.unmodifiableSet(
+                StringUtils.splitAsSet(reservedKeywordString, ",", kw -> kw != null ? kw.trim().toUpperCase() : null));
     }
 }

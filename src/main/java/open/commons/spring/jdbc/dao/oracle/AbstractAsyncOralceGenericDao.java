@@ -62,11 +62,13 @@ public abstract class AbstractAsyncOralceGenericDao extends AbstractOracleGeneri
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.IAsyncSupportable#getList(java.lang.String, int, int, java.lang.Class,
-     *      java.util.function.Supplier, java.util.function.Supplier)
+     * @see open.commons.spring.jdbc.dao.IAsyncSupportable#getList(java.lang.String,
+     *      int, int, java.lang.Class, java.util.function.Supplier,
+     *      java.util.function.Supplier)
      */
     @Override
-    public <E> Result<List<E>> getList(String query, int offset, int fetch, Class<E> dataType, Supplier<Object[]> params, Supplier<String[]> columns)
+    public <E> Result<List<E>> getList(String query, int offset, int fetch, Class<E> dataType,
+            Supplier<Object[]> params, Supplier<String[]> columns)
             throws NullPointerException, IllegalArgumentException {
 
         AssertUtils2.notNulls(query, dataType, params, columns);
@@ -77,13 +79,15 @@ public abstract class AbstractAsyncOralceGenericDao extends AbstractOracleGeneri
 
         Object[] parameters = ArrayUtils.add(params.get(), offset, fetch);
 
-        logger.debug("Query: {}, offset: {}, count: {}, latestTime: {}", query, offset, fetch, Arrays.toString(parameters));
+        logger.debug("Query: {}, offset: {}, count: {}, latestTime: {}", query, offset, fetch,
+                Arrays.toString(parameters));
 
         // begin - 성능 측정
         StopWatch watch = new StopWatch();
         watch.start();
 
-        Result<List<E>> result = getList(extendedQuery.toString(), SQLConsumer.setParameters(parameters), dataType, columns.get());
+        Result<List<E>> result = getList(extendedQuery.toString(), SQLConsumer.setParameters(parameters), dataType,
+                columns.get());
 
         watch.stop();
         // end - 성능 측정

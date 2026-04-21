@@ -186,7 +186,8 @@ public class JdbcConfigHelper {
      * @since 2025. 11. 12.
      * @version 2.1.0
      */
-    public static DataSourceInitializer initializeDbmsDefaultData(DataSource dataSource, DatabaseInitResources initResources) throws IOException {
+    public static DataSourceInitializer initializeDbmsDefaultData(DataSource dataSource,
+            DatabaseInitResources initResources) throws IOException {
         return initializeDbmsDefaultData(dataSource, initResources, null);
     }
 
@@ -212,8 +213,8 @@ public class JdbcConfigHelper {
      * @since 2025. 4. 28.
      * @version 0.5.0
      */
-    public static DataSourceInitializer initializeDbmsDefaultData(DataSource dataSource, DatabaseInitResources initResources, @Nullable Map<String, Object> properties)
-            throws IOException {
+    public static DataSourceInitializer initializeDbmsDefaultData(DataSource dataSource,
+            DatabaseInitResources initResources, @Nullable Map<String, Object> properties) throws IOException {
 
         AssertUtils2.notNulls(dataSource, initResources);
 
@@ -224,7 +225,8 @@ public class JdbcConfigHelper {
             try {
                 return updateInitResource(schema, properties);
             } catch (IOException e) {
-                throw ExceptionUtils.newException(RuntimeException.class, e, "Schema SQL 처리 도중 오류가 발생하였습니다. schema=%s", schema);
+                throw ExceptionUtils.newException(RuntimeException.class, e, "Schema SQL 처리 도중 오류가 발생하였습니다. schema=%s",
+                        schema);
             }
         }).toArray(Resource[]::new);
 
@@ -264,7 +266,8 @@ public class JdbcConfigHelper {
      * @since 2025. 4. 28.
      * @version 0.5.0
      */
-    private static Resource updateInitResource(Resource resource, @Nullable Map<String, Object> properties) throws IOException {
+    private static Resource updateInitResource(Resource resource, @Nullable Map<String, Object> properties)
+            throws IOException {
 
         String sqlResource;
         try (InputStream in = resource.getInputStream()) {

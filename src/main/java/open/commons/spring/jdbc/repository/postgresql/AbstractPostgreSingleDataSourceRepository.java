@@ -111,7 +111,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @since 2023. 8. 28.
      * @version 0.4.0
      */
-    public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractPostgreSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive,
+            boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
     }
 
@@ -168,7 +169,9 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
         AssertUtils2.notNulls(whereArgs);
 
         // #1. 데이터 변경 쿼리 생성
-        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
+        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트
+                                                                      // 가능한 컬럼
+                                                                      // 도출
                 .collect(Collectors.toList()) //
         ;
 
@@ -177,7 +180,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
 
         if (!updateClmns.isEmpty()) {
             // 'CONFLICT' 여부 확인
-            List<String> primaryKeys = AnnotationUtils.getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
+            List<String> primaryKeys = AnnotationUtils
+                    .getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
                     .filter(m -> m.getAnnotation(ColumnValue.class).primaryKey()) //
                     .map(m -> SQLUtils.getColumnName(m)) //
                     .map(cn -> validateColumnName(cn)) //
@@ -250,7 +254,9 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
         AssertUtils2.notNulls(whereArgs);
 
         // #1. 데이터 변경 쿼리 생성
-        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트 가능한 컬럼 도출
+        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트
+                                                                      // 가능한 컬럼
+                                                                      // 도출
                 .collect(Collectors.toList()) //
         ;
 
@@ -259,7 +265,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
 
         if (!updateClmns.isEmpty()) {
             // 'CONFLICT' 여부 확인
-            List<String> primaryKeys = AnnotationUtils.getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
+            List<String> primaryKeys = AnnotationUtils
+                    .getAnnotatedMethodsAllAsStream(data.getClass(), ColumnValue.class) //
                     .filter(m -> m.getAnnotation(ColumnValue.class).primaryKey()) //
                     .map(m -> SQLUtils.getColumnName(m)) //
                     .map(cn -> validateColumnName(cn)) //
@@ -274,7 +281,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
                 queryBuf.append("DO UPDATE SET (");
                 queryBuf.append(String.join(",", updateClmns));
                 queryBuf.append(") = ROW(");
-                queryBuf.append(String.join(",", updateClmns.stream().map(clmn -> String.join(".", "excluded", clmn)).collect(Collectors.toList())));
+                queryBuf.append(String.join(",", updateClmns.stream().map(clmn -> String.join(".", "excluded", clmn))
+                        .collect(Collectors.toList())));
                 queryBuf.append(")");
             }
         }
@@ -311,7 +319,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @since 2021. 11. 26.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int,
+     *      int)
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {

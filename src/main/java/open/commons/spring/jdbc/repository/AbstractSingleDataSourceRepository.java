@@ -116,7 +116,8 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * @since 2023. 8. 28.
      * @version 0.4.0
      */
-    public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractSingleDataSourceRepository(@NotNull Class<T> entityType, boolean forceToPrimitive,
+            boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
     }
 

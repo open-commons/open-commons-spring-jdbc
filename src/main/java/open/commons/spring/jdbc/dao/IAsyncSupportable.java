@@ -90,8 +90,10 @@ public interface IAsyncSupportable {
      *
      * @since 2020. 1. 21.
      */
-    default <E> List<Future<Result<List<E>>>> callAsync(HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
-            , String query, int totalCount, int partitionSize, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+    default <E> List<Future<Result<List<E>>>> callAsync(
+            HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
+            , String query, int totalCount, int partitionSize, Class<E> type, Supplier<Object[]> params,
+            Supplier<String[]> columns) {
         AssertUtils2.notNulls(m, query, type, params, columns);
 
         ThreadPoolTaskExecutor threadPool = getThreadPoolExecutor();
@@ -103,12 +105,14 @@ public interface IAsyncSupportable {
         int pos = 0;
 
         while (pos < q) {
-            futures.add(threadPool.submit(new AsyncSelectorBy<E>(m, query, pos * partitionSize, partitionSize, type, params, columns)));
+            futures.add(threadPool.submit(
+                    new AsyncSelectorBy<E>(m, query, pos * partitionSize, partitionSize, type, params, columns)));
             pos++;
         }
 
         if (r > 0) {
-            futures.add(threadPool.submit(new AsyncSelectorBy<E>(m, query, pos * partitionSize, partitionSize, type, params, columns)));
+            futures.add(threadPool.submit(
+                    new AsyncSelectorBy<E>(m, query, pos * partitionSize, partitionSize, type, params, columns)));
         }
 
         return futures;
@@ -143,7 +147,8 @@ public interface IAsyncSupportable {
      * @since 2020. 1. 30.
      * @version 0.0.6
      */
-    default <E> Result<List<E>> executeParallel(String query, int totalCount, int partitionSize, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+    default <E> Result<List<E>> executeParallel(String query, int totalCount, int partitionSize, Class<E> type,
+            Supplier<Object[]> params, Supplier<String[]> columns) {
         AssertUtils2.notNulls(query, type, params, columns);
 
         List<E> data = new ArrayList<>();
@@ -151,7 +156,8 @@ public interface IAsyncSupportable {
         Predicate<Result<List<E>>> failureFilter = t -> !t.getResult() || t.getData() == null;
 
         // 비동기 호출 결과
-        List<Future<Result<List<E>>>> futures = callAsync(this::getList, query, totalCount, partitionSize, type, params, columns);
+        List<Future<Result<List<E>>>> futures = callAsync(this::getList, query, totalCount, partitionSize, type, params,
+                columns);
         // 실패하는 작업이 발생하는 경우 나머지 작업을 취소하기 위한.
         List<Future<Result<List<E>>>> clones = new ArrayList<>(futures);
 
@@ -379,7 +385,8 @@ public interface IAsyncSupportable {
      * @since 2020. 1. 30.
      * @version 0.0.6
      */
-    default <E, P> Result<List<E>> getList(String query, int partitionSize, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+    default <E, P> Result<List<E>> getList(String query, int partitionSize, Class<E> type, Supplier<Object[]> params,
+            Supplier<String[]> columns) {
         AssertUtils2.notNulls(query, type, params, columns);
 
         // #1. 조회 데이터 개수
@@ -421,7 +428,8 @@ public interface IAsyncSupportable {
      * @since 2020. 1. 30.
      * @version 0.0.6
      */
-    public <E> Result<List<E>> getList(String query, int offset, int fetch, Class<E> dataType, Supplier<Object[]> params, Supplier<String[]> columns)
+    public <E> Result<List<E>> getList(String query, int offset, int fetch, Class<E> dataType,
+            Supplier<Object[]> params, Supplier<String[]> columns)
             throws NullPointerException, IllegalArgumentException;
 
     /**
@@ -483,8 +491,10 @@ public interface IAsyncSupportable {
          * @since 2020. 1. 21.
          * @version
          */
-        public AsyncSelectorBy(HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
-                , String query, Integer offset, Integer count, Class<E> type, Supplier<Object[]> params, Supplier<String[]> columns) {
+        public AsyncSelectorBy(
+                HexaFunction<String, Integer, Integer, Class<E>, Supplier<Object[]>, Supplier<String[]>, Result<List<E>>> m //
+                , String query, Integer offset, Integer count, Class<E> type, Supplier<Object[]> params,
+                Supplier<String[]> columns) {
             this.m = m;
             this.query = query;
             this.offset = offset;

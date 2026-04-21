@@ -123,7 +123,8 @@ public class H2DbUtils {
                     arguments.add(v.toString());
                 }
             } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-                throw ExceptionUtils.newException(RuntimeException.class, e, "데이터 조회 중 오류가 발생하였습니다. 객체=%s, 메소드=%s", o, m);
+                throw ExceptionUtils.newException(RuntimeException.class, e, "데이터 조회 중 오류가 발생하였습니다. 객체=%s, 메소드=%s", o,
+                        m);
             }
         }
 

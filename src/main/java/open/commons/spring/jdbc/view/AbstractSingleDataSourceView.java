@@ -109,7 +109,8 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * @since 2025. 5. 13.
      * @version 0.5.0
      */
-    public AbstractSingleDataSourceView(@NotNull Class<T> entityType, boolean forceToPrimitive, boolean ignoreNoDataMethod) {
+    public AbstractSingleDataSourceView(@NotNull Class<T> entityType, boolean forceToPrimitive,
+            boolean ignoreNoDataMethod) {
         super(entityType, forceToPrimitive, ignoreNoDataMethod);
     }
 

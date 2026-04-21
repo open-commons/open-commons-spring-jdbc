@@ -65,7 +65,8 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
     // JdbcTemplate getJdbcTemplate();
 
     /**
-     * {@link TransactionAwareDataSourceProxy} 객체 또는 {@link TransactionAwareDataSourceProxy} 제공하는 객체를 제공합니다. <br>
+     * {@link TransactionAwareDataSourceProxy} 객체 또는
+     * {@link TransactionAwareDataSourceProxy} 제공하는 객체를 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -75,7 +76,8 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      *                               
      * </pre>
      *
-     * @return {@link TransactionAwareDataSourceProxy} 객체 또는 {@link TransactionAwareDataSourceProxy} 제공하는 객체
+     * @return {@link TransactionAwareDataSourceProxy} 객체 또는
+     *         {@link TransactionAwareDataSourceProxy} 제공하는 객체
      *
      * @since 2025. 6. 11.
      * @version 0.5.0
@@ -100,7 +102,8 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @version 0.1.0
      * 
      * @see #getQuerySource()
-     * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[], Locale)
+     * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[],
+     *      Locale)
      */
     String getQuery(@NotNull String name);
 
@@ -125,7 +128,8 @@ public interface IGenericDao extends InitializingBean, DisposableBean {
      * @since 2019. 3. 28.
      * @version 0.1.0
      * 
-     * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[], String, Locale)
+     * @see ReloadableResourceBundleMessageSource#getMessage(String, Object[],
+     *      String, Locale)
      */
     String getQuery(@NotNull String name, Object[] args, Locale locale);
 

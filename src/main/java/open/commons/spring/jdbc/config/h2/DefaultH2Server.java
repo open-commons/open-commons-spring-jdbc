@@ -114,7 +114,8 @@ public class DefaultH2Server {
                 creator = Server::createWebServer;
                 break;
             default:
-                throw ExceptionUtils.newException(IllegalArgumentException.class, "지원하지 않는 서버 유형입니다. 입력값=%s", this.serverType);
+                throw ExceptionUtils.newException(IllegalArgumentException.class, "지원하지 않는 서버 유형입니다. 입력값=%s",
+                        this.serverType);
         }
 
         List<String> baseArgs = this.serverArgs.getBaseArguments();

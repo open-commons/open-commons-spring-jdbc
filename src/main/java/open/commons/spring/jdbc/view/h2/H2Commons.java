@@ -74,7 +74,8 @@ public class H2Commons {
                     + "WHEN, WHENEVER, WHERE, WHILE, WINDOW, WITH, WITHIN, WITHOUT, YEAR" //
     ;
 
-    public static final Set<String> RESERVED_KEYWORDS = CommonUtils.loadReservedKeywords(H2Commons.RESERVED_KEYWORD_STRING);
+    public static final Set<String> RESERVED_KEYWORDS = CommonUtils
+            .loadReservedKeywords(H2Commons.RESERVED_KEYWORD_STRING);
 
     /**
      * 예약어 감싸는 문자

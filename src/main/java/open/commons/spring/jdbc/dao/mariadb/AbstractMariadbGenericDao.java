@@ -66,11 +66,13 @@ public abstract class AbstractMariadbGenericDao extends AbstractSingleDataSource
      * @version 0.3.0
      *
      * @see open.commons.spring.jdbc.dao.AbstractGenericDao#executeUpdate(java.util.List,
-     *      open.commons.function.SQLTripleFunction, int, java.lang.String, java.lang.String)
+     *      open.commons.function.SQLTripleFunction, int, java.lang.String,
+     *      java.lang.String)
      */
     @Override
-    public <E> Result<Integer> executeUpdate(List<E> data, SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize, String headerQuery,
-            String valueQuery) {
+    public <E> Result<Integer> executeUpdate(List<E> data,
+            SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
+            String headerQuery, String valueQuery) {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, ",", "");
     }
 }

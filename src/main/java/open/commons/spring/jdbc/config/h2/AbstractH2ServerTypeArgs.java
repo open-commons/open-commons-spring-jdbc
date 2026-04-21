@@ -104,7 +104,7 @@ public class AbstractH2ServerTypeArgs implements IH2ServerArgs {
      */
     public AbstractH2ServerTypeArgs(@NotNull H2ServerType type, @Min(1) int port) {
         Assert.notNull(type, "서버 구동방식은 반드시 설정되어야 합니다.");
-        
+
         this.type = type;
         this.port = port;
     }
