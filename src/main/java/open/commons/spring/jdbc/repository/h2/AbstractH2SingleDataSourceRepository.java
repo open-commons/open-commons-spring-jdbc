@@ -352,8 +352,7 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      * @since 2025. 4. 1.
      * @version 0.5.0
      *
-     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int,
-     *      int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {

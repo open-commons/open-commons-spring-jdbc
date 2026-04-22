@@ -319,8 +319,7 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      * @since 2021. 11. 26.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int,
-     *      int)
+     * @see open.commons.spring.jdbc.view.AbstractGenericView#queryForOffset(int, int)
      */
     @Override
     protected String queryForOffset(@Min(0) int offset, @Min(1) int limit) {

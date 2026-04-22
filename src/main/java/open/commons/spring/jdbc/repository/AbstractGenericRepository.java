@@ -973,8 +973,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
     }
 
     /**
-     * {@link ColumnValue#name()}이 기본값 (빈 문자열)일 경우를 {@link Method#getName()}값을
-     * 이용하여 컬럼명을 제공합니다.<br>
+     * {@link ColumnValue#name()}이 기본값 (빈 문자열)일 경우를 {@link Method#getName()}값을 이용하여 컬럼명을 제공합니다.<br>
      * 
      * <pre>
      * [개정이력]
@@ -1151,8 +1150,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2021. 11. 26.
      * @version 0.3.0
      *
-     * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.util.List,
-     *      int)
+     * @see open.commons.spring.jdbc.repository.IGenericRepository#insert(java.util.List, int)
      */
     @Override
     public Result<Integer> insert(List<T> data, @Min(1) int partitionSize) {
@@ -1234,8 +1232,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
     /**
      * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
      * 
-     * 파라미터 중에 2번째({@link Method}), 3번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지
-     * 않을 수도 있습니다.
+     * 파라미터 중에 2번째({@link Method}), 3번째({@link Object} ...)은 DBMS에 따라 구현할 때 사용되지 않을 수도 있습니다.
      * 
      * <pre>
      * [개정이력]
@@ -1552,8 +1549,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
 
     /**
      * 주어진 조건에 맞는 데이터를 갱신합니다. <br>
-     * 이 메소드({@link #updateBy(Object, Object...)})를 호출하는 메소드의 파라미터는 이 메소드의 파라미터
-     * 순서와 동일한 순서(갱신할 데이터, Where ...)이어야 합니다.
+     * 이 메소드({@link #updateBy(Object, Object...)})를 호출하는 메소드의 파라미터는 이 메소드의 파라미터 순서와 동일한 순서(갱신할 데이터,
+     * Where ...)이어야 합니다.
      * 
      * <pre>
      * [개정이력]

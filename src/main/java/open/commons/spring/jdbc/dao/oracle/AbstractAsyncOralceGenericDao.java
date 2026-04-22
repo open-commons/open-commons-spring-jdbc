@@ -62,9 +62,8 @@ public abstract class AbstractAsyncOralceGenericDao extends AbstractOracleGeneri
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.IAsyncSupportable#getList(java.lang.String,
-     *      int, int, java.lang.Class, java.util.function.Supplier,
-     *      java.util.function.Supplier)
+     * @see open.commons.spring.jdbc.dao.IAsyncSupportable#getList(java.lang.String, int, int,
+     *      java.lang.Class, java.util.function.Supplier, java.util.function.Supplier)
      */
     @Override
     public <E> Result<List<E>> getList(String query, int offset, int fetch, Class<E> dataType,

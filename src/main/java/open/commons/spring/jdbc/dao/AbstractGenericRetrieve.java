@@ -612,8 +612,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            요청쿼리 처리 결과 데이타 모델
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *            {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과.
      * @throws SQLException
      *
@@ -695,8 +694,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            쿼리처리 결과 데이타 타입
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *            {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -769,8 +767,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     }
 
     /**
-     * {@link DataSource}를 {@link TransactionAwareDataSourceProxy}로 감싸서 제공합니다.
-     * <br>
+     * {@link DataSource}를 {@link TransactionAwareDataSourceProxy}로 감싸서 제공합니다. <br>
      * 
      * <pre>
      * [개정이력]
@@ -810,8 +807,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이타 타입
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *          {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -848,8 +844,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이타 타입
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *          {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -890,8 +885,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이타 타입
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *          {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -1011,8 +1005,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이터 타입.
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *          {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -1043,8 +1036,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param entity
      *            결과 데이터 타입.
      * @columns 요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *          {@link ColumnDef#name()} 값들.
+     *          <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * 
      * @return 쿼리 처리결과
      *         <ul>
@@ -1076,8 +1068,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @param columns
      * 
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *            {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1111,8 +1102,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            결과 데이타 타입
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *            {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1148,8 +1138,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            필수 여부
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *            {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1214,8 +1203,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *            결과 데이타 타입.
      * @param columns
      *            요청쿼리 처리 결과에서 필요한 컬럼이름.
-     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된
-     *            {@link ColumnDef#name()} 값들.
+     *            <li><b><code>entity</code></b> 모델의 메소드에 적용된 {@link ColumnDef#name()} 값들.
      * @return 쿼리 처리결과
      *         <ul>
      *         <li>&lt;T&gt; 요청받을 데이타 타입
@@ -1350,8 +1338,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String,
-     *      java.lang.Object[], java.util.Locale)
+     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String, java.lang.Object[],
+     *      java.util.Locale)
      */
     @Override
     public String getQuery(String name, Object[] args, Locale locale) {
@@ -1359,8 +1347,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     }
 
     /**
-     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String,
-     *      java.lang.Object[], java.lang.String, java.util.Locale)
+     * @see open.commons.spring.jdbc.dao.IGenericDao#getQuery(java.lang.String, java.lang.Object[],
+     *      java.lang.String, java.util.Locale)
      */
     @Override
     public String getQuery(String name, Object[] args, String defaultMessage, Locale locale) {
@@ -1378,8 +1366,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
      * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
-     * {@link #getValue(String, SQLConsumer, boolean, String, Function)}을 사용하기
-     * 바랍니다.</b></font>
+     * {@link #getValue(String, SQLConsumer, boolean, String, Function)}을 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1518,8 +1505,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
      * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
-     * {@link #getValue(String, String, boolean, Function)}을 사용하기
-     * 바랍니다.</b></font>
+     * {@link #getValue(String, String, boolean, Function)}을 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]
@@ -1603,8 +1589,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
     /**
      * 특정컬럼 데이터를 조회합니다. <br>
      * <font color="red"><b>DB 조회 결과 데이터 타입과 반환데이터 타입이 서로 일치하는 것이 확실하지 않은 경우,
-     * {@link #getValues(String, SQLConsumer, String, Function)} 를 사용하기
-     * 바랍니다.</b></font>
+     * {@link #getValues(String, SQLConsumer, String, Function)} 를 사용하기 바랍니다.</b></font>
      * 
      * <pre>
      * [개정이력]

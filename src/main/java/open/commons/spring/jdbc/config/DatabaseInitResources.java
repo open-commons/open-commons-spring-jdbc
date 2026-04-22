@@ -195,8 +195,8 @@ public class DatabaseInitResources {
      * <li>예) file:./resources/queries/user-info.sql
      * </ul>
      * <li>dir: 디렉토리 내의 파일들을 의미.<br>
-     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는
-     * 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른 디렉토리에 설정하기 바랍니다.
+     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는 경우 명시적으로
+     * DDL(schema)과 DML(data)은 서로 다른 디렉토리에 설정하기 바랍니다.
      * <ul>
      * <li>예) dir:./resources/queries
      * </ul>
@@ -234,8 +234,8 @@ public class DatabaseInitResources {
      * <li>예) file:./resources/queries/user-table.sql
      * </ul>
      * <li>dir: 디렉토리 내의 파일들을 의미.<br>
-     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는
-     * 경우 명시적으로 DDL(schema)과 DML(data)은 서로 다른 디렉토리에 설정하기 바랍니다.
+     * <code>'dir:'</code>는 해당 디렉토리 내의 모든 파일을 읽기 때문에, <code>'dir:'</code>를 사용하는 경우 명시적으로
+     * DDL(schema)과 DML(data)은 서로 다른 디렉토리에 설정하기 바랍니다.
      * <ul>
      * <li>예) dir:./resources/queries
      * </ul>

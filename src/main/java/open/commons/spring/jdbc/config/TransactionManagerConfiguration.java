@@ -70,8 +70,7 @@ public class TransactionManagerConfiguration {
     }
 
     /**
-     * {@link Repository} 계층에서 사용하는 {@link Connection}에 대한 기본 transaction를 관리
-     * Bean을 제공합니다.<br>
+     * {@link Repository} 계층에서 사용하는 {@link Connection}에 대한 기본 transaction를 관리 Bean을 제공합니다.<br>
      * 
      * <pre>
      * [개정이력]
