@@ -30,8 +30,7 @@ import java.util.List;
 import java.util.Map;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 
 import open.commons.core.Result;
 
@@ -80,7 +79,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 2. 11.
      * @version 0.3.0
      */
-    public Result<Integer> countBy(@NotNull Map<String, Object> clmnParams);
+    public Result<Integer> countBy(Map<String, Object> clmnParams);
 
     /**
      * DB Table Entity 타입을 제공합니다. <br>
@@ -223,7 +222,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect);
+    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect);
 
     /**
      * 주어진 쿼리를 이용하여 여러 개의 데이터를 제공합니다. <br>
@@ -249,7 +248,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    public Result<List<T>> selectAllByQuery(@NotEmpty String queryForSelect, @Min(0) int offset, @Min(1) int limit);
+    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, @Min(0) int offset, @Min(1) int limit);
 
     /**
      * 주어진 쿼리와, 조건에 따라 정렬된 모든 데이터를 제공합니다. <br>
@@ -281,7 +280,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    public Result<List<T>> selectAllByQuery(String queryForSelect, @Min(0) int offset, @Min(1) int limit,
+    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, @Min(0) int offset, @Min(1) int limit,
             String... orderByArgs);
 
     /**
@@ -310,7 +309,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    public Result<List<T>> selectAllByQuery(String queryForSelect, String... orderByArgs);
+    public Result<List<T>> selectAllByQuery(@NotBlank String queryForSelect, String... orderByArgs);
 
     /**
      * 주어진 조건에 맞는 데이터를 제공합니다.<br>
@@ -338,8 +337,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 2. 11.
      * @version 0.3.0
      */
-    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, int offset, int limit,
-            String... orderByArgs);
+    public Result<List<T>> selectBy(Map<String, Object> clmnParams, int offset, int limit, String... orderByArgs);
 
     /**
      * 주어진 조건에 맞는 데이터를 제공합니다.<br>
@@ -363,7 +361,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 2. 11.
      * @version 0.3.0
      */
-    public Result<List<T>> selectBy(@NotNull Map<String, Object> clmnParams, String... orderByArgs);
+    public Result<List<T>> selectBy(Map<String, Object> clmnParams, String... orderByArgs);
 
     /**
      * 주어진 쿼리와 조건에 맞는 데이터를 제공합니다.<br>
@@ -396,7 +394,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams, int offset,
+    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams, int offset,
             int limit, String... orderByArgs);
 
     /**
@@ -427,7 +425,7 @@ public interface IGenericRetrieve<T> {
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    public Result<List<T>> selectByQuery(String queryForSelect, @NotNull Map<String, Object> clmnParams,
+    public Result<List<T>> selectByQuery(@NotBlank String queryForSelect, Map<String, Object> clmnParams,
             String... orderByArgs);
 
 }

@@ -44,6 +44,7 @@ import java.util.stream.Collectors;
 import javax.sql.DataSource;
 
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 
 import org.slf4j.Logger;
@@ -1498,7 +1499,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public <T> Result<T> getValue(@NotEmpty String query, @NotEmpty String column) {
+    public <T> Result<T> getValue(@NotBlank String query, @NotBlank String column) {
         return getValue(query, SQLConsumer.DO_NOTHING, false, column);
     }
 
@@ -1526,7 +1527,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public <T> Result<T> getValue(@NotEmpty String query, @NotEmpty String column, boolean required) {
+    public <T> Result<T> getValue(@NotBlank String query, @NotBlank String column, boolean required) {
         return getValue(query, SQLConsumer.DO_NOTHING, required, column);
     }
 
@@ -1555,7 +1556,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2022. 3. 2.
      * @version 1.8.0
      */
-    public <T> Result<T> getValue(@NotEmpty String query, @NotEmpty String column, boolean required,
+    public <T> Result<T> getValue(@NotBlank String query, @NotBlank String column, boolean required,
             Function<Object, T> converter) {
         return getValue(query, SQLConsumer.DO_NOTHING, required, column, converter);
     }
@@ -1582,7 +1583,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2022. 3. 2.
      * @version 1.8.0
      */
-    public <T> Result<T> getValue(@NotEmpty String query, @NotEmpty String column, Function<Object, T> converter) {
+    public <T> Result<T> getValue(@NotBlank String query, @NotBlank String column, Function<Object, T> converter) {
         return getValue(query, SQLConsumer.DO_NOTHING, false, column, converter);
     }
 
@@ -1610,8 +1611,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public <T> Result<List<T>> getValues(@NotEmpty String query, SQLConsumer<PreparedStatement> setter,
-            @NotEmpty String column) {
+    public <T> Result<List<T>> getValues(@NotBlank String query, SQLConsumer<PreparedStatement> setter,
+            @NotBlank String column) {
         return getValues(query, setter, column, null);
     }
 
@@ -1640,8 +1641,8 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @version 1.8.0
      */
     @SuppressWarnings("unchecked")
-    public <T> Result<List<T>> getValues(@NotEmpty String query, SQLConsumer<PreparedStatement> setter,
-            @NotEmpty String column, Function<Object, T> converter) {
+    public <T> Result<List<T>> getValues(@NotBlank String query, SQLConsumer<PreparedStatement> setter,
+            @NotBlank String column, Function<Object, T> converter) {
         Result<List<Map<String, Object>>> mapResult = getListAsMap(query, setter, column);
 
         if (!mapResult.getResult()) {
@@ -1684,7 +1685,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      *
      * @since 2020. 7. 30.
      */
-    public <T> Result<List<T>> getValues(@NotEmpty String query, @NotEmpty String column) {
+    public <T> Result<List<T>> getValues(@NotBlank String query, @NotBlank String column) {
         return getValues(query, SQLConsumer.DO_NOTHING, column);
     }
 
@@ -1710,7 +1711,7 @@ public abstract class AbstractGenericRetrieve implements IGenericDao {
      * @since 2022. 3. 2.
      * @version 1.8.0
      */
-    public <T> Result<List<T>> getValues(@NotEmpty String query, @NotEmpty String column,
+    public <T> Result<List<T>> getValues(@NotBlank String query, @NotBlank String column,
             Function<Object, T> converter) {
         return getValues(query, SQLConsumer.DO_NOTHING, column, converter);
     }

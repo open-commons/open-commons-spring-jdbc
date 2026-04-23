@@ -26,7 +26,7 @@
 
 package open.commons.spring.jdbc.config.h2;
 
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 
 /**
  * 
@@ -216,7 +216,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @see #password
      */
-    public void setPassword(@NotEmpty String password) {
+    public void setPassword(@NotBlank String password) {
         H2DbUtils.assertNullOrEmpty(password, "비밀번호");
         this.password = password;
     }
@@ -239,7 +239,7 @@ public class H2TcpArgs extends AbstractH2ServerTypeArgs {
      *
      * @see #shutdown
      */
-    public void setShutdown(@NotEmpty String shutdownUrl) {
+    public void setShutdown(@NotBlank String shutdownUrl) {
         H2DbUtils.assertNullOrEmpty(shutdownUrl, "서버를 정지시키는 URL 정보");
         this.shutdown = shutdownUrl;
     }

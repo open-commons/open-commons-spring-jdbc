@@ -39,7 +39,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotBlank;
 
 import open.commons.core.Result;
 import open.commons.core.annotation.ColumnDef;
@@ -218,7 +218,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2021. 11. 29.
      * @version 0.3.0
      */
-    protected String attachSetClause(String queryHeader) {
+    protected String attachSetClause(@NotBlank String queryHeader) {
         AssertUtils2.notBlank(queryHeader);
 
         List<ColumnValue> columns = getUpdatableColumnValues();
@@ -408,7 +408,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.5.0
      */
     private String createMergeAssembleColumnMatch(Collection<String> clmns, final String one, final String other,
-            @NotEmpty String concatenator) {
+            @NotBlank String concatenator) {
         AssertUtils2.notNulls(clmns);
         AssertUtils2.notNulls(one, other, concatenator);
 
@@ -1500,7 +1500,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 15.
      * @version 0.4.0
      */
-    protected String queryForUpdateHeader(@NotEmpty String tableName) {
+    protected String queryForUpdateHeader(@NotBlank String tableName) {
         AssertUtils2.notNull(tableName);
 
         return new StringBuffer() //
