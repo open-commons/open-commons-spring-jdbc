@@ -11,4 +11,4 @@
  * @since 2026. 4. 8.
  */
 @org.jspecify.annotations.NullMarked
-package open.commons.spring.jdbc;
+package open.commons.spring.jdbc.configure.helper;

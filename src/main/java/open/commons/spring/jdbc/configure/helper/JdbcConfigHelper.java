@@ -24,7 +24,7 @@
  * 
  */
 
-package open.commons.spring.jdbc.config;
+package open.commons.spring.jdbc.configure.helper;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;

@@ -24,7 +24,7 @@
  * 
  */
 
-package open.commons.spring.jdbc.config.h2;
+package open.commons.spring.jdbc.configure.h2;
 
 import java.util.List;
 

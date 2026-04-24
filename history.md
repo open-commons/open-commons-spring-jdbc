@@ -1,3 +1,12 @@
+[2026/04/24]
+- 변경
+  + 설정 패키지 변경 ( open.commons.spring.jdbc.config -> open.commons.spring.jdbc.configure)
+- 신규
+  + open.commons.spring.jdbc.autoconfigure.OpenCommonsSpringJdbcCoreAutoConfiguration: '빈' 제공 확장을 위한 작업.
+- 삭제
+  + open.commons.spring.jdbc.OpenCommonsSpringJdbcMarker: 'auto-configure' 방식으로 전환되면서 불필요. (사용자 영역에서 @ComponentScan 대상에서 제외)
+  + open.commons.spring.jdbc.config.TransactionManagerConfiguration: Spring Boot 기본 기능과 중복
+
 [2026/04/17]
 - Migration
   + Spring Boot 4.0.3, Spring Framework 7.0.5 적용 완료

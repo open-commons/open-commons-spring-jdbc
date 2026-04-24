@@ -24,7 +24,7 @@
  * 
  */
 
-package open.commons.spring.jdbc.config.h2;
+package open.commons.spring.jdbc.configure.h2;
 
 /**
  * PG 방식 설정 클래스.

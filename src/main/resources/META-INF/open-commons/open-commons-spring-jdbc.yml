@@ -1,0 +1,4 @@
+spring:
+  dao:
+    exceptiontranslation:
+      enabled: true

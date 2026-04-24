@@ -24,7 +24,7 @@
  * 
  */
 
-package open.commons.spring.jdbc.config.h2;
+package open.commons.spring.jdbc.configure.h2;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -36,7 +36,7 @@ import org.jspecify.annotations.Nullable;
 import open.commons.core.utils.AnnotationUtils;
 import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.ExceptionUtils;
-import open.commons.spring.jdbc.config.h2.AbstractH2ServerTypeArgs.H2ServerType;
+import open.commons.spring.jdbc.configure.h2.AbstractH2ServerTypeArgs.H2ServerType;
 
 /**
  * H2 DB에 대한 지원기능을 제공합니다.

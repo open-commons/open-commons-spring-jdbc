@@ -24,7 +24,7 @@
  * 
  */
 
-package open.commons.spring.jdbc.config.h2;
+package open.commons.spring.jdbc.configure.h2;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
 import open.commons.core.function.SQLFunction;
 import open.commons.core.utils.AssertUtils2;
 import open.commons.core.utils.ExceptionUtils;
-import open.commons.spring.jdbc.config.h2.AbstractH2ServerTypeArgs.H2ServerType;
+import open.commons.spring.jdbc.configure.h2.AbstractH2ServerTypeArgs.H2ServerType;
 
 /**
  * H2 서버 구동을 위한 상위 클래스. (자동 실행/종료)

@@ -24,13 +24,13 @@
  * 
  */
 
-package open.commons.spring.jdbc.config.h2;
+package open.commons.spring.jdbc.configure.h2;
 
 import java.util.List;
 import java.util.Map;
 
 import open.commons.core.utils.ExceptionUtils;
-import open.commons.spring.jdbc.config.h2.AbstractH2ServerTypeArgs.H2ServerType;
+import open.commons.spring.jdbc.configure.h2.AbstractH2ServerTypeArgs.H2ServerType;
 
 /**
  * H2 서버 구동 설정.
@@ -562,7 +562,7 @@ public class H2ServerArgs implements IH2ServerArgs {
      * @since 2025. 4. 3.
      * @version 0.5.0
      *
-     * @see open.commons.spring.jdbc.config.h2.IH2ServerArgs#toArguments()
+     * @see open.commons.spring.jdbc.configure.h2.IH2ServerArgs#toArguments()
      */
     @Override
     public List<String> toArguments() {

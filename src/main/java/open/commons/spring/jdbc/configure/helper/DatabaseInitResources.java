@@ -24,7 +24,7 @@
  * 
  */
 
-package open.commons.spring.jdbc.config;
+package open.commons.spring.jdbc.configure.helper;
 
 import java.io.IOException;
 import java.nio.file.Files;
