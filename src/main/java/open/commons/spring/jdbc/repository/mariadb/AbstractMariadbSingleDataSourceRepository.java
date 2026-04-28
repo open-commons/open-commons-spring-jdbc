@@ -33,7 +33,8 @@ import java.util.stream.Collectors;
 
 import jakarta.validation.constraints.Min;
 
-import open.commons.core.utils.AssertUtils2;
+import org.jspecify.annotations.Nullable;
+
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
 import open.commons.spring.jdbc.view.mariadb.MariadbCommons;
 
@@ -136,7 +137,8 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2022. 11. 29.
      * @version 0.4.0
      *
@@ -144,11 +146,15 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrNothing(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
         return this.QUERY_FOR_INSERT_IGNORE;
     }
 
     /**
+     * {@inheritDoc}
+     * 
+     * 
      * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
      * 
      * <pre>
@@ -177,9 +183,8 @@ public abstract class AbstractMariadbSingleDataSourceRepository<T> extends Abstr
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(data, method);
-        AssertUtils2.notNulls(whereArgs);
+    protected String createQueryForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
 
         // #1. 데이터 변경 쿼리 생성
         String updatePart = String.join(",", //

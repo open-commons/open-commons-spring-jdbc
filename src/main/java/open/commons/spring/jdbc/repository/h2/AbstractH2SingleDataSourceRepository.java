@@ -32,6 +32,8 @@ import java.util.Set;
 
 import jakarta.validation.constraints.Min;
 
+import org.jspecify.annotations.Nullable;
+
 import open.commons.core.text.NamedTemplate;
 import open.commons.core.utils.AssertUtils2;
 import open.commons.spring.jdbc.repository.AbstractSingleDataSourceRepository;
@@ -186,7 +188,8 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2025. 4. 2.
      * @version 0.5.0
      *
@@ -194,14 +197,18 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrNothing(T data, Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrNothing(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
+        AssertUtils2.notNull(data);
+
         // #1. 'SELECT' 파라미터
         List<String> clmnSelect = getColumnNames();
         return getColumnValues(data, clmnSelect);
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2025. 4. 2.
      * @version 0.5.0
      *
@@ -209,12 +216,14 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
         return super.createParametersForInsertOrUpdate(data, method, whereArgs);
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2025. 4. 1.
      * @version 0.5.0
      *
@@ -222,9 +231,8 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(data, method);
-        AssertUtils2.notNulls(whereArgs);
+    protected String createQueryForInsertOrNothing(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
 
         if (this.QUERY_FOR_INSERT_OR_NOTHING != null) {
             return this.QUERY_FOR_INSERT_OR_NOTHING;
@@ -268,7 +276,8 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2025. 4. 1.
      * @version 0.5.0
      *
@@ -276,9 +285,8 @@ public abstract class AbstractH2SingleDataSourceRepository<T> extends AbstractSi
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(data, method);
-        AssertUtils2.notNulls(whereArgs);
+    protected String createQueryForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
 
         if (this.QUERY_FOR_INSERT_OR_UPDATE != null) {
             return this.QUERY_FOR_INSERT_OR_UPDATE;

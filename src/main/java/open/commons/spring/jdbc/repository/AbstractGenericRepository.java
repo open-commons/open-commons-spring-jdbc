@@ -41,6 +41,8 @@ import java.util.stream.Stream;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
+import org.jspecify.annotations.Nullable;
+
 import open.commons.core.Result;
 import open.commons.core.annotation.ColumnDef;
 import open.commons.core.annotation.ColumnValue;
@@ -508,6 +510,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
 
     /**
      * 데이터 생성에 사용될 파라미터를 제공합니다.<br>
+     * <font color="red">각 파라미터에 대한 <b>{@link Nullable}</b>은 확장성을 고려해 적용하였습니다.<br>
+     * 하위 클래스에 따라서 구현부에서 <b><i>{@code null-check}</i></b>를 하기 바랍니다.</font>
      * 
      * <pre>
      * [개정이력]
@@ -528,12 +532,15 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 29.
      * @version 0.4.0
      */
-    protected Object createParametersForInsertOrNothing(T data, Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrNothing(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
         return data;
     }
 
     /**
      * 데이터 생성에 사용될 파라미터를 제공합니다. <br>
+     * <font color="red">각 파라미터에 대한 <b>{@link Nullable}</b>은 확장성을 고려해 적용하였습니다.<br>
+     * 하위 클래스에 따라서 구현부에서 <b><i>{@code null-check}</i></b>를 하기 바랍니다.</font>
      * 
      * <pre>
      * [개정이력]
@@ -554,12 +561,15 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 29.
      * @version 0.4.0
      */
-    protected Object createParametersForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
         return data;
     }
 
     /**
      * 데이터 생성에 사용될 Query를 제공합니다. <br>
+     * <font color="red">각 파라미터에 대한 <b>{@link Nullable}</b>은 확장성을 고려해 적용하였습니다.<br>
+     * 하위 클래스에 따라서 구현부에서 <b><i>{@code null-check}</i></b>를 하기 바랍니다.</font>
      * 
      * <pre>
      * [개정이력]
@@ -580,10 +590,13 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 29.
      * @version 0.4.0
      */
-    protected abstract String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs);
+    protected abstract String createQueryForInsertOrNothing(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs);
 
     /**
      * 데이터 생성에 사용될 쿼리를 제공합니다. <br>
+     * <font color="red">각 파라미터에 대한 <b>{@link Nullable}</b>은 확장성을 고려해 적용하였습니다.<br>
+     * 하위 클래스에 따라서 구현부에서 <b><i>{@code null-check}</i></b>를 하기 바랍니다.</font>
      * 
      * <pre>
      * [개정이력]
@@ -604,7 +617,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2022. 11. 29.
      * @version 0.4.0
      */
-    protected abstract String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs);
+    protected abstract String createQueryForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs);
 
     /**
      * 주어진 컬럼값을 변경하는 'Set' 구문을 제공합니다. <br>
@@ -790,7 +804,10 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @version 0.0.6
      * 
      * @see SQLTripleFunction#setParameters(String...)
+     * 
+     * @deprecated Use {@link #insert(List, int)}
      */
+    @Deprecated(since = "4.0.0", forRemoval = true)
     public <E> Result<Integer> executeUpdate(List<E> data,
             SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String valueQuery) {

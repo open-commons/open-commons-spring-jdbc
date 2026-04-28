@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 
 import jakarta.validation.constraints.Min;
 
+import org.jspecify.annotations.Nullable;
+
 import open.commons.core.Result;
 import open.commons.core.function.SQLTripleFunction;
 import open.commons.core.text.NamedTemplate;
@@ -165,7 +167,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2022. 11. 29.
      * @version 0.4.0
      *
@@ -173,7 +176,9 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrNothing(T data, Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrNothing(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
+        AssertUtils2.notNulls(data, method);
 
         // #1. 'USING DUAL ON' 파라미터
         List<String> pkClmns = getVariableBindingColumnNames(method);
@@ -191,7 +196,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2022. 11. 29.
      * @version 0.4.0
      *
@@ -199,9 +205,9 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected Object createParametersForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+    protected Object createParametersForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
         AssertUtils2.notNulls(data, method);
-        AssertUtils2.notNulls(whereArgs);
 
         // #1. 'USING DUAL ON' 파라미터
         List<String> pkClmns = getVariableBindingColumnNames(method);
@@ -223,7 +229,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2022. 11. 29.
      * @version 0.4.0
      *
@@ -232,8 +239,7 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      */
     @Override
     protected String createQueryForInsertOrNothing(T data, Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(data, method);
-        AssertUtils2.notNulls(whereArgs);
+        AssertUtils2.notNulls(method);
 
         // #0. 쿼리 구문 선언
         NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_NOTHING);
@@ -266,7 +272,8 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
     }
 
     /**
-     *
+     * {@inheritDoc}
+     * 
      * @since 2022. 11. 29.
      * @version 0.4.0
      *
@@ -274,7 +281,9 @@ public abstract class AbstractOracleSingleDataSourceRepoistory<T> extends Abstra
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrUpdate(T data, Method method, Object... whereArgs) {
+    protected String createQueryForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
+        AssertUtils2.notNull(method);
 
         // #0. 쿼리 구문 선언
         NamedTemplate queryTpl = new NamedTemplate(QUERY_TPL_INSERT_OR_UPDATE);

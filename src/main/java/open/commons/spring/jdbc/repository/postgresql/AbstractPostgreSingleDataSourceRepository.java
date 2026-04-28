@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
+import org.jspecify.annotations.Nullable;
+
 import open.commons.core.annotation.ColumnValue;
 import open.commons.core.utils.AnnotationUtils;
 import open.commons.core.utils.AssertUtils2;
@@ -117,6 +119,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
     }
 
     /**
+     * {@inheritDoc}
+     * 
      * 데이터를 추가하거나 이미 존재하는 경우 아무런 동작을 하지 않습니다.<br>
      * 
      * 참고: https://www.postgresql.org/docs/&lt;versoin&gt;/sql-insert.html<br>
@@ -164,16 +168,12 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrNothing(T data, @NotNull Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(data, method);
-        AssertUtils2.notNulls(whereArgs);
+    protected String createQueryForInsertOrNothing(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
+        AssertUtils2.notNulls(data);
 
         // #1. 데이터 변경 쿼리 생성
-        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트
-                                                                      // 가능한 컬럼
-                                                                      // 도출
-                .collect(Collectors.toList()) //
-        ;
+        List<String> updateClmns = getUpdatableColumnNames().stream().collect(Collectors.toList());
 
         StringBuilder queryBuf = new StringBuilder();
         queryBuf.append(QUERY_FOR_INSERT);
@@ -201,6 +201,8 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
     }
 
     /**
+     * {@inheritDoc}
+     * 
      * 데이터를 추가하거나 이미 존재하는 경우 설정된 데이터를 갱신합니다. <br>
      * 
      * 참고: https://www.postgresql.org/docs/&lt;versoin&gt;/sql-insert.html<br>
@@ -249,16 +251,12 @@ public abstract class AbstractPostgreSingleDataSourceRepository<T> extends Abstr
      *      java.lang.reflect.Method, java.lang.Object[])
      */
     @Override
-    protected String createQueryForInsertOrUpdate(T data, @NotNull Method method, Object... whereArgs) {
-        AssertUtils2.notNulls(data, method);
-        AssertUtils2.notNulls(whereArgs);
+    protected String createQueryForInsertOrUpdate(@Nullable T data, @Nullable Method method,
+            Object @Nullable... whereArgs) {
+        AssertUtils2.notNulls(data);
 
         // #1. 데이터 변경 쿼리 생성
-        List<String> updateClmns = getUpdatableColumnNames().stream() // 업데이트
-                                                                      // 가능한 컬럼
-                                                                      // 도출
-                .collect(Collectors.toList()) //
-        ;
+        List<String> updateClmns = getUpdatableColumnNames().stream().collect(Collectors.toList());
 
         StringBuilder queryBuf = new StringBuilder();
         queryBuf.append(QUERY_FOR_INSERT);
