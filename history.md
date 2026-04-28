@@ -1,3 +1,11 @@
+[2026/04/28] 
+- 변경
+  + "데이터 추가 쿼리" 생성 메소드 파라미터 제한요건 변경 ( @NotNull -> @Nullable)
+    + open.commons.spring.jdbc.repository.AbstractGenericRepository.createParametersForInsertOrNothing(T, Method, Object...)
+    + open.commons.spring.jdbc.repository.AbstractGenericRepository.createParametersForInsertOrUpdate(T, Method, Object...)
+    + open.commons.spring.jdbc.repository.AbstractGenericRepository.createQueryForInsertOrNothing(T, Method, Object...)
+    + open.commons.spring.jdbc.repository.AbstractGenericRepository.createQueryForInsertOrUpdate(T, Method, Object...)
+
 [2026/04/24]
 - 변경
   + 설정 패키지 변경 ( open.commons.spring.jdbc.config -> open.commons.spring.jdbc.configure)

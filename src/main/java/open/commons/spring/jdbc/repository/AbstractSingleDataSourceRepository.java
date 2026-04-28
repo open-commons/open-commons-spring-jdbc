@@ -202,6 +202,6 @@ public abstract class AbstractSingleDataSourceRepository<T> extends AbstractGene
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    public abstract void setDataSource(@NotNull DataSource dataSource);
+    public abstract void setDataSource(DataSource dataSource);
 
 }

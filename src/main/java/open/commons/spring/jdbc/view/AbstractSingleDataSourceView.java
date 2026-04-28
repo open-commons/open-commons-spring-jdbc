@@ -177,6 +177,6 @@ public abstract class AbstractSingleDataSourceView<T> extends AbstractGenericVie
      * @since 2025. 5. 13.
      * @version 0.5.0
      */
-    public abstract void setDataSource(@NotNull DataSource dataSource);
+    public abstract void setDataSource(DataSource dataSource);
 
 }
