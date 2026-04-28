@@ -140,9 +140,8 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    @SafeVarargs
-    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers)
-            throws NullPointerException {
+    @SuppressWarnings("unchecked")
+    public <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers) throws NullPointerException {
         AssertUtils2.notNulls((Object[]) brokers);
 
         Result<Integer> result = new Result<>();
@@ -292,7 +291,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data,
+    public <E> Result<Integer> executeUpdate(List<E> data,
             SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String headerQuery, String valueQuery, String tailQuery) {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
@@ -334,7 +333,7 @@ public abstract class AbstractGenericDao extends AbstractGenericRetrieve {
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data,
+    public <E> Result<Integer> executeUpdate(List<E> data,
             SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String headerQuery, String valueQuery, String concatForVQ, String tailQuery) {
         ConnectionCallbackBroker2<SQLConsumer<PreparedStatement>>[] brokers = createConnectionCallbackBrokers(data,

@@ -728,8 +728,8 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * @since 2019. 3. 28.
      * @version 0.1.0
      */
-    @SafeVarargs
-    public final <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers)
+    @SuppressWarnings("unchecked")
+    public <E> Result<Integer> executeUpdate(ConnectionCallbackBroker2<E>... brokers)
             throws RuntimeDataAccessException {
         AssertUtils2.notNulls((Object[]) brokers);
 
@@ -884,7 +884,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data,
+    public <E> Result<Integer> executeUpdate(List<E> data,
             SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String headerQuery, String valueQuery, String tailQuery) throws RuntimeDataAccessException {
         return executeUpdate(data, dataSetter, partitionSize, headerQuery, valueQuery, "", tailQuery);
@@ -927,7 +927,7 @@ public abstract class AbstractGenericRepository<T> extends AbstractGenericView<T
      * 
      * @see SQLTripleFunction#setParameters(String...)
      */
-    public final <E> Result<Integer> executeUpdate(List<E> data,
+    public <E> Result<Integer> executeUpdate(List<E> data,
             SQLTripleFunction<PreparedStatement, Integer, E, Integer> dataSetter, @Min(1) int partitionSize,
             String headerQuery, String valueQuery, String concatForVQ, String tailQuery)
             throws RuntimeDataAccessException {
