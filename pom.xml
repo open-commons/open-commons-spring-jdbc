@@ -50,7 +50,7 @@
     <snapshotRepository>
       <id>ymtech-maven-repo</id>
       <name>Snapshot Repository</name>
-      <url>https://nexus3.ymtech.co.kr/repository/maven-snapshots/</url>
+      <url>https://nexus3-int.ymtech.co.kr/repository/maven-snapshots/</url>
     </snapshotRepository>
   </distributionManagement>
 
